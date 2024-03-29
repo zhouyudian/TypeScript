@@ -354,3 +354,207 @@ TypeScript 5.0 弃用了以下选项和行为：
 到了 TypeScript 5.5（可能是 2024 年 6 月），它们将变成严格的错误，使用它们的代码将需要进行迁移。
 
 要获取更多信息，您可以在 GitHub 上查阅[这个计划](https://github.com/microsoft/TypeScript/issues/51909)，其中包含了如何最佳地适应您的代码库的建议。
+
+## 值得注意的行为改变
+
+本节重点介绍一系列值得注意的变更，作为升级的一部分，应该予以认识和理解。
+有时它会强调弃用、移除和新的限制。
+它还可能包含功能性改进的错误修复，但这些修复也可能通过引入新的错误影响现有的构建。
+
+### lib.d.ts 变化
+
+[DOM 类型有变化](https://github.com/microsoft/TypeScript/pull/57027)。
+
+### 更准确的有条件类型约束
+
+下面的 `foo` 函数不再允许第二个变量声明。
+
+```ts
+type IsArray<T> = T extends any[] ? true : false;
+
+function foo<U extends object>(x: IsArray<U>) {
+  let first: true = x; // Error
+  let second: false = x; // Error, but previously wasn't
+}
+```
+
+在之前的版本中，当 TypeScript 检查第二个初始化器时，它需要确定 `IsArray<U>` 是否可赋值给 `false` 类型的单元类型。
+虽然 `IsArray<U>` 在任何明显的方式下都不兼容，但 TypeScript 也会考虑该类型的约束。
+在形如 `T extends Foo ? TrueBranch : FalseBranch` 的条件类型中，其中 `T` 是泛型，类型系统会查看 `T` 的约束，在 `T` 本身的位置上进行替代，并决定选择 `true` 分支还是 `false` 分支。
+
+但是，这种行为是不准确的，因为它过于急切。即使 `T` 的约束不能赋值给 `Foo`，也并不意味着它不会实例化为某个可赋值给 `Foo` 的类型。
+因此，更正确的行为是在无法证明 `T` 永远不会或总是 extends `Foo` 的情况下，为条件类型的约束产生一个联合类型。
+
+TypeScript 5.4 采用了这种更准确的行为。
+在实践中，这意味着您可能会发现某些条件类型实例与它们的分支不再兼容。
+
+您可以在[此处](https://github.com/microsoft/TypeScript/pull/56004)阅读具体的更改内容。
+
+### 更积极地减少类型变量与原始类型之间的交集
+
+```ts
+declare function intersect<T, U>(x: T, y: U): T & U;
+
+function foo<T extends 'abc' | 'def'>(x: T, str: string, num: number) {
+  // Was 'T & string', now is just 'T'
+  let a = intersect(x, str);
+
+  // Was 'T & number', now is just 'never'
+  let b = intersect(x, num);
+
+  // Was '(T & "abc") | (T & "def")', now is just 'T'
+  let c = Math.random() < 0.5 ? intersect(x, 'abc') : intersect(x, 'def');
+}
+```
+
+更多详情请参考 [PR](https://github.com/microsoft/TypeScript/pull/56515)。
+
+### 改进了对带有插值的模板字符串的检查
+
+TypeScript 现在更准确地检查字符串是否可赋值给模板字符串类型的占位符位置。
+
+```ts
+function a<T extends { id: string }>() {
+  let x: `-${keyof T & string}`;
+
+  // Used to error, now doesn't.
+  x = '-id';
+}
+```
+
+这种行为更加理想，但可能会导致使用条件类型等结构的代码出现问题，因为这些规则变化很容易引发观察到的错误。
+
+更多详情请参考 [PR](https://github.com/microsoft/TypeScript/pull/56598)。
+
+### 当类型导入与本地值冲突时报错
+
+在之前的版本中，如果对 `"Something"` 的导入只涉及类型，TypeScript 会在 `"isolatedModules"` 下允许以下代码。
+
+```ts
+import { Something } from './some/path';
+
+let Something = 123;
+```
+
+然而，对于单文件编译器来说，假设是否能够"安全"删除 `import` 并不可靠，即使代码在运行时肯定会失败。
+在 TypeScript 5.4 中，这段代码将触发以下类似的错误：
+
+```ts
+Import 'Something' conflicts with local value, so must be declared with a type-only import when 'isolatedModules' is enabled.
+```
+
+修改方法或者给本地变量重命名，或者为导入语句添加 `type` 修饰符：
+
+```ts
+import type { Something } from './some/path';
+
+// or
+
+import { type Something } from './some/path';
+```
+
+更多详情请参考 [PR](https://github.com/microsoft/TypeScript/pull/56354)。
+
+### 新的枚举可赋值性检查
+
+在之前的版本中，当两个枚举具有相同的声明名称和枚举成员名称时，它们通常被认为是兼容的。
+然而，当这些值是已知的时候，TypeScript 会默默地允许它们具有不同的值。
+
+TypeScript 5.4 通过要求已知的值必须相同来加强这一限制。
+这意味着当枚举的值已知时，它们必须具有相同的值。
+
+```ts
+namespace First {
+  export enum SomeEnum {
+    A = 0,
+    B = 1,
+  }
+}
+
+namespace Second {
+  export enum SomeEnum {
+    A = 0,
+    B = 2,
+  }
+}
+
+function foo(x: First.SomeEnum, y: Second.SomeEnum) {
+  // Both used to be compatible - no longer the case,
+  // TypeScript errors with something like:
+  //
+  //  Each declaration of 'SomeEnum.B' differs in its value, where '1' was expected but '2' was given.
+  x = y;
+  y = x;
+}
+```
+
+此外，对于一个枚举成员没有静态已知值的情况，还有一些新的限制。
+在这些情况下，另一个枚举成员必须至少是隐式数字类型（例如，它没有静态解析的初始化值），或者是显式数字类型（意味着 TypeScript 可以将值解析为某个数字类型）。
+从实际角度来看，这意味着字符串枚举成员只能与具有相同值的其他字符串枚举兼容。
+
+```ts
+namespace First {
+  export declare enum SomeEnum {
+    A,
+    B,
+  }
+}
+
+namespace Second {
+  export declare enum SomeEnum {
+    A,
+    B = 'some known string',
+  }
+}
+
+function foo(x: First.SomeEnum, y: Second.SomeEnum) {
+  // Both used to be compatible - no longer the case,
+  // TypeScript errors with something like:
+  //
+  //  One value of 'SomeEnum.B' is the string '"some known string"', and the other is assumed to be an unknown numeric value.
+  x = y;
+  y = x;
+}
+```
+
+更多详情请参考 [PR](https://github.com/microsoft/TypeScript/pull/55924)。
+
+### 枚举成员名的限制
+
+TypeScript 不再允许枚举成员名使用 `Infinity`，`-Infinity`，或 `NaN`。
+
+```ts
+// Errors on all of these:
+//
+//  An enum member cannot have a numeric name.
+enum E {
+  Infinity = 0,
+  '-Infinity' = 1,
+  NaN = 2,
+}
+```
+
+更多详情请参考 [PR](https://github.com/microsoft/TypeScript/pull/56161)。
+
+### 在具有 `any` 剩余元素的元组上，更好地保留映射类型
+
+在之前的版本中，将带有 `"any"` 类型的映射类型应用于元组时，会创建一个 `"any"` 元素类型。
+这是不可取的，并且现在已经修复了这个问题。
+
+```ts
+Promise.all(['', ...([] as any)]).then(result => {
+  const head = result[0]; // 5.3: any, 5.4: string
+  const tail = result.slice(1); // 5.3 any, 5.4: any[]
+});
+```
+
+更多详情请参考 [PR](https://github.com/microsoft/TypeScript/pull/57031)，[Issue](https://github.com/microsoft/TypeScript/issues/57389)，[Issue](https://github.com/microsoft/TypeScript/issues/57389)。
+
+### 代码生成变化
+
+虽然这不是一个直接的破坏性变更，但开发人员可能会隐式地依赖于 TypeScript 生成的 JavaScript 或声明文件输出。以下是一些值得注意的变化。
+
+- [当类型参数被遮蔽时更频繁地保留类型参数名称](https://github.com/microsoft/TypeScript/pull/55820)
+- [将异步函数的复杂参数列表移到降级生成器主体中](https://github.com/microsoft/TypeScript/pull/56296)
+- [不要移除函数声明中的绑定别名](https://github.com/microsoft/TypeScript/pull/57020)
+- [当存在 ImportTypeNode 时，ImportAttributes 应该经过相同的编译阶段处理](https://github.com/microsoft/TypeScript/pull/56395)
