@@ -330,3 +330,27 @@ TypeScript 现在提供了一个快速修复选项，可以为被调用时传递
 TypeScript 的自动导入功能以前不会考虑 `imports` 中的路径，这可能令人沮丧。
 相反，用户可能需要在 `tsconfig.json` 中手动定义路径。
 然而，由于 [Emma Hamilton](https://github.com/emmatown) 的贡献，TypeScript 的自动导入现在支持[子路径导入](https://github.com/microsoft/TypeScript/pull/55015)！
+
+## 即将到来的 TypeScript 5.0 弃用功能
+
+TypeScript 5.0 弃用了以下选项和行为：
+
+- charset
+- target: ES3
+- importsNotUsedAsValues
+- noImplicitUseStrict
+- noStrictGenericChecks
+- keyofStringsOnly
+- suppressExcessPropertyErrors
+- suppressImplicitAnyIndexErrors
+- out
+- preserveValueImports
+- 工程引用中的 prepend
+- 隐式的系统特定 newLine
+
+为了继续使用这些功能，使用 TypeScript 5.0 + 版本的开发人员必须指定一个名为 `ignoreDeprecations` 的新选项，其值为 `"5.0"`。
+
+然而，TypScript 5.4 将是这些功能继续正常工作的最后一个版本。
+到了 TypeScript 5.5（可能是 2024 年 6 月），它们将变成严格的错误，使用它们的代码将需要进行迁移。
+
+要获取更多信息，您可以在 GitHub 上查阅[这个计划](https://github.com/microsoft/TypeScript/issues/51909)，其中包含了如何最佳地适应您的代码库的建议。
