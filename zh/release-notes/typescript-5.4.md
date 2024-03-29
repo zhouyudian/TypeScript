@@ -213,3 +213,74 @@ myObj.even;
 我们预计它们最终会在稳定的 `es2024` 目标下可用。
 
 感谢[Kevin Gibbons](https://github.com/bakkot)的[PR](https://github.com/microsoft/TypeScript/pull/56805)。
+
+## 支持在 `--moduleResolution bundler` 和 `--module preserve` 时 使用 `require()`
+
+TypeScript 有一个名为 `bundler` 的 `moduleResolution` 选项，旨在模拟现代打包工具确定导入路径所指向的文件的方式。
+该选项的一个限制是它必须与 `--module esnext` 配对使用，这导致无法使用 `import ... = require(...)` 语法。
+
+```ts
+// previously errored
+import myModule = require('module/path');
+```
+
+如果您计划只编写标准的 ECMAScript `import`，这可能看起来并不是很重要，但在使用具有[条件导出](https://nodejs.org/api/packages.html#conditional-exports)的包时就会有所不同。
+
+在 TypeScript 5.4 中，当将 `module` 设置为一个名为 `preserve` 的新选项时，可以使用 `require()`。
+
+在 `--module preserve` 和 `--moduleResolution bundler` 之间，这两个选项更准确地模拟了像 Bun 等打包工具和运行时环境允许的操作以及它们如何执行模块查找。
+实际上，在使用 `--module preserve` 时，`--moduleResolution` 选项将会隐式设置为 `bundler`（以及 `--esModuleInterop` 和 `--resolveJsonModule`）。
+
+```json
+{
+  "compilerOptions": {
+    "module": "preserve"
+    // ^ also implies:
+    // "moduleResolution": "bundler",
+    // "esModuleInterop": true,
+    // "resolveJsonModule": true,
+
+    // ...
+  }
+}
+```
+
+在 `--module preserve` 下，ECMAScript 的 `import` 语句将始终按原样输出，而 `import ... = require(...)` 语句将被输出为 `require()` 调用（尽管实际上你可能不会使用 TypeScript 进行输出，因为你很可能会使用打包工具来处理你的代码）。
+这一点不受包含文件的文件扩展名的影响。
+因此，以下代码：
+
+```ts
+import * as foo from 'some-package/foo';
+import bar = require('some-package/bar');
+```
+
+的输出结果会是这样：
+
+```js
+import * as foo from 'some-package/foo';
+var bar = require('some-package/bar');
+```
+
+这也意味着您选择的语法将指定条件导出的匹配方式。
+因此，在上面的示例中，如果 `some-package` 的 `package.json` 如下所示：
+
+```json
+{
+  "name": "some-package",
+  "version": "0.0.1",
+  "exports": {
+    "./foo": {
+      "import": "./esm/foo-from-import.mjs",
+      "require": "./cjs/foo-from-require.cjs"
+    },
+    "./bar": {
+      "import": "./esm/bar-from-import.mjs",
+      "require": "./cjs/bar-from-require.cjs"
+    }
+  }
+}
+```
+
+TypeScript 会将路径解析为 `[...]/some-package/esm/foo-from-import.mjs` 和 `[...]/some-package/cjs/bar-from-require.cjs`。
+
+更多详情请参考 [PR](https://github.com/microsoft/TypeScript/pull/56785)。
