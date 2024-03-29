@@ -284,3 +284,26 @@ var bar = require('some-package/bar');
 TypeScript 会将路径解析为 `[...]/some-package/esm/foo-from-import.mjs` 和 `[...]/some-package/cjs/bar-from-require.cjs`。
 
 更多详情请参考 [PR](https://github.com/microsoft/TypeScript/pull/56785)。
+
+## 检查导入属性和断言
+
+导入属性和断言现在会与全局的 `ImportAttributes` 类型进行检查。
+这意味着运行时现在可以更准确地描述导入属性。
+
+```ts
+// In some global file.
+interface ImportAttributes {
+    type: "json";
+}
+
+// In some other module
+import * as ns from "foo" with { type: "not-json" };
+//                                     ~~~~~~~~~~
+// error!
+//
+// Type '{ type: "not-json"; }' is not assignable to type 'ImportAttributes'.
+//  Types of property 'type' are incompatible.
+//    Type '"not-json"' is not assignable to type '"json"'.
+```
+
+感谢 [Oleksandr Tarasiuk](https://github.com/a-tarasyuk)的 [PR](https://github.com/microsoft/TypeScript/pull/56034)。
