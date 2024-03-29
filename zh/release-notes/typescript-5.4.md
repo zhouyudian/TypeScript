@@ -147,3 +147,69 @@ createStreetLight(['red', 'yellow', 'green'], 'blue');
 排除对 `defaultColor` 类型进行推断的探索意味着 `"blue"` 永远不会成为推断的候选项，类型检查器可以拒绝它。
 
 具体实现请参考 [PR](https://github.com/microsoft/TypeScript/pull/56794)，以及最初实现 [PR](https://github.com/microsoft/TypeScript/pull/52968)，感谢[Mateusz Burzyński](https://github.com/Andarist)
+
+## `Object.groupBy` 和 `Map.groupBy`
+
+TypeScript 5.4 为 JavaScript 的新静态方法 `Object.groupBy` 和 `Map.groupBy` 添加了声明。
+
+`Object.groupBy` 接受一个可迭代对象和一个函数，该函数确定每个元素应该被放置在哪个“组”中。
+该函数需要为每个不同的分组生成一个“键”，而 `Object.groupBy` 使用该键来创建一个对象，其中每个键都映射到一个包含原始元素的数组。
+
+因此：
+
+```js
+const array = [0, 1, 2, 3, 4, 5];
+
+const myObj = Object.groupBy(array, (num, index) => {
+  return num % 2 === 0 ? 'even' : 'odd';
+});
+```
+
+等同于：
+
+```js
+const myObj = {
+  even: [0, 2, 4],
+  odd: [1, 3, 5],
+};
+```
+
+`Map.groupBy` 类似，但生成的是一个 `Map` 而不是普通对象。
+如果您需要 `Map` 提供的保证、处理期望 `Map` 的 API，或者需要使用任何类型的键进行分组（而不仅仅是可以作为 JavaScript 属性名的键），那么这可能更可取。
+
+```js
+const myObj = Map.groupBy(array, (num, index) => {
+  return num % 2 === 0 ? 'even' : 'odd';
+});
+```
+
+就像之前一样，你可以用等效的方式创建 `myObj`：
+
+```js
+const myObj = new Map();
+
+myObj.set('even', [0, 2, 4]);
+myObj.set('odd', [1, 3, 5]);
+```
+
+注意在 `Object.groupBy` 的例子中，生成的对象使用了所有可选属性。
+
+```js
+interface EvenOdds {
+    even?: number[];
+    odd?: number[];
+}
+
+const myObj: EvenOdds = Object.groupBy(...);
+
+myObj.even;
+//    ~~~~
+// Error to access this under 'strictNullChecks'.
+```
+
+这是因为没法保证 `groupBy` 生成了*所有的*键。
+
+注意这些方法仅在将 `target` 设置为 `esnext`，或者设置了相应的 `lib` 选项时才可用。
+我们预计它们最终会在稳定的 `es2024` 目标下可用。
+
+感谢[Kevin Gibbons](https://github.com/bakkot)的[PR](https://github.com/microsoft/TypeScript/pull/56805)。
