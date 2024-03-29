@@ -319,3 +319,14 @@ TypeScript 现在提供了一个快速修复选项，可以为被调用时传递
 当在多个现有函数之间传递一个新参数时，这将非常有用，而目前这样做可能会很麻烦。
 
 感谢 [Oleksandr Tarasiuk](https://github.com/a-tarasyuk)的 [PR](https://github.com/microsoft/TypeScript/pull/56411)。
+
+## 子路径导入支持自动导入
+
+在 Node.js 中，`package.json` 通过一个名为 `imports` 的字段支持一种称为“子路径导入”的功能。
+这是一种将包内的路径重新映射到其他模块路径的方式。
+在概念上，这与路径映射非常相似，某些模块打包工具和加载器支持该功能（TypeScript 通过一个称为 `paths` 的功能也支持该功能）。
+唯一的区别是，子路径导入必须始终以 `#` 开头。
+
+TypeScript 的自动导入功能以前不会考虑 `imports` 中的路径，这可能令人沮丧。
+相反，用户可能需要在 `tsconfig.json` 中手动定义路径。
+然而，由于 [Emma Hamilton](https://github.com/emmatown) 的贡献，TypeScript 的自动导入现在支持[子路径导入](https://github.com/microsoft/TypeScript/pull/55015)！
