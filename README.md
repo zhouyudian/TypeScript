@@ -8,7 +8,7 @@
 近来该项目又持续不断地有新的朋友关注，
 因此现将所有文档整理发布为**图书**样式。希望大家能够喜欢!
 
-线上阅读地址：[http://zhongsp.github.io/TypeScript](http://zhongsp.github.io/TypeScript)
+线上阅读地址：[https://zhongsp.github.io/TypeScript](https://zhongsp.github.io/TypeScript)
 
 ---
 
