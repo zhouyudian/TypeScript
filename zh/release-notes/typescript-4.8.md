@@ -13,8 +13,8 @@ TypeScript 现在能够识别出这种情况，允许将 `unknown` 赋值给 `{}
 
 ```ts
 function f(x: unknown, y: {} | null | undefined) {
-    x = y; // 可以工作
-    y = x; // 以前会报错，现在可以工作
+  x = y; // 可以工作
+  y = x; // 以前会报错，现在可以工作
 }
 ```
 
@@ -33,8 +33,8 @@ function f(x: unknown, y: {} | null | undefined) {
 
 ```ts
 function foo<T>(x: NonNullable<T>, y: NonNullable<NonNullable<T>>) {
-    x = y; // 一直没问题
-    y = x; // 以前会报错，现在没问题
+  x = y; // 一直没问题
+  y = x; // 以前会报错，现在没问题
 }
 ```
 
@@ -43,21 +43,19 @@ function foo<T>(x: NonNullable<T>, y: NonNullable<NonNullable<T>>) {
 
 ```ts
 function narrowUnknownishUnion(x: {} | null | undefined) {
-    if (x) {
-        x;  // {}
-    }
-    else {
-        x;  // {} | null | undefined
-    }
+  if (x) {
+    x; // {}
+  } else {
+    x; // {} | null | undefined
+  }
 }
 
 function narrowUnknown(x: unknown) {
-    if (x) {
-        x;  // 以前是 'unknown'，现在是 '{}'
-    }
-    else {
-        x;  // unknown
-    }
+  if (x) {
+    x; // 以前是 'unknown'，现在是 '{}'
+  } else {
+    x; // unknown
+  }
 }
 ```
 
@@ -68,13 +66,13 @@ TypeScript 会将其与 `{}` 进行交叉 - 等同于使用 `NonNullable`。
 
 ```ts
 function throwIfNullable<T>(value: T): NonNullable<T> {
-    if (value === undefined || value === null) {
-        throw Error("Nullable value!");
-    }
+  if (value === undefined || value === null) {
+    throw Error('Nullable value!');
+  }
 
-    // 以前会报错，因为 'T' 不能赋值给 'NonNullable<T>'。
-    // 现在会细化为 'T & {}' 并且不报错，因为它等同于 'NonNullable<T>'。
-    return value;
+  // 以前会报错，因为 'T' 不能赋值给 'NonNullable<T>'。
+  // 现在会细化为 'T & {}' 并且不报错，因为它等同于 'NonNullable<T>'。
+  return value;
 }
 ```
 
@@ -92,21 +90,22 @@ function throwIfNullable<T>(value: T): NonNullable<T> {
 ```ts
 // 提取元组类型中的第一个元素，若其能够赋值给 'number'，
 // 返回 'never' 若无这样的元素。
-type TryGetNumberIfFirst<T> =
-    T extends [infer U extends number, ...unknown[]] ? U : never;
+type TryGetNumberIfFirst<T> = T extends [infer U extends number, ...unknown[]]
+  ? U
+  : never;
 ```
 
 若 `infer` 类型出现在模版字符串类型中且被原始类型所约束，则 TypeScript 会尝试将其解析为字面量类型。
 
 ```ts
 // SomeNum 以前是 'number'；现在是 '100'。
-type SomeNum = "100" extends `${infer U extends number}` ? U : never;
+type SomeNum = '100' extends `${infer U extends number}` ? U : never;
 
 // SomeBigInt 以前是 'bigint'；现在是 '100n'。
-type SomeBigInt = "100" extends `${infer U extends bigint}` ? U : never;
+type SomeBigInt = '100' extends `${infer U extends bigint}` ? U : never;
 
 // SomeBool 以前是 'boolean'；现在是 'true'。
-type SomeBool = "true" extends `${infer U extends boolean}` ? U : never;
+type SomeBool = 'true' extends `${infer U extends boolean}` ? U : never;
 ```
 
 现在它能更好地表达代码库在运行时的行为，提供更准确的类型。
@@ -118,7 +117,7 @@ type SomeBool = "true" extends `${infer U extends boolean}` ? U : never;
 
 ```ts
 // JustNumber 为 `number` 因为 TypeScript 解析 出 `"1.0"`，但 `String(Number("1.0"))` 为 `"1"` 不匹配。
-type JustNumber = "1.0" extends `${infer T extends number}` ? T : never; 
+type JustNumber = '1.0' extends `${infer T extends number}` ? T : never;
 ```
 
 更多详情请参考[这里](https://github.com/microsoft/TypeScript/pull/48094)。
@@ -153,9 +152,9 @@ if people_at_home == []:
 let peopleAtHome = [];
 
 if (peopleAtHome === []) {
-//  ~~~~~~~~~~~~~~~~~~~
-// This condition will always return 'false' since JavaScript compares objects by reference, not value.
-    console.log("that's where she lies, broken inside. </3")
+  //  ~~~~~~~~~~~~~~~~~~~
+  // This condition will always return 'false' since JavaScript compares objects by reference, not value.
+  console.log("that's where she lies, broken inside. </3");
 }
 ```
 
@@ -169,7 +168,7 @@ if (peopleAtHome === []) {
 ```ts
 declare function chooseRandomly<T>(x: T, y: T): T;
 
-let [a, b, c] = chooseRandomly([42, true, "hi!"], [0, false, "bye!"]);
+let [a, b, c] = chooseRandomly([42, true, 'hi!'], [0, false, 'bye!']);
 //   ^  ^  ^
 //   |  |  |
 //   |  |  string
@@ -240,10 +239,10 @@ TypeScript 4.8 增加了一个编辑器首选项从自动导入中排除指定�
 
 ```json
 {
-    // Note that `javascript.preferences.autoImportFileExcludePatterns` can be specified for JavaScript too.
-    "typescript.preferences.autoImportFileExcludePatterns": [
-      "**/node_modules/@types/node"
-    ]
+  // Note that `javascript.preferences.autoImportFileExcludePatterns` can be specified for JavaScript too.
+  "typescript.preferences.autoImportFileExcludePatterns": [
+    "**/node_modules/@types/node"
+  ]
 }
 ```
 

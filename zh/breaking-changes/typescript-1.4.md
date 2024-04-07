@@ -27,20 +27,28 @@ var bs: { x: number; y?: number; z?: number }[] = [b, a];
 
 ## 泛型接口
 
-当在多个T类型的参数上使用了不同的类型时会得到一个错误，就算是添加约束也不行：
+当在多个 T 类型的参数上使用了不同的类型时会得到一个错误，就算是添加约束也不行：
 
 ```typescript
-declare function foo<T>(x: T, y:T): T;
-var r = foo(1, ""); // r used to be {}, now this is an error
+declare function foo<T>(x: T, y: T): T;
+var r = foo(1, ''); // r used to be {}, now this is an error
 ```
 
 添加约束：
 
 ```typescript
-interface Animal { x }
-interface Giraffe extends Animal { y }
-interface Elephant extends Animal { z }
-function f<T extends Animal>(x: T, y: T): T { return undefined; }
+interface Animal {
+  x;
+}
+interface Giraffe extends Animal {
+  y;
+}
+interface Elephant extends Animal {
+  z;
+}
+function f<T extends Animal>(x: T, y: T): T {
+  return undefined;
+}
 var g: Giraffe;
 var e: Elephant;
 f(g, e);
@@ -51,17 +59,19 @@ f(g, e);
 **推荐** 如果这种不匹配的行为是故意为之，那么明确指定类型参数：
 
 ```typescript
-var r = foo<{}>(1, ""); // Emulates 1.0 behavior
-var r = foo<string|number>(1, ""); // Most useful
-var r = foo<any>(1, ""); // Easiest
+var r = foo<{}>(1, ''); // Emulates 1.0 behavior
+var r = foo<string | number>(1, ''); // Most useful
+var r = foo<any>(1, ''); // Easiest
 f<Animal>(g, e);
 ```
 
-_或_重写函数定义指明就算不匹配也没问题：
+*或*重写函数定义指明就算不匹配也没问题：
 
 ```typescript
-declare function foo<T,U>(x: T, y:U): T|U;
-function f<T extends Animal, U extends Animal>(x: T, y: U): T|U { return undefined; }
+declare function foo<T, U>(x: T, y: U): T | U;
+function f<T extends Animal, U extends Animal>(x: T, y: U): T | U {
+  return undefined;
+}
 ```
 
 ## 泛型剩余参数
@@ -69,48 +79,52 @@ function f<T extends Animal, U extends Animal>(x: T, y: U): T|U { return undefin
 不能再使用混杂的参数类型：
 
 ```typescript
-function makeArray<T>(...items: T[]): T[] { return items; }
-var r = makeArray(1, ""); // used to return {}[], now an error
+function makeArray<T>(...items: T[]): T[] {
+  return items;
+}
+var r = makeArray(1, ''); // used to return {}[], now an error
 ```
 
 `new Array(...)`也一样
 
-**推荐** 声明向后兼容的签名，如果1.0的行为是你想要的：
+**推荐** 声明向后兼容的签名，如果 1.0 的行为是你想要的：
 
 ```typescript
 function makeArray<T>(...items: T[]): T[];
 function makeArray(...items: {}[]): {}[];
-function makeArray<T>(...items: T[]): T[] { return items; }
+function makeArray<T>(...items: T[]): T[] {
+  return items;
+}
 ```
 
 ## 带类型参数接口的重载解析
 
 ```typescript
 var f10: <T>(x: T, b: () => (a: T) => void, y: T) => T;
-var r9 = f10('', () => (a => a.foo), 1); // r9 was any, now this is an error
+var r9 = f10('', () => a => a.foo, 1); // r9 was any, now this is an error
 ```
 
 **推荐** 手动指定一个类型参数
 
 ```typescript
-var r9 = f10<any>('', () => (a => a.foo), 1);
+var r9 = f10<any>('', () => a => a.foo, 1);
 ```
 
 ## 类声明与类型表达式以严格模式解析
 
-ECMAScript 2015语言规范\(ECMA-262 6th Edition\)指明_ClassDeclaration_和_ClassExpression_使用严格模式。 因此，在解析类声明或类表达式时将使用额外的限制。
+ECMAScript 2015 语言规范\(ECMA-262 6th Edition\)指明*ClassDeclaration*和*ClassExpression*使用严格模式。 因此，在解析类声明或类表达式时将使用额外的限制。
 
 例如：
 
 ```typescript
-class implements {}  // Invalid: implements is a reserved word in strict mode
+class implements {} // Invalid: implements is a reserved word in strict mode
 class C {
-    foo(arguments: any) {   // Invalid: "arguments" is not allow as a function argument
-        var eval = 10;      // Invalid: "eval" is not allowed as the left-hand-side expression
-        arguments = [];     // Invalid: arguments object is immutable
-    }
+  foo(arguments: any) {
+    // Invalid: "arguments" is not allow as a function argument
+    var eval = 10; // Invalid: "eval" is not allowed as the left-hand-side expression
+    arguments = []; // Invalid: arguments object is immutable
+  }
 }
 ```
 
 关于严格模式限制的完整列表，请阅读 Annex C - The Strict Mode of ECMAScript of ECMA-262 6th Edition。
-

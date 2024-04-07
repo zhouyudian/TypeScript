@@ -312,9 +312,9 @@ import * as ns from "foo" with { type: "not-json" };
 
 TypeScript 现在提供了一个快速修复选项，可以为被调用时传递了过多参数的函数添加一个新的参数。
 
-![](https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2024/01/add-missing-params-5-4-beta-before.png)
+![x](https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2024/01/add-missing-params-5-4-beta-before.png)
 
-![](https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2024/01/add-missing-params-5-4-beta-after.png)
+![x](https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2024/01/add-missing-params-5-4-beta-after.png)
 
 当在多个现有函数之间传递一个新参数时，这将非常有用，而目前这样做可能会很麻烦。
 

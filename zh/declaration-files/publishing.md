@@ -18,11 +18,11 @@ TypeScript 工程和 JavaScript 工程都可以使用[`--declaration`](/tsconfig
 
 ```json
 {
-    "name": "awesome",
-    "author": "Vandelay Industries",
-    "version": "1.0.0",
-    "main": "./lib/main.js",
-    "types": "./lib/main.d.ts"
+  "name": "awesome",
+  "author": "Vandelay Industries",
+  "version": "1.0.0",
+  "main": "./lib/main.js",
+  "types": "./lib/main.d.ts"
 }
 ```
 
@@ -38,16 +38,16 @@ TypeScript 工程和 JavaScript 工程都可以使用[`--declaration`](/tsconfig
 
 ```json
 {
-    "name": "browserify-typescript-extension",
-    "author": "Vandelay Industries",
-    "version": "1.0.0",
-    "main": "./lib/main.js",
-    "types": "./lib/main.d.ts",
-    "dependencies": {
-        "browserify": "latest",
-        "@types/browserify": "latest",
-        "typescript": "next"
-    }
+  "name": "browserify-typescript-extension",
+  "author": "Vandelay Industries",
+  "version": "1.0.0",
+  "main": "./lib/main.js",
+  "types": "./lib/main.d.ts",
+  "dependencies": {
+    "browserify": "latest",
+    "@types/browserify": "latest",
+    "typescript": "next"
+  }
 }
 ```
 
@@ -80,9 +80,9 @@ TypeScript 工程和 JavaScript 工程都可以使用[`--declaration`](/tsconfig
 
 如果你的类型声明依赖于另一个包：
 
--   *不要*把依赖的包放进你的包里，保持它们在各自的文件里。
--   *不要*将声明拷贝到你的包里。
--   *应该*依赖在 npm 上的类型声明包，如果依赖包没包含它自己的声明文件的话。
+- *不要*把依赖的包放进你的包里，保持它们在各自的文件里。
+- *不要*将声明拷贝到你的包里。
+- *应该*依赖在 npm 上的类型声明包，如果依赖包没包含它自己的声明文件的话。
 
 ## 使用`typesVersions`选择版本
 
@@ -92,12 +92,12 @@ TypeScript 工程和 JavaScript 工程都可以使用[`--declaration`](/tsconfig
 
 ```json
 {
-    "name": "package-name",
-    "version": "1.0",
-    "types": "./index.d.ts",
-    "typesVersions": {
-        ">=3.1": { "*": ["ts3.1/*"] }
-    }
+  "name": "package-name",
+  "version": "1.0",
+  "types": "./index.d.ts",
+  "typesVersions": {
+    ">=3.1": { "*": ["ts3.1/*"] }
+  }
 }
 ```
 
@@ -121,13 +121,13 @@ TypeScript 是根据 Node.js 的[语言化版本](https://github.com/npm/node-se
 
 ```json tsconfig
 {
-    "name": "package-name",
-    "version": "1.0",
-    "types": "./index.d.ts",
-    "typesVersions": {
-        ">=3.2": { "*": ["ts3.2/*"] },
-        ">=3.1": { "*": ["ts3.1/*"] }
-    }
+  "name": "package-name",
+  "version": "1.0",
+  "types": "./index.d.ts",
+  "typesVersions": {
+    ">=3.2": { "*": ["ts3.2/*"] },
+    ">=3.1": { "*": ["ts3.1/*"] }
+  }
 }
 ```
 
@@ -136,14 +136,14 @@ TypeScript 是根据 Node.js 的[语言化版本](https://github.com/npm/node-se
 
 ```jsonc tsconfig
 {
-    "name": "package-name",
-    "version": "1.0",
-    "types": "./index.d.ts",
-    "typesVersions": {
-        // NOTE: this doesn't work!
-        ">=3.1": { "*": ["ts3.1/*"] },
-        ">=3.2": { "*": ["ts3.2/*"] }
-    }
+  "name": "package-name",
+  "version": "1.0",
+  "types": "./index.d.ts",
+  "typesVersions": {
+    // NOTE: this doesn't work!
+    ">=3.1": { "*": ["ts3.1/*"] },
+    ">=3.2": { "*": ["ts3.2/*"] }
+  }
 }
 ```
 

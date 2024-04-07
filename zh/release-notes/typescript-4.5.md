@@ -93,7 +93,7 @@ export interface Error {
 }
 
 export function handler(r: Success | Error) {
-  if (r.type === "HttpSuccess") {
+  if (r.type === 'HttpSuccess') {
     // 'r' 的类型为 'Success'
     let token = r.body;
   }
@@ -134,7 +134,7 @@ type TrimLeft<T extends string> = T extends ` ${infer Rest}`
   : T;
 
 // Test = "hello" | "world"
-type Test = TrimLeft<"   hello" | " world">;
+type Test = TrimLeft<'   hello' | ' world'>;
 ```
 
 这个类型也许有用，但如果字符串起始位置有 50 个空格，就会产生错误。
@@ -145,7 +145,7 @@ type TrimLeft<T extends string> = T extends ` ${infer Rest}`
   : T;
 
 // error: Type instantiation is excessively deep and possibly infinite.
-type Test = TrimLeft<"                                                oops">;
+type Test = TrimLeft<'                                                oops'>;
 ```
 
 这很讨厌，因为这种类型在表示字符串操作时很有用 - 例如，URL 路由解析器。
@@ -184,9 +184,9 @@ type GetCharsHelper<S, Acc> = S extends `${infer Char}${infer Rest}`
 例如，考虑下面的代码：
 
 ```ts
-import { Animal } from "./animal.js";
+import { Animal } from './animal.js';
 
-eval("console.log(new Animal().isDangerous())");
+eval('console.log(new Animal().isDangerous())');
 ```
 
 默认情况下，TypeScript 会删除上面的导入语句，因为它看上去没有被使用。
@@ -196,7 +196,7 @@ eval("console.log(new Animal().isDangerous())");
 ```html
 <!-- A .svelte File -->
 <script>
-  import { someFunc } from "./some-module.js";
+  import { someFunc } from './some-module.js';
 </script>
 
 <button on:click="{someFunc}">Click me!</button>
@@ -207,7 +207,7 @@ eval("console.log(new Animal().isDangerous())");
 ```html
 <!-- A .vue File -->
 <script setup>
-  import { someFunc } from "./some-module.js";
+  import { someFunc } from './some-module.js';
 </script>
 
 <button @click="someFunc">Click me!</button>
@@ -222,7 +222,7 @@ eval("console.log(new Animal().isDangerous())");
 ```ts
 // Which of these is a value that should be preserved? tsc knows, but `ts.transpileModule`,
 // ts-loader, esbuild, etc. don't, so `isolatedModules` gives an error.
-import { someFunc, BaseType } from "./some-module.js";
+import { someFunc, BaseType } from './some-module.js';
 //                 ^^^^^^^^
 // Error: 'BaseType' is a type and must be imported using a type-only import
 // when 'preserveValueImports' and 'isolatedModules' are both enabled.
@@ -239,7 +239,7 @@ import { someFunc, BaseType } from "./some-module.js";
 ```ts
 // Which of these is a value that should be preserved? tsc knows, but `ts.transpileModule`,
 // ts-loader, esbuild, etc. don't, so `isolatedModules` issues an error.
-import { someFunc, BaseType } from "./some-module.js";
+import { someFunc, BaseType } from './some-module.js';
 //                 ^^^^^^^^
 // Error: 'BaseType' is a type and must be imported using a type-only import
 // when 'preserveValueImports' and 'isolatedModules' are both enabled.
@@ -249,8 +249,8 @@ import { someFunc, BaseType } from "./some-module.js";
 TypeScript 已经有类似的功能，即 `import type`：
 
 ```ts
-import type { BaseType } from "./some-module.js";
-import { someFunc } from "./some-module.js";
+import type { BaseType } from './some-module.js';
+import { someFunc } from './some-module.js';
 
 export class Thing implements BaseType {
   // ...
@@ -261,19 +261,19 @@ export class Thing implements BaseType {
 因此，TypeScript 4.5 允许在每个命名导入前使用 `type` 修饰符，你可以按需混合使用它们。
 
 ```ts
-import { someFunc, type BaseType } from "./some-module.js";
+import { someFunc, type BaseType } from './some-module.js';
 
 export class Thing implements BaseType {
-    someMethod() {
-        someFunc();
-    }
+  someMethod() {
+    someFunc();
+  }
 }
 ```
 
 上例中，在 [`preserveValueImports`](/tsconfig#preserveValueImports) 模式下，能够确定 `BaseType` 可以被删除，同时 `someFunc` 应该被保留，于是就会生成如下代码：
 
 ```js
-import { someFunc } from "./some-module.js";
+import { someFunc } from './some-module.js';
 
 export class Thing {
   someMethod() {
@@ -291,17 +291,19 @@ TypeScript 4.5 支持了检查对象上是否存在某私有字段的 ECMAScript
 
 ```ts
 class Person {
-    #name: string;
-    constructor(name: string) {
-        this.#name = name;
-    }
+  #name: string;
+  constructor(name: string) {
+    this.#name = name;
+  }
 
-    equals(other: unknown) {
-        return other &&
-            typeof other === "object" &&
-            #name in other && // <- this is new!
-            this.#name === other.#name;
-    }
+  equals(other: unknown) {
+    return (
+      other &&
+      typeof other === 'object' &&
+      #name in other && // <- this is new!
+      this.#name === other.#name
+    );
+  }
 }
 ```
 
@@ -313,11 +315,11 @@ class Person {
 
 ### 导入断言
 
-TypeScript 4.5 支持了 ECMAScript Proposal 中的 *导入断言*。
+TypeScript 4.5 支持了 ECMAScript Proposal 中的 _导入断言_。
 该语法会被运行时所使用来检查导入是否为期望的格式。
 
 ```ts
-import obj from "./something.json" assert { type: "json" };
+import obj from './something.json' assert { type: 'json' };
 ```
 
 TypeScript 不会检查这些断言，因为它们依赖于宿主环境。
@@ -326,16 +328,14 @@ TypeScript 会保留原样，稍后让浏览器或者运行时来处理它们（
 ```ts
 // TypeScript 允许
 // 但浏览器可能不允许
-import obj from "./something.json" assert {
-    type: "fluffy bunny"
-};
+import obj from './something.json' assert { type: 'fluffy bunny' };
 ```
 
 动态的 `import()` 调用可以通过第二个参数来使用导入断言。
 
 ```ts
-const obj = await import("./something.json", {
-  assert: { type: "json" },
+const obj = await import('./something.json', {
+  assert: { type: 'json' },
 });
 ```
 
@@ -375,7 +375,7 @@ TypeScript 通常会使用属性的类型来判断插入哪种初始化器，但
 
 ![Hovering over a signature where `Buffer` isn't found, TypeScript replaces it with `any`.](https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2021/10/quick-info-unresolved-4-4.png)
 
-上例中，没有找到 `Buffer`，因此 TypeScript 在 *quick info* 里显示了 `any`。
+上例中，没有找到 `Buffer`，因此 TypeScript 在 _quick info_ 里显示了 `any`。
 在 TypeScript 4.5 中，TypeScript 会尽可能保留你编写的代码。
 
 ![Hovering over a signature where `Buffer` isn't found, it continues to use the name `Buffer`.](https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2021/10/quick-info-unresolved-4-5.png)

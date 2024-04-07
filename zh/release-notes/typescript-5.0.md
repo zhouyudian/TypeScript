@@ -1235,9 +1235,9 @@ TypeScript 现在对一些常用的机制进行缓存，以便在这些操作之
 
 更多详情：
 
-* [Migrate to Modules](https://github.com/microsoft/TypeScript/pull/51387)
-* [Node Monomorphization](https://github.com/microsoft/TypeScript/pull/51682)
-* [Symbol Monomorphization](https://github.com/microsoft/TypeScript/pull/51880)
-* [Identifier Size Reduction](https://github.com/microsoft/TypeScript/pull/52170)
-* [Printer Caching](https://github.com/microsoft/TypeScript/pull/52382)
-* [Limited Usage of var](https://github.com/microsoft/TypeScript/issues/52924)
+- [Migrate to Modules](https://github.com/microsoft/TypeScript/pull/51387)
+- [Node Monomorphization](https://github.com/microsoft/TypeScript/pull/51682)
+- [Symbol Monomorphization](https://github.com/microsoft/TypeScript/pull/51880)
+- [Identifier Size Reduction](https://github.com/microsoft/TypeScript/pull/52170)
+- [Printer Caching](https://github.com/microsoft/TypeScript/pull/52382)
+- [Limited Usage of var](https://github.com/microsoft/TypeScript/issues/52924)

@@ -6,14 +6,14 @@
 
 这些例子是按复杂度递增的顺序组织的。
 
--   [带属性的对象](#带属性的对象)
--   [函数重载](#函数重载)
--   [可重用类型（接口）](#可重用类型接口)
--   [可重用类型（类型别名）](#可重用类型类型别名)
--   [组织类型](#组织类型)
--   [类](#类)
--   [全局变量](#全局变量)
--   [全局函数](#全局函数)
+- [带属性的对象](#带属性的对象)
+- [函数重载](#函数重载)
+- [可重用类型（接口）](#可重用类型接口)
+- [可重用类型（类型别名）](#可重用类型类型别名)
+- [组织类型](#组织类型)
+- [类](#类)
+- [全局变量](#全局变量)
+- [全局函数](#全局函数)
 
 ## 带属性的对象
 
@@ -37,8 +37,8 @@ _声明_
 
 ```ts
 declare namespace myLib {
-    function makeGreeting(s: string): string;
-    let numberOfGreetings: number;
+  function makeGreeting(s: string): string;
+  let numberOfGreetings: number;
 }
 ```
 
@@ -80,8 +80,8 @@ _代码_
 
 ```ts
 greet({
-    greeting: 'hello world',
-    duration: 4000,
+  greeting: 'hello world',
+  duration: 4000,
 });
 ```
 
@@ -91,9 +91,9 @@ _声明_
 
 ```ts
 interface GreetingSettings {
-    greeting: string;
-    duration?: number;
-    color?: string;
+  greeting: string;
+  duration?: number;
+  color?: string;
 }
 
 declare function greet(setting: GreetingSettings): void;
@@ -109,7 +109,7 @@ _代码_
 
 ```ts
 function getGreeting() {
-    return 'howdy';
+  return 'howdy';
 }
 class MyGreeter extends Greeter {}
 
@@ -149,14 +149,14 @@ _声明_
 
 ```ts
 declare namespace GreetingLib {
-    interface LogOptions {
-        verbose?: boolean;
-    }
-    interface AlertOptions {
-        modal: boolean;
-        title?: string;
-        color?: string;
-    }
+  interface LogOptions {
+    verbose?: boolean;
+  }
+  interface AlertOptions {
+    modal: boolean;
+    title?: string;
+    color?: string;
+  }
 }
 ```
 
@@ -164,15 +164,15 @@ declare namespace GreetingLib {
 
 ```ts
 declare namespace GreetingLib.Options {
-    // Refer to via GreetingLib.Options.Log
-    interface Log {
-        verbose?: boolean;
-    }
-    interface Alert {
-        modal: boolean;
-        title?: string;
-        color?: string;
-    }
+  // Refer to via GreetingLib.Options.Log
+  interface Log {
+    verbose?: boolean;
+  }
+  interface Alert {
+    modal: boolean;
+    title?: string;
+    color?: string;
+  }
 }
 ```
 
@@ -190,9 +190,9 @@ myGreeter.greeting = 'howdy';
 myGreeter.showGreeting();
 
 class SpecialGreeter extends Greeter {
-    constructor() {
-        super('Very special greetings');
-    }
+  constructor() {
+    super('Very special greetings');
+  }
 }
 ```
 
@@ -203,10 +203,10 @@ _声明_
 
 ```ts
 declare class Greeter {
-    constructor(greeting: string);
+  constructor(greeting: string);
 
-    greeting: string;
-    showGreeting(): void;
+  greeting: string;
+  showGreeting(): void;
 }
 ```
 

@@ -23,11 +23,11 @@
 
 1. 如何获取代码库？
 
-    比如，是否只能够从 npm 或 CDN 获取。
+   比如，是否只能够从 npm 或 CDN 获取。
 
 2. 如何导入代码库？
 
-    它是否添加了某个全局对象？它是否使用了`require`或`import`/`export`语句？
+   它是否添加了某个全局对象？它是否使用了`require`或`import`/`export`语句？
 
 ## 针对不同类型的代码库的示例
 
@@ -70,22 +70,22 @@ define(..., ['someLib'], function(someLib) {
 
 模块化代码库至少会包含以下代表性条目之一：
 
--   无条件的调用`require`或`define`
--   像`import * as a from 'b';`或`export c;`这样的声明
--   赋值给`exports`或`module.exports`
+- 无条件的调用`require`或`define`
+- 像`import * as a from 'b';`或`export c;`这样的声明
+- 赋值给`exports`或`module.exports`
 
 它们极少包含：
 
--   对`window`或`global`的赋值
+- 对`window`或`global`的赋值
 
 #### 模块化代码库的模版
 
 有以下四个模版可用：
 
--   [`module.d.ts`](./templates/module.d.ts.md)
--   [`module-class.d.ts`](./templates/module-class.d.ts.md)
--   [`module-function.d.ts`](./templates/module-function.d.ts.md)
--   [`module-plugin.d.ts`](./templates/module-plugin.d.ts.md)
+- [`module.d.ts`](./templates/module.d.ts.md)
+- [`module-class.d.ts`](./templates/module-class.d.ts.md)
+- [`module-function.d.ts`](./templates/module-function.d.ts.md)
+- [`module-plugin.d.ts`](./templates/module-plugin.d.ts.md)
 
 你应该先阅读[`module.d.ts`](./templates/module.d.ts.md)以便从整体上了解它们的工作方式。
 
@@ -120,7 +120,7 @@ require('jest-matchers-files');
 
 ```ts
 $(() => {
-    console.log('hello!');
+  console.log('hello!');
 });
 ```
 
@@ -141,7 +141,7 @@ UMD 代码库与全局代码库很难通过文档来识别。
 
 ```js
 function createGreeting(s) {
-    return 'Hello, ' + s;
+  return 'Hello, ' + s;
 }
 ```
 
@@ -149,22 +149,22 @@ function createGreeting(s) {
 
 ```js
 window.createGreeting = function (s) {
-    return 'Hello, ' + s;
+  return 'Hello, ' + s;
 };
 ```
 
 在阅读全局代码库的代码时，你会看到：
 
--   顶层的`var`语句或`function`声明
--   一个或多个`window.someName`赋值语句
--   假设 DOM 相关的原始值`document`或`window`存在
+- 顶层的`var`语句或`function`声明
+- 一个或多个`window.someName`赋值语句
+- 假设 DOM 相关的原始值`document`或`window`存在
 
 你不会看到：
 
--   检查或使用了模块加载器，如`require`或`define`
--   CommonJS/Node.js 风格的导入语句，如`var fs = require("fs");`
--   `define(...)`调用
--   描述`require`或导入代码库的文档
+- 检查或使用了模块加载器，如`require`或`define`
+- CommonJS/Node.js 风格的导入语句，如`var fs = require("fs");`
+- `define(...)`调用
+- 描述`require`或导入代码库的文档
 
 #### 全局代码库的示例
 
@@ -337,7 +337,7 @@ import * as someLib from 'someLib';
 
 ```ts
 declare namespace cats {
-    interface KittySettings {}
+  interface KittySettings {}
 }
 ```
 

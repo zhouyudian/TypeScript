@@ -9,7 +9,7 @@ JSX 是一种可嵌入的类似 XML 的语法. 它将最终被转换为合法的
 TypeScript 1.6 引入了新的 `.tsx` 文件扩展名. 这一扩展名一方面允许 TypeScript 文件中的 JSX 语法, 一方面将 `as` 运算符作为默认的类型转换方式 \(避免 JSX 表达式和 TypeScript 前置类型转换运算符之间的歧义\). 比如:
 
 ```typescript
-var x = <any> foo;
+var x = <any>foo;
 // 与如下等价:
 var x = foo as any;
 ```
@@ -27,7 +27,7 @@ interface Props {
 
 class MyComponent extends React.Component<Props, {}> {
   render() {
-    return <span>{this.props.foo}</span>
+    return <span>{this.props.foo}</span>;
   }
 }
 
@@ -43,8 +43,8 @@ JSX 元素的名称和属性是根据 `JSX` 命名空间来检验的. 请查看 
 
 TypeScript 支持两种 `JSX` 模式: `preserve` \(保留\) 和 `react`.
 
-* `preserve` 模式将会在输出中保留 JSX 表达式, 使之后的转换步骤可以处理. _并且输出的文件扩展名为 `.jsx`._
-* `react` 模式将会生成 `React.createElement`, 不再需要再通过 JSX 转换即可运行, 输出的文件扩展名为 `.js`.
+- `preserve` 模式将会在输出中保留 JSX 表达式, 使之后的转换步骤可以处理. _并且输出的文件扩展名为 `.jsx`._
+- `react` 模式将会生成 `React.createElement`, 不再需要再通过 JSX 转换即可运行, 输出的文件扩展名为 `.js`.
 
 查看 [JSX](https://github.com/Microsoft/TypeScript/wiki/JSX) 页面了解更多 JSX 在 TypeScript 中的使用.
 
@@ -56,19 +56,19 @@ TypeScript 1.6 引入了交叉类型作为联合类型 \(union types\) 逻辑上
 
 ```typescript
 function extend<T, U>(first: T, second: U): T & U {
-    let result = <T & U> {};
-    for (let id in first) {
-        result[id] = first[id];
+  let result = <T & U>{};
+  for (let id in first) {
+    result[id] = first[id];
+  }
+  for (let id in second) {
+    if (!result.hasOwnProperty(id)) {
+      result[id] = second[id];
     }
-    for (let id in second) {
-        if (!result.hasOwnProperty(id)) {
-            result[id] = second[id];
-        }
-    }
-    return result;
+  }
+  return result;
 }
 
-var x = extend({ a: "hello" }, { b: 42 });
+var x = extend({ a: 'hello' }, { b: 42 });
 var s = x.a;
 var n = x.b;
 ```
@@ -77,7 +77,7 @@ var n = x.b;
 type LinkedList<T> = T & { next: LinkedList<T> };
 
 interface Person {
-    name: string;
+  name: string;
 }
 
 var people: LinkedList<Person>;
@@ -85,14 +85,20 @@ var s = people.name;
 var s = people.next.name;
 var s = people.next.next.name;
 var s = people.next.next.next.name;
-interface A { a: string }
-interface B { b: string }
-interface C { c: string }
+interface A {
+  a: string;
+}
+interface B {
+  b: string;
+}
+interface C {
+  c: string;
+}
 
 var abc: A & B & C;
-abc.a = "hello";
-abc.b = "hello";
-abc.c = "hello";
+abc.a = 'hello';
+abc.b = 'hello';
+abc.c = 'hello';
 ```
 
 查看 [issue \#1256](https://github.com/Microsoft/TypeScript/issues/1256) 了解更多.
@@ -103,16 +109,19 @@ abc.c = "hello";
 
 ```typescript
 function f() {
-    if (true) {
-        interface T { x: number }
-        let v: T;
-        v.x = 5;
+  if (true) {
+    interface T {
+      x: number;
     }
-    else {
-        interface T { x: string }
-        let v: T;
-        v.x = "hello";
+    let v: T;
+    v.x = 5;
+  } else {
+    interface T {
+      x: string;
     }
+    let v: T;
+    v.x = 'hello';
+  }
 }
 ```
 
@@ -120,16 +129,16 @@ function f() {
 
 ```typescript
 interface Point {
-    x: number;
-    y: number;
+  x: number;
+  y: number;
 }
 
 function getPointFactory(x: number, y: number) {
-    class P {
-        x = x;
-        y = y;
-    }
-    return P;
+  class P {
+    x = x;
+    y = y;
+  }
+  return P;
 }
 
 var PointZero = getPointFactory(0, 0);
@@ -143,17 +152,17 @@ var p3 = new PointOne();
 
 ```typescript
 function f3() {
-    function f<X, Y>(x: X, y: Y) {
-        class C {
-            public x = x;
-            public y = y;
-        }
-        return C;
+  function f<X, Y>(x: X, y: Y) {
+    class C {
+      public x = x;
+      public y = y;
     }
-    let C = f(10, "hello");
-    let v = new C();
-    let x = v.x;  // number
-    let y = v.y;  // string
+    return C;
+  }
+  let C = f(10, 'hello');
+  let v = new C();
+  let x = v.x; // number
+  let y = v.y; // string
 }
 ```
 
@@ -163,12 +172,12 @@ TypeScript 1.6 增加了对 ES6 类表达式的支持. 在一个类表达式中,
 
 ```typescript
 let Point = class {
-    constructor(public x: number, public y: number) { }
-    public length() {
-        return Math.sqrt(this.x * this.x + this.y * this.y);
-    }
+  constructor(public x: number, public y: number) {}
+  public length() {
+    return Math.sqrt(this.x * this.x + this.y * this.y);
+  }
 };
-var p = new Point(3, 4);  // p has anonymous class type
+var p = new Point(3, 4); // p has anonymous class type
 console.log(p.length());
 ```
 
@@ -183,35 +192,39 @@ TypeScript 1.6 增加了对类继承任意值为一个构造函数的表达式�
 ```typescript
 // 继承内建类
 
-class MyArray extends Array<number> { }
-class MyError extends Error { }
+class MyArray extends Array<number> {}
+class MyError extends Error {}
 
 // 继承表达式类
 
 class ThingA {
-    getGreeting() { return "Hello from A"; }
+  getGreeting() {
+    return 'Hello from A';
+  }
 }
 
 class ThingB {
-    getGreeting() { return "Hello from B"; }
+  getGreeting() {
+    return 'Hello from B';
+  }
 }
 
 interface Greeter {
-    getGreeting(): string;
+  getGreeting(): string;
 }
 
 interface GreeterConstructor {
-    new (): Greeter;
+  new (): Greeter;
 }
 
 function getGreeterBase(): GreeterConstructor {
-    return Math.random() >= 0.5 ? ThingA : ThingB;
+  return Math.random() >= 0.5 ? ThingA : ThingB;
 }
 
 class Test extends getGreeterBase() {
-    sayHello() {
-        console.log(this.getGreeting());
-    }
+  sayHello() {
+    console.log(this.getGreeting());
+  }
 }
 ```
 
@@ -223,20 +236,24 @@ TypeScript 1.6 为类和它们的方法增加了 `abstract` 关键字. 一个抽
 
 ```typescript
 abstract class Base {
-    abstract getThing(): string;
-    getOtherThing() { return 'hello'; }
+  abstract getThing(): string;
+  getOtherThing() {
+    return 'hello';
+  }
 }
 
 let x = new Base(); // 错误, 'Base' 是抽象的
 
 // 错误, 必须也为抽象类, 或者实现 'getThing' 方法
-class Derived1 extends Base { }
+class Derived1 extends Base {}
 
 class Derived2 extends Base {
-    getThing() { return 'hello'; }
-    foo() {
-        super.getThing();// 错误: 不能调用 'super' 的抽象方法
-    }
+  getThing() {
+    return 'hello';
+  }
+  foo() {
+    super.getThing(); // 错误: 不能调用 'super' 的抽象方法
+  }
 }
 
 var x = new Derived2(); // 正确
@@ -253,12 +270,12 @@ TypeScript 1.6 中, 类型别名支持泛型. 比如:
 type Lazy<T> = T | (() => T);
 
 var s: Lazy<string>;
-s = "eager";
-s = () => "lazy";
+s = 'eager';
+s = () => 'lazy';
 
 interface Tuple<A, B> {
-    a: A;
-    b: B;
+  a: A;
+  b: B;
 }
 
 type Pair<T> = Tuple<T, T>;
@@ -272,17 +289,17 @@ type Pair<T> = Tuple<T, T>;
 
 ```typescript
 var x: { foo: number };
-x = { foo: 1, baz: 2 };  // 错误, 多余的属性 `baz`
+x = { foo: 1, baz: 2 }; // 错误, 多余的属性 `baz`
 
-var y: { foo: number, bar?: number };
-y = { foo: 1, baz: 2 };  // 错误, 多余或者拼错的属性 `baz`
+var y: { foo: number; bar?: number };
+y = { foo: 1, baz: 2 }; // 错误, 多余或者拼错的属性 `baz`
 ```
 
 一个类型可以通过包含一个索引签名来显示指明未出现在类型中的属性是被允许的.
 
 ```typescript
-var x: { foo: number, [x: string]: any };
-x = { foo: 1, baz: 2 };  // 现在 `baz` 匹配了索引签名
+var x: { foo: number; [x: string]: any };
+x = { foo: 1, baz: 2 }; // 现在 `baz` 匹配了索引签名
 ```
 
 ## ES6 生成器 \(generators\)
@@ -292,22 +309,22 @@ TypeScript 1.6 添加了对于 ES6 输出的生成器支持.
 一个生成器函数可以有返回值类型标注, 就像普通的函数. 标注表示生成器函数返回的生成器的类型. 这里有个例子:
 
 ```typescript
-function *g(): Iterable<string> {
-    for (var i = 0; i < 100; i++) {
-        yield ""; // string 可以赋值给 string
-    }
-    yield * otherStringGenerator(); // otherStringGenerator 必须可遍历, 并且元素类型需要可赋值给 string
+function* g(): Iterable<string> {
+  for (var i = 0; i < 100; i++) {
+    yield ''; // string 可以赋值给 string
+  }
+  yield* otherStringGenerator(); // otherStringGenerator 必须可遍历, 并且元素类型需要可赋值给 string
 }
 ```
 
 没有标注类型的生成器函数会有自动推演的类型. 在下面的例子中, 类型会由 yield 语句推演出来:
 
 ```typescript
-function *g() {
-    for (var i = 0; i < 100; i++) {
-        yield ""; // 推导出 string
-    }
-    yield * otherStringGenerator(); // 推导出 otherStringGenerator 的元素类型
+function* g() {
+  for (var i = 0; i < 100; i++) {
+    yield ''; // 推导出 string
+  }
+  yield* otherStringGenerator(); // 推导出 otherStringGenerator 的元素类型
 }
 ```
 
@@ -315,7 +332,7 @@ function *g() {
 
 TypeScript 1.6 增加了编译到 ES6 时对 `async` 函数试验性的支持. 异步函数会执行一个异步的操作, 在等待的同时不会阻塞程序的正常运行. 这是通过与 ES6 兼容的 `Promise` 实现完成的, 并且会将函数体转换为支持在等待的异步操作完成时继续的形式.
 
-由 `async` 标记的函数或方法被称作_异步函数_. 这个标记告诉了编译器该函数体需要被转换, 关键字 _await_ 则应该被当做一个一元运算符, 而不是标示符. 一个_异步函数_必须返回类型与 `Promise` 兼容的值. 返回值类型的推断只能在有一个全局的, 与 ES6 兼容的 `Promise` 类型时使用.
+由 `async` 标记的函数或方法被称作*异步函数*. 这个标记告诉了编译器该函数体需要被转换, 关键字 _await_ 则应该被当做一个一元运算符, 而不是标示符. 一个*异步函数*必须返回类型与 `Promise` 兼容的值. 返回值类型的推断只能在有一个全局的, 与 ES6 兼容的 `Promise` 类型时使用.
 
 ### 例子
 
@@ -358,8 +375,8 @@ npm install -g typescript@next
 
 从 1.6 开始, TypeScript 编译器对于 "commonjs" 的模块解析会使用一套不同的规则. 这些[规则](https://github.com/Microsoft/TypeScript/issues/2338) 尝试模仿 Node 查找模块的过程. 这就意味着 node 模块可以包含它的类型信息, 并且 TypeScript 编译器可以找到这些信息. 不过用户可以通过使用 `--moduleResolution` 命令行选项覆盖模块解析规则. 支持的值有:
 
-* 'classic' - TypeScript 1.6 以前的编译器使用的模块解析规则
-* 'node' - 与 node 相似的模块解析
+- 'classic' - TypeScript 1.6 以前的编译器使用的模块解析规则
+- 'node' - 与 node 相似的模块解析
 
 ## 合并外围类和接口的声明
 
@@ -367,16 +384,16 @@ npm install -g typescript@next
 
 ```typescript
 declare class Foo {
-    public x : number;
+  public x: number;
 }
 
 interface Foo {
-    y : string;
+  y: string;
 }
 
-function bar(foo : Foo)  {
-    foo.x = 1; // 没问题, 在类 Foo 中有声明
-    foo.y = "1"; // 没问题, 在接口 Foo 中有声明
+function bar(foo: Foo) {
+  foo.x = 1; // 没问题, 在类 Foo 中有声明
+  foo.y = '1'; // 没问题, 在接口 Foo 中有声明
 }
 ```
 
@@ -392,7 +409,7 @@ function isCat(a: any): a is Cat {
 }
 
 var x: Cat | Dog;
-if(isCat(x)) {
+if (isCat(x)) {
   x.meow(); // 那么, x 在这个代码块内是 Cat 类型
 }
 ```
@@ -419,4 +436,3 @@ if(isCat(x)) {
 ## `--init` 命令行选项
 
 在一个目录中执行 `tsc --init` 可以在该目录中创建一个包含了默认值的 `tsconfig.json`. 可以通过一并传递其他选项来生成初始的 `tsconfig.json`.
-

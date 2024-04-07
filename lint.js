@@ -9,7 +9,7 @@ var options = {
     MD001: false, // Header levels should only increment by one level at a time
     MD002: false, // First header should be a h1 header
     MD003: "atx", // Header style
-    MD004: { style: "asterisk" }, // Unordered list style
+    MD004: { style: "consistent" }, // Unordered list style
     MD005: true, // Inconsistent indentation for list items at the same level
     MD006: true, // Consider starting bulleted lists at the beginning of the line
     MD007: { indent: 2 }, // Unordered list indentation
@@ -30,7 +30,7 @@ var options = {
     MD026: { punctuation: ".,;:!" }, // Trailing punctuation in header
     MD027: true, // Multiple spaces after blockquote symbol
     MD028: true, // Blank line inside blockquote
-    MD029: { style: "ordered" }, // Ordered list item prefix
+    MD029: { style: "one_or_ordered" }, // Ordered list item prefix
     MD030: true, // Spaces after list markers
     MD031: true, // Fenced code blocks should be surrounded by blank lines
     MD032: true, // Lists should be surrounded by blank lines

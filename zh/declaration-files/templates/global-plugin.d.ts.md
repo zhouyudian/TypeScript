@@ -47,9 +47,9 @@ console.log(moment.format());
 
 针对模块，共存在三个模版。它们是：
 
--   [`module.d.ts`](./templates/module.d.ts.md)
--   [`module-class.d.ts`](./templates/module-class.d.ts.md)
--   [`module-function.d.ts`](./templates/module-function.d.ts.md)
+- [`module.d.ts`](./templates/module.d.ts.md)
+- [`module-class.d.ts`](./templates/module-class.d.ts.md)
+- [`module-function.d.ts`](./templates/module-function.d.ts.md)
 
 若一个模块可以当作函数调用，则使用[`module-function.d.ts`](./templates/module-function.d.ts.md)。
 
@@ -203,7 +203,7 @@ import * as someLib from 'someLib';
 
 ```ts
 declare namespace cats {
-    interface KittySettings {}
+  interface KittySettings {}
 }
 ```
 
@@ -243,7 +243,7 @@ var app = exp();
 
 一个代码库可以包含多个模块，比如：
 
-```
+```txt
 myLib
   +---- index.js
   +---- foo.js
@@ -263,7 +263,7 @@ var d = require('myLib/bar/baz');
 
 声明文件如下：
 
-```
+```txt
 @types/myLib
   +---- index.d.ts
   +---- foo.d.ts
@@ -284,22 +284,22 @@ var d = require('myLib/bar/baz');
  *~ the built-in number type.
  */
 interface Number {
-    toBinaryString(opts?: MyLibrary.BinaryFormatOptions): string;
+  toBinaryString(opts?: MyLibrary.BinaryFormatOptions): string;
 
-    toBinaryString(
-        callback: MyLibrary.BinaryFormatCallback,
-        opts?: MyLibrary.BinaryFormatOptions
-    ): string;
+  toBinaryString(
+    callback: MyLibrary.BinaryFormatCallback,
+    opts?: MyLibrary.BinaryFormatOptions
+  ): string;
 }
 
 /*~ If you need to declare several types, place them inside a namespace
  *~ to avoid adding too many things to the global namespace.
  */
 declare namespace MyLibrary {
-    type BinaryFormatCallback = (n: number) => string;
-    interface BinaryFormatOptions {
-        prefix?: string;
-        padding: number;
-    }
+  type BinaryFormatCallback = (n: number) => string;
+  interface BinaryFormatOptions {
+    prefix?: string;
+    padding: number;
+  }
 }
 ```

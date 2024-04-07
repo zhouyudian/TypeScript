@@ -4,12 +4,12 @@
 
 ### 概述
 
-联合类型有助于表示一个值的类型可以是多种类型之一的情况。比如，有一个API接命令行传入`string`类型，`string[]`类型或者是一个返回`string`的函数。你就可以这样写：
+联合类型有助于表示一个值的类型可以是多种类型之一的情况。比如，有一个 API 接命令行传入`string`类型，`string[]`类型或者是一个返回`string`的函数。你就可以这样写：
 
 ```typescript
 interface RunOptions {
-   program: string;
-   commandline: string[]|string|(() => string);
+  program: string;
+  commandline: string[] | string | (() => string);
 }
 ```
 
@@ -25,7 +25,8 @@ opts.commandline = [42]; // Error, 数字不是字符串或字符串数组
 当读取联合类型时，你可以访问类型共有的属性：
 
 ```typescript
-if(opts.length === 0) { // OK, string和string[]都有'length'属性
+if (opts.length === 0) {
+  // OK, string和string[]都有'length'属性
   console.log("it's empty");
 }
 ```
@@ -33,12 +34,12 @@ if(opts.length === 0) { // OK, string和string[]都有'length'属性
 使用类型保护，你可以轻松地使用联合类型：
 
 ```typescript
-function formatCommandline(c: string|string[]) {
-    if(typeof c === 'string') {
-        return c.trim();
-    } else {
-        return c.join(' ');
-    }
+function formatCommandline(c: string | string[]) {
+  if (typeof c === 'string') {
+    return c.trim();
+  } else {
+    return c.join(' ');
+  }
 }
 ```
 
@@ -60,12 +61,16 @@ var e = equal(42, 'hello');
 
 ```typescript
 // 'choose' function where types must match
-function choose1<T>(a: T, b: T): T { return Math.random() > 0.5 ? a : b }
+function choose1<T>(a: T, b: T): T {
+  return Math.random() > 0.5 ? a : b;
+}
 var a = choose1('hello', 42); // Error
-var b = choose1<string|number>('hello', 42); // OK
+var b = choose1<string | number>('hello', 42); // OK
 
 // 'choose' function where types need not match
-function choose2<T, U>(a: T, b: U): T|U { return Math.random() > 0.5 ? a : b }
+function choose2<T, U>(a: T, b: U): T | U {
+  return Math.random() > 0.5 ? a : b;
+}
 var c = choose2('bar', 'foo'); // OK, c: string
 var d = choose2('hello', 42); // OK, d: string|number
 ```
@@ -82,7 +87,7 @@ x[0] = false; // Error, boolean is not string or number
 
 ## `let` 声明
 
-在JavaScript里，`var`声明会被“提升”到所在作用域的顶端。这可能会引发一些让人不解的bugs：
+在 JavaScript 里，`var`声明会被“提升”到所在作用域的顶端。这可能会引发一些让人不解的 bugs：
 
 ```typescript
 console.log(x); // meant to write 'y' here
@@ -90,49 +95,50 @@ console.log(x); // meant to write 'y' here
 var x = 'hello';
 ```
 
-TypeScript已经支持新的ES6的关键字`let`，声明一个块级作用域的变量。一个`let`变量只能在声明之后的位置被引用，并且作用域为声明它的块里：
+TypeScript 已经支持新的 ES6 的关键字`let`，声明一个块级作用域的变量。一个`let`变量只能在声明之后的位置被引用，并且作用域为声明它的块里：
 
 ```typescript
-if(foo) {
-    console.log(x); // Error, cannot refer to x before its declaration
-    let x = 'hello';
+if (foo) {
+  console.log(x); // Error, cannot refer to x before its declaration
+  let x = 'hello';
 } else {
-    console.log(x); // Error, x is not declared in this block
+  console.log(x); // Error, x is not declared in this block
 }
 ```
 
-`let`只在设置目标为ECMAScript 6 （`--target ES6`）时生效。
+`let`只在设置目标为 ECMAScript 6 （`--target ES6`）时生效。
 
 ## `const` 声明
 
-另一个TypeScript支持的ES6里新出现的声明类型是`const`。不能给一个`const`类型变量赋值，只能在声明的时候初始化。这对于那些在初始化之后就不想去改变它的值的情况下是很有帮助的：
+另一个 TypeScript 支持的 ES6 里新出现的声明类型是`const`。不能给一个`const`类型变量赋值，只能在声明的时候初始化。这对于那些在初始化之后就不想去改变它的值的情况下是很有帮助的：
 
 ```typescript
 const halfPi = Math.PI / 2;
 halfPi = 2; // Error, can't assign to a `const`
 ```
 
-`const`只在设置目标为ECMAScript 6 （`--target ES6`）时生效。
+`const`只在设置目标为 ECMAScript 6 （`--target ES6`）时生效。
 
 ## 模版字符串
 
-TypeScript现已支持ES6模块字符串。通过它可以方便地在字符串中嵌入任何表达式：
+TypeScript 现已支持 ES6 模块字符串。通过它可以方便地在字符串中嵌入任何表达式：
 
 ```typescript
-var name = "TypeScript";
-var greeting  = `Hello, ${name}! Your name has ${name.length} characters`;
+var name = 'TypeScript';
+var greeting = `Hello, ${name}! Your name has ${name.length} characters`;
 ```
 
-当编译目标为ES6之前的版本时，这个字符串被分解为：
+当编译目标为 ES6 之前的版本时，这个字符串被分解为：
 
 ```javascript
-var name = "TypeScript!";
-var greeting = "Hello, " + name + "! Your name has " + name.length + " characters";
+var name = 'TypeScript!';
+var greeting =
+  'Hello, ' + name + '! Your name has ' + name.length + ' characters';
 ```
 
 ## 类型守护
 
-JavaScript常用模式之一是在运行时使用`typeof`或`instanceof`检查表达式的类型。 在`if`语句里使用它们的时候，TypeScript可以识别出这些条件并且随之改变类型推断的结果。
+JavaScript 常用模式之一是在运行时使用`typeof`或`instanceof`检查表达式的类型。 在`if`语句里使用它们的时候，TypeScript 可以识别出这些条件并且随之改变类型推断的结果。
 
 使用`typeof`来检查一个变量：
 
@@ -175,7 +181,7 @@ if(pet instanceof Dog) {
 你现在可以使用`type`关键字来为类型定义一个“别名”：
 
 ```typescript
-type PrimitiveArray = Array<string|number|boolean>;
+type PrimitiveArray = Array<string | number | boolean>;
 type MyNumber = number;
 type NgScope = ng.IScope;
 type Callback = () => void;
@@ -188,7 +194,12 @@ type Callback = () => void;
 枚举很有帮助，但是有些程序实际上并不需要它生成的代码并且想要将枚举变量所代码的数字值直接替换到对应位置上。新的`const enum`声明与正常的`enum`在类型安全方面具有同样的作用，只是在编译时会清除掉。
 
 ```typescript
-const enum Suit { Clubs, Diamonds, Hearts, Spades }
+const enum Suit {
+  Clubs,
+  Diamonds,
+  Hearts,
+  Spades,
+}
 var d = Suit.Diamonds;
 ```
 
@@ -198,7 +209,7 @@ Compiles to exactly:
 var d = 1;
 ```
 
-TypeScript也会在可能的情况下计算枚举值：
+TypeScript 也会在可能的情况下计算枚举值：
 
 ```typescript
 enum MyFlags {
@@ -206,41 +217,38 @@ enum MyFlags {
   Neat = 1,
   Cool = 2,
   Awesome = 4,
-  Best = Neat | Cool | Awesome
+  Best = Neat | Cool | Awesome,
 }
 var b = MyFlags.Best; // emits var b = 7;
 ```
 
 ## `-noEmitOnError` 命令行选项
 
-TypeScript编译器的默认行为是当存在类型错误（比如，将`string`类型赋值给`number`类型）时仍会生成.js文件。这在构建服务器上或是其它场景里可能会是不想看到的情况，因为希望得到的是一次“纯净”的构建。新的`noEmitOnError`标记可以阻止在编译时遇到错误的情况下继续生成.js代码。
+TypeScript 编译器的默认行为是当存在类型错误（比如，将`string`类型赋值给`number`类型）时仍会生成.js 文件。这在构建服务器上或是其它场景里可能会是不想看到的情况，因为希望得到的是一次“纯净”的构建。新的`noEmitOnError`标记可以阻止在编译时遇到错误的情况下继续生成.js 代码。
 
-它现在是MSBuild工程的默认行为；这允许MSBuild持续构建以我们想要的行为进行，输出永远是来自纯净的构建。
+它现在是 MSBuild 工程的默认行为；这允许 MSBuild 持续构建以我们想要的行为进行，输出永远是来自纯净的构建。
 
 ## AMD 模块名
 
-默认情况下AMD模块以匿名形式生成。这在使用其它工具（比如，r.js）处理生成的模块的时可能会带来麻烦。
+默认情况下 AMD 模块以匿名形式生成。这在使用其它工具（比如，r.js）处理生成的模块的时可能会带来麻烦。
 
 新的`amd-module name`标签允许给编译器传入一个可选的模块名：
 
 ```typescript
 //// [amdModule.ts]
 ///<amd-module name='NamedModule'/>
-export class C {
-}
+export class C {}
 ```
 
-结果会把`NamedModule`赋值成模块名，做为调用AMD`define`的一部分：
+结果会把`NamedModule`赋值成模块名，做为调用 AMD`define`的一部分：
 
 ```javascript
 //// [amdModule.js]
-define("NamedModule", ["require", "exports"], function (require, exports) {
-    var C = (function () {
-        function C() {
-        }
-        return C;
-    })();
-    exports.C = C;
+define('NamedModule', ['require', 'exports'], function (require, exports) {
+  var C = (function () {
+    function C() {}
+    return C;
+  })();
+  exports.C = C;
 });
 ```
-

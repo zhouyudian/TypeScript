@@ -18,13 +18,20 @@ this.whargarbl = 10;
 在某些情况下，TypeScript 3.4 的推断改进可能会产生泛型的函数，而不是那些接收并返回其约束的函数（通常是 `{}`）。
 
 ```typescript
-declare function compose<T, U, V>(f: (arg: T) => U, g: (arg: U) => V): (arg: T) => V;
+declare function compose<T, U, V>(
+  f: (arg: T) => U,
+  g: (arg: U) => V
+): (arg: T) => V;
 
-function list<T>(x: T) { return [x]; }
-function box<T>(value: T) { return { value }; }
+function list<T>(x: T) {
+  return [x];
+}
+function box<T>(value: T) {
+  return { value };
+}
 
 let f = compose(list, box);
-let x = f(100)
+let x = f(100);
 
 // 在 TypeScript 3.4 中, 'x.value' 的类型为
 //
@@ -35,7 +42,7 @@ let x = f(100)
 //   {}[]
 //
 // 因此，插入一个 `string` 类型是错误的
-x.value.push("hello");
+x.value.push('hello');
 ```
 
 `x` 上的显式类型注释可以清除这个错误。
@@ -46,11 +53,11 @@ TypeScript 现在使用函数调用时传入的类型（如下例中的 `then`�
 
 ```typescript
 function isEven(prom: Promise<number>): Promise<{ success: boolean }> {
-  return prom.then<{success: boolean}>((x) => {
-    return x % 2 === 0 ?
-      { success: true } :
-      Promise.resolve({ success: false });
-    });
+  return prom.then<{ success: boolean }>(x => {
+    return x % 2 === 0
+      ? { success: true }
+      : Promise.resolve({ success: false });
+  });
 }
 ```
 
@@ -69,10 +76,10 @@ Argument of type '(x: number) => Promise<{ success: false; }> | { success: true;
 ```typescript
 function isEven(prom: Promise<number>): Promise<{ success: boolean }> {
   //               vvvvvvvvvvvvvvvvvv
-  return prom.then<{success: boolean}>((x) => {
-    return x % 2 === 0 ?
-      { success: true } :
-      Promise.resolve({ success: false });
+  return prom.then<{ success: boolean }>(x => {
+    return x % 2 === 0
+      ? { success: true }
+      : Promise.resolve({ success: false });
   });
 }
 ```
@@ -88,8 +95,12 @@ function isEven(prom: Promise<number>): Promise<{ success: boolean }> {
 这导致一个可见的重大变更，只要有类型参数的接口使用了 `keyof`（包括诸如 `Record<K, T>` 之类的地方，这是涉及 `keyof K` 的类型别名）。下例就是这样一个可能的变更。
 
 ```typescript
-interface HasX { x: any }
-interface HasY { y: any }
+interface HasX {
+  x: any;
+}
+interface HasY {
+  y: any;
+}
 
 declare const source: HasX | HasY;
 declare const properties: KeyContainer<HasX>;
@@ -99,7 +110,7 @@ interface KeyContainer<T> {
 }
 
 function readKey<T>(source: T, prop: KeyContainer<T>) {
-  console.log(source[prop.key])
+  console.log(source[prop.key]);
 }
 
 // 这个调用应该被拒绝，因为我们可能会这样做
@@ -111,5 +122,4 @@ readKey(source, properties);
 
 ## 参考
 
-* [原文](https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#typescript-34)
-
+- [原文](https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#typescript-34)

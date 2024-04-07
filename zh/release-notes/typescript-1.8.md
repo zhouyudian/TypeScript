@@ -8,15 +8,15 @@
 
 ```typescript
 function assign<T extends U, U>(target: T, source: U): T {
-    for (let id in source) {
-        target[id] = source[id];
-    }
-    return target;
+  for (let id in source) {
+    target[id] = source[id];
+  }
+  return target;
 }
 
 let x = { a: 1, b: 2, c: 3, d: 4 };
 assign(x, { b: 10, d: 20 });
-assign(x, { e: 0 });  // 错误
+assign(x, { e: 0 }); // 错误
 ```
 
 ## 控制流错误分析
@@ -37,14 +37,13 @@ TypeScript 1.8 中引入了控制流分析来捕获开发者通常会遇到的�
 
 ```typescript
 function f(x) {
-    if (x) {
-       return true;
-    }
-    else {
-       return false;
-    }
+  if (x) {
+    return true;
+  } else {
+    return false;
+  }
 
-    x = 0; // 错误: 检测到不可及的代码.
+  x = 0; // 错误: 检测到不可及的代码.
 }
 ```
 
@@ -52,10 +51,10 @@ function f(x) {
 
 ```typescript
 function f() {
-    return            // 换行导致自动插入的分号
-    {
-        x: "string"   // 错误: 检测到不可及的代码.
-    }
+  return; // 换行导致自动插入的分号
+  {
+    x: 'string'; // 错误: 检测到不可及的代码.
+  }
 }
 ```
 
@@ -68,8 +67,9 @@ function f() {
 #### 例子
 
 ```typescript
-loop: while (x > 0) {  // 错误: 未使用的标签.
-    x++;
+loop: while (x > 0) {
+  // 错误: 未使用的标签.
+  x++;
 }
 ```
 
@@ -80,12 +80,13 @@ JS 中没有返回值的代码分支会隐式地返回 `undefined`. 现在编译
 #### 例子
 
 ```typescript
-function f(x) { // 错误: 不是所有分支都返回了值.
-    if (x) {
-        return false;
-    }
+function f(x) {
+  // 错误: 不是所有分支都返回了值.
+  if (x) {
+    return false;
+  }
 
-    // 隐式返回了 `undefined`
+  // 隐式返回了 `undefined`
 }
 ```
 
@@ -97,12 +98,12 @@ TypeScript 现在可以在 switch 语句中出现贯穿的几个非空 case 时�
 
 ```typescript
 switch (x % 2) {
-    case 0: // 错误: switch 中出现了贯穿的 case.
-        console.log("even");
+  case 0: // 错误: switch 中出现了贯穿的 case.
+    console.log('even');
 
-    case 1:
-        console.log("odd");
-        break;
+  case 1:
+    console.log('odd');
+    break;
 }
 ```
 
@@ -110,27 +111,27 @@ switch (x % 2) {
 
 ```typescript
 switch (x % 3) {
-    case 0:
-    case 1:
-        console.log("Acceptable");
-        break;
+  case 0:
+  case 1:
+    console.log('Acceptable');
+    break;
 
-    case 2:
-        console.log("This is *two much*!");
-        break;
+  case 2:
+    console.log('This is *two much*!');
+    break;
 }
 ```
 
-## React里的函数组件
+## React 里的函数组件
 
 TypeScript 现在支持[函数组件](https://reactjs.org/docs/components-and-props.html#functional-and-class-components). 它是可以组合其他组件的轻量级组件.
 
 ```typescript
 // 使用参数解构和默认值轻松地定义 'props' 的类型
-const Greeter = ({name = 'world'}) => <div>Hello, {name}!</div>;
+const Greeter = ({ name = 'world' }) => <div>Hello, {name}!</div>;
 
 // 参数可以被检验
-let example = <Greeter name='TypeScript 1.8' />;
+let example = <Greeter name="TypeScript 1.8" />;
 ```
 
 如果需要使用这一特性及简化的 props, 请确认使用的是[最新的 react.d.ts](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/react).
@@ -141,15 +142,15 @@ let example = <Greeter name='TypeScript 1.8' />;
 
 具体的:
 
-* 你不再需要显式的声明 `ref` 和 `key` 或者 `extend React.Props`
-* `ref` 和 `key` 属性会在所有组件上拥有正确的类型.
-* `ref` 属性在无状态函数组件上会被正确地禁用.
+- 你不再需要显式的声明 `ref` 和 `key` 或者 `extend React.Props`
+- `ref` 和 `key` 属性会在所有组件上拥有正确的类型.
+- `ref` 属性在无状态函数组件上会被正确地禁用.
 
 ## 在模块中扩充全局或者模块作用域
 
 用户现在可以为任何模块进行他们想要, 或者其他人已经对其作出的扩充. 模块扩充的形式和过去的包模块一致 \(例如 `declare module "foo" { }` 这样的语法\), 并且可以直接嵌在你自己的模块内, 或者在另外的顶级外部包模块中.
 
-除此之外, TypeScript 还以 `declare global { }` 的形式提供了对于_全局_声明的扩充. 这能使模块对像 `Array` 这样的全局类型在必要的时候进行扩充.
+除此之外, TypeScript 还以 `declare global { }` 的形式提供了对于*全局*声明的扩充. 这能使模块对像 `Array` 这样的全局类型在必要的时候进行扩充.
 
 模块扩充的名称解析规则与 `import` 和 `export` 声明中的一致. 扩充的模块声明合并方式与在同一个文件中声明是相同的.
 
@@ -162,7 +163,7 @@ let example = <Greeter name='TypeScript 1.8' />;
 ```typescript
 // observable.ts
 export class Observable<T> {
-    // ...
+  // ...
 }
 ```
 
@@ -185,8 +186,8 @@ Observable.prototype.map = /*...*/;
 
 ```typescript
 // consumer.ts
-import { Observable } from "./observable";
-import "./map";
+import { Observable } from './observable';
+import './map';
 
 let o: Observable<number>;
 o.map(x => x.toFixed());
@@ -201,12 +202,14 @@ o.map(x => x.toFixed());
 export {};
 
 declare global {
-    interface Array<T> {
-        mapToNumbers(): number[];
-    }
+  interface Array<T> {
+    mapToNumbers(): number[];
+  }
 }
 
-Array.prototype.mapToNumbers = function () { /* ... */ }
+Array.prototype.mapToNumbers = function () {
+  /* ... */
+};
 ```
 
 ## 字符串字面量类型
@@ -215,13 +218,13 @@ Array.prototype.mapToNumbers = function () { /* ... */ }
 
 ```typescript
 declare class UIElement {
-    animate(options: AnimationOptions): void;
+  animate(options: AnimationOptions): void;
 }
 
 interface AnimationOptions {
-    deltaX: number;
-    deltaY: number;
-    easing: string; // 可以是 "ease-in", "ease-out", "ease-in-out"
+  deltaX: number;
+  deltaY: number;
+  easing: string; // 可以是 "ease-in", "ease-out", "ease-in-out"
 }
 ```
 
@@ -229,7 +232,7 @@ interface AnimationOptions {
 
 ```typescript
 // 没有报错
-new UIElement().animate({ deltaX: 100, deltaY: 100, easing: "ease-inout" });
+new UIElement().animate({ deltaX: 100, deltaY: 100, easing: 'ease-inout' });
 ```
 
 在 TypeScript 1.8 中, 我们新增了字符串字面量类型. 这些类型和字符串字面量的写法一致, 只是写在类型的位置.
@@ -238,13 +241,13 @@ new UIElement().animate({ deltaX: 100, deltaY: 100, easing: "ease-inout" });
 
 ```typescript
 interface AnimationOptions {
-    deltaX: number;
-    deltaY: number;
-    easing: "ease-in" | "ease-out" | "ease-in-out";
+  deltaX: number;
+  deltaY: number;
+  easing: 'ease-in' | 'ease-out' | 'ease-in-out';
 }
 
 // 错误: 类型 '"ease-inout"' 不能复制给类型 '"ease-in" | "ease-out" | "ease-in-out"'
-new UIElement().animate({ deltaX: 100, deltaY: 100, easing: "ease-inout" });
+new UIElement().animate({ deltaX: 100, deltaY: 100, easing: 'ease-inout' });
 ```
 
 ## 更好的联合/交叉类型接口
@@ -257,27 +260,27 @@ TypeScript 1.8 优化了源类型和目标类型都是联合或者交叉类型�
 type Maybe<T> = T | void;
 
 function isDefined<T>(x: Maybe<T>): x is T {
-    return x !== undefined && x !== null;
+  return x !== undefined && x !== null;
 }
 
 function isUndefined<T>(x: Maybe<T>): x is void {
-    return x === undefined || x === null;
+  return x === undefined || x === null;
 }
 
 function getOrElse<T>(x: Maybe<T>, defaultValue: T): T {
-    return isDefined(x) ? x : defaultValue;
+  return isDefined(x) ? x : defaultValue;
 }
 
 function test1(x: Maybe<string>) {
-    let x1 = getOrElse(x, "Undefined");         // string
-    let x2 = isDefined(x) ? x : "Undefined";    // string
-    let x3 = isUndefined(x) ? "Undefined" : x;  // string
+  let x1 = getOrElse(x, 'Undefined'); // string
+  let x2 = isDefined(x) ? x : 'Undefined'; // string
+  let x3 = isUndefined(x) ? 'Undefined' : x; // string
 }
 
 function test2(x: Maybe<number>) {
-    let x1 = getOrElse(x, -1);         // number
-    let x2 = isDefined(x) ? x : -1;    // number
-    let x3 = isUndefined(x) ? -1 : x;  // number
+  let x1 = getOrElse(x, -1); // number
+  let x2 = isDefined(x) ? x : -1; // number
+  let x3 = isUndefined(x) ? -1 : x; // number
 }
 ```
 
@@ -291,35 +294,35 @@ function test2(x: Maybe<number>) {
 
 ```typescript
 // 文件 src/a.ts
-import * as B from "./lib/b";
+import * as B from './lib/b';
 export function createA() {
-    return B.createB();
+  return B.createB();
 }
 ```
 
 ```typescript
 // 文件 src/lib/b.ts
 export function createB() {
-    return { };
+  return {};
 }
 ```
 
 结果为:
 
 ```javascript
-define("lib/b", ["require", "exports"], function (require, exports) {
-    "use strict";
-    function createB() {
-        return {};
-    }
-    exports.createB = createB;
+define('lib/b', ['require', 'exports'], function (require, exports) {
+  'use strict';
+  function createB() {
+    return {};
+  }
+  exports.createB = createB;
 });
-define("a", ["require", "exports", "lib/b"], function (require, exports, B) {
-    "use strict";
-    function createA() {
-        return B.createB();
-    }
-    exports.createA = createA;
+define('a', ['require', 'exports', 'lib/b'], function (require, exports, B) {
+  'use strict';
+  function createA() {
+    return B.createB();
+  }
+  exports.createA = createA;
 });
 ```
 
@@ -340,7 +343,7 @@ define("a", ["require", "exports", "lib/b"], function (require, exports, B) {
 ```typescript
 let list = [];
 for (let i = 0; i < 5; i++) {
-    list.push(() => i);
+  list.push(() => i);
 }
 
 list.forEach(f => console.log(f()));
@@ -350,13 +353,17 @@ list.forEach(f => console.log(f()));
 
 ```javascript
 var list = [];
-var _loop_1 = function(i) {
-    list.push(function () { return i; });
+var _loop_1 = function (i) {
+  list.push(function () {
+    return i;
+  });
 };
 for (var i = 0; i < 5; i++) {
-    _loop_1(i);
+  _loop_1(i);
 }
-list.forEach(function (f) { return console.log(f()); });
+list.forEach(function (f) {
+  return console.log(f());
+});
 ```
 
 然后结果是:
@@ -375,15 +382,16 @@ list.forEach(function (f) { return console.log(f()); });
 
 从 TypeScript 1.8 开始:
 
-* 在 `for..in` 语句中的变量隐含类型为 `string`.
-* 当一个有数字索引签名对应类型 `T` \(比如一个数组\) 的对象被一个 `for..in` 索引_有_数字索引签名并且_没有_字符串索引签名 \(比如还是数组\) 的对象的变量索引, 产生的值的类型为 `T`.
+- 在 `for..in` 语句中的变量隐含类型为 `string`.
+- 当一个有数字索引签名对应类型 `T` \(比如一个数组\) 的对象被一个 `for..in` 索引*有*数字索引签名并且*没有*字符串索引签名 \(比如还是数组\) 的对象的变量索引, 产生的值的类型为 `T`.
 
 ### 例子
 
 ```typescript
 var a: MyObject[];
-for (var x in a) {   // x 的隐含类型为 string
-    var obj = a[x];  // obj 的类型为 MyObject
+for (var x in a) {
+  // x 的隐含类型为 string
+  var obj = a[x]; // obj 的类型为 MyObject
 }
 ```
 
@@ -406,9 +414,9 @@ for (var x in a) {   // x 的隐含类型为 string
 ### 例子
 
 ```typescript
-import {jsxFactory} from "jsxFactory";
+import { jsxFactory } from 'jsxFactory';
 
-var div = <div>Hello JSX!</div>
+var div = <div>Hello JSX!</div>;
 ```
 
 编译参数:
@@ -420,9 +428,9 @@ tsc --jsx react --reactNamespace jsxFactory --m commonJS
 结果:
 
 ```javascript
-"use strict";
-var jsxFactory_1 = require("jsxFactory");
-var div = jsxFactory_1.jsxFactory.createElement("div", null, "Hello JSX!");
+'use strict';
+var jsxFactory_1 = require('jsxFactory');
+var div = jsxFactory_1.jsxFactory.createElement('div', null, 'Hello JSX!');
 ```
 
 ## 基于 `this` 的类型收窄
@@ -435,31 +443,37 @@ TypeScript 1.8 为类和接口方法扩展了[用户定义的类型收窄函数]
 
 ```typescript
 class FileSystemObject {
-    isFile(): this is File { return this instanceof File; }
-    isDirectory(): this is Directory { return this instanceof Directory;}
-    isNetworked(): this is (Networked & this) { return this.networked; }
-    constructor(public path: string, private networked: boolean) {}
+  isFile(): this is File {
+    return this instanceof File;
+  }
+  isDirectory(): this is Directory {
+    return this instanceof Directory;
+  }
+  isNetworked(): this is Networked & this {
+    return this.networked;
+  }
+  constructor(public path: string, private networked: boolean) {}
 }
 
 class File extends FileSystemObject {
-    constructor(path: string, public content: string) { super(path, false); }
+  constructor(path: string, public content: string) {
+    super(path, false);
+  }
 }
 class Directory extends FileSystemObject {
-    children: FileSystemObject[];
+  children: FileSystemObject[];
 }
 interface Networked {
-    host: string;
+  host: string;
 }
 
-let fso: FileSystemObject = new File("foo/bar.txt", "foo");
+let fso: FileSystemObject = new File('foo/bar.txt', 'foo');
 if (fso.isFile()) {
-    fso.content; // fso 是 File
-}
-else if (fso.isDirectory()) {
-    fso.children; // fso 是 Directory
-}
-else if (fso.isNetworked()) {
-    fso.host; // fso 是 networked
+  fso.content; // fso 是 File
+} else if (fso.isDirectory()) {
+  fso.children; // fso 是 Directory
+} else if (fso.isNetworked()) {
+  fso.host; // fso 是 networked
 }
 ```
 
@@ -469,12 +483,12 @@ else if (fso.isNetworked()) {
 
 稳定版本可以在这里下载:
 
-* [Microsoft.TypeScript.Compiler](https://www.nuget.org/packages/Microsoft.TypeScript.Compiler/)
-* [Microsoft.TypeScript.MSBuild](https://www.nuget.org/packages/Microsoft.TypeScript.MSBuild/)
+- [Microsoft.TypeScript.Compiler](https://www.nuget.org/packages/Microsoft.TypeScript.Compiler/)
+- [Microsoft.TypeScript.MSBuild](https://www.nuget.org/packages/Microsoft.TypeScript.MSBuild/)
 
-与此同时, 和[每日npm包](https://blogs.msdn.com/b/typescript/archive/2015/07/27/introducing-typescript-nightlies.aspx)对应的每日 NuGet 包可以在[https://myget.org](https://myget.org)下载:
+与此同时, 和[每日 npm 包](https://blogs.msdn.com/b/typescript/archive/2015/07/27/introducing-typescript-nightlies.aspx)对应的每日 NuGet 包可以在[https://myget.org](https://myget.org)下载:
 
-* [TypeScript-Preview](https://www.myget.org/gallery/typescript-preview)
+- [TypeScript-Preview](https://www.myget.org/gallery/typescript-preview)
 
 ## `tsc` 错误信息更美观
 
@@ -482,7 +496,7 @@ else if (fso.isNetworked()) {
 
 通过传递 `--pretty` 命令行选项, TypeScript 会给出更丰富的输出, 包含错误发生的上下文.
 
-![&#x5C55;&#x793A;&#x5728; ConEmu &#x4E2D;&#x7F8E;&#x5316;&#x4E4B;&#x540E;&#x7684;&#x9519;&#x8BEF;&#x4FE1;&#x606F;](https://raw.githubusercontent.com/wiki/Microsoft/TypeScript/images/new-in-typescript/pretty01.png)
+![展示在 ConEmu 中美化之后的错误信息](https://raw.githubusercontent.com/wiki/Microsoft/TypeScript/images/new-in-typescript/pretty01.png)
 
 ## 高亮 VS 2015 中的 JSX 代码
 
@@ -539,13 +553,12 @@ tsc foo.ts --outFile /dev/stdout | pretty-js
 
 TypeScript 1.8 允许在任何种类的项目中使用 `tsconfig.json` 文件. 包括 ASP.NET v4 项目, _控制台应用_, 以及 _用 TypeScript 开发的 HTML 应用_. 与此同时, 你可以添加不止一个 `tsconfig.json` 文件, 其中每一个都会作为项目的一部分被构建. 这使得你可以在不使用多个不同项目的情况下为应用的不同部分使用不同的配置.
 
-![&#x5C55;&#x793A; Visual Studio &#x4E2D;&#x7684; tsconfig.json](https://raw.githubusercontent.com/wiki/Microsoft/TypeScript/images/new-in-typescript/tsconfig-in-vs.png)
+![展示 Visual Studio 中的 tsconfig.json](https://raw.githubusercontent.com/wiki/Microsoft/TypeScript/images/new-in-typescript/tsconfig-in-vs.png)
 
 当项目中添加了 `tsconfig.json` 文件时, 我们还禁用了项目属性页面. 也就是说所有配置的改变必须在 `tsconfig.json` 文件中进行.
 
 ### 一些限制
 
-* 如果你添加了一个 `tsconfig.json` 文件, 不在其上下文中的 TypeScript 文件不会被编译.
-* Apache Cordova 应用依然有单个 `tsconfig.json` 文件的限制, 而这个文件必须在根目录或者 `scripts` 文件夹.
-* 多数项目类型中都没有 `tsconfig.json` 的模板.
-
+- 如果你添加了一个 `tsconfig.json` 文件, 不在其上下文中的 TypeScript 文件不会被编译.
+- Apache Cordova 应用依然有单个 `tsconfig.json` 文件的限制, 而这个文件必须在根目录或者 `scripts` 文件夹.
+- 多数项目类型中都没有 `tsconfig.json` 的模板.

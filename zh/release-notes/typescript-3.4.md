@@ -57,8 +57,8 @@ function compose<A, B, C>(f: (arg: A) => B, g: (arg: B) => C): (arg: A) => C {
 
 `compose` 还有两个其他函数：
 
-* `f` 它接受一些参数（类型为 `A`）并返回类型为 `B` 的值
-* `g` 采用类型为 `B` 的参数（类型为 `f` 返回），并返回类型为 `C` 的值
+- `f` 它接受一些参数（类型为 `A`）并返回类型为 `B` 的值
+- `g` 采用类型为 `B` 的参数（类型为 `f` 返回），并返回类型为 `C` 的值
 
 `compose` 然后返回一个函数，它通过 `f` 然后 `g` 来提供它的参数。
 
@@ -79,13 +79,10 @@ function getLength(s: string) {
 }
 
 // 拥有类型 '(p: Person) => number'
-const getDisplayNameLength = compose(
-  getDisplayName,
-  getLength,
-);
+const getDisplayNameLength = compose(getDisplayName, getLength);
 
 // 有效并返回 `number` 类型
-getDisplayNameLength({ name: "Person McPersonface", age: 42 });
+getDisplayNameLength({ name: 'Person McPersonface', age: 42 });
 ```
 
 推断过程在这里相当简单，因为 `getDisplayName` 和 `getLength` 使用的是可以轻松引用的类型。 但是，在 TypeScript 3.3 及更早版本中，泛型函数如 `compose` 在传递其他泛型函数时效果不佳。
@@ -104,12 +101,9 @@ function makeBox<U>(value: U): Box<U> {
 }
 
 // 类型为 '(arg: {}) => Box<{}[]>'
-const makeBoxedArray = compose(
-  makeArray,
-  makeBox,
-)
+const makeBoxedArray = compose(makeArray, makeBox);
 
-makeBoxedArray("hello!").value[0].toUpperCase();
+makeBoxedArray('hello!').value[0].toUpperCase();
 //                                ~~~~~~~~~~~
 // 错误：类型 '{}' 没有 'toUpperCase' 属性
 ```
@@ -121,13 +115,13 @@ makeBoxedArray("hello!").value[0].toUpperCase();
 换句话说，而不是生成类型
 
 ```typescript
-(arg: {}) => Box<{}[]>
+(arg: {}) => Box<{}[]>;
 ```
 
 TypeScript 3.4 生成的类型
 
 ```typescript
-<T>(arg: T) => Box<T[]>
+<T>(arg: T) => Box<T[]>;
 ```
 
 注意，`T` 已从 `makeArray` 传递到结果类型的类型参数列表中。 这意味着来自 `compose` 参数的泛型已被保留，我们的 `makeBoxedArray` 示例将正常运行！
@@ -146,13 +140,10 @@ function makeBox<U>(value: U): Box<U> {
 }
 
 // 类型为 '<T>(arg: T) => Box<T[]>'
-const makeBoxedArray = compose(
-  makeArray,
-  makeBox,
-)
+const makeBoxedArray = compose(makeArray, makeBox);
 
 // 正常运行！
-makeBoxedArray("hello!").value[0].toUpperCase();
+makeBoxedArray('hello!').value[0].toUpperCase();
 ```
 
 更多细节，你可以[读到更多从这些原始的变动](https://github.com/Microsoft/TypeScript/pull/30215)。
@@ -169,8 +160,8 @@ TypeScript 3.4 让使用只读的类似数组的类型更简单了。
 
 ```typescript
 function foo(arr: ReadonlyArray<string>) {
-  arr.slice();        // okay
-  arr.push("hello!"); // error!
+  arr.slice(); // okay
+  arr.push('hello!'); // error!
 }
 ```
 
@@ -180,8 +171,8 @@ TypeScript 3.4 为 `ReadonlyArray` 引入了一个新的语法，就是在数组
 
 ```typescript
 function foo(arr: readonly string[]) {
-  arr.slice();        // okay
-  arr.push("hello!"); // 错误！
+  arr.slice(); // okay
+  arr.push('hello!'); // 错误！
 }
 ```
 
@@ -191,8 +182,8 @@ TypeScript 3.4 同样引入了对 `readonly` 元祖的支持。 我们可以在�
 
 ```typescript
 function foo(pair: readonly [string, string]) {
-  console.log(pair[0]);   // okay
-  pair[1] = "hello!";     // 错误
+  console.log(pair[0]); // okay
+  pair[1] = 'hello!'; // 错误
 }
 ```
 
@@ -205,13 +196,14 @@ function foo(pair: readonly [string, string]) {
 这意味着，一个映射类型像 `Boxify` 可以在数组上生效，元祖也是。
 
 ```typescript
-interface Box<T> { value: T }
-
-type Boxify<T> = {
+interface Box<T> {
+  value: T;
 }
 
+type Boxify<T> = {};
+
 // { a: Box<string>, b: Box<number> }
-type A = Boxify<{ a: string, b: number }>;
+type A = Boxify<{ a: string; b: number }>;
 
 // Array<Box<number>>
 type B = Boxify<number[]>;
@@ -225,13 +217,13 @@ type C = Boxify<[string, boolean]>;
 ```typescript
 // lib.d.ts
 type Readonly<T> = {
-  readonly [K in keyof T]: T[K]
-}
+  readonly [K in keyof T]: T[K];
+};
 
 // 在 TypeScript 3.4 之前代码会如何执行
 
 // { readonly a: string, readonly b: number }
-type A = Readonly<{ a: string, b: number }>;
+type A = Readonly<{ a: string; b: number }>;
 
 // number[]
 type B = Readonly<number[]>;
@@ -246,7 +238,7 @@ type C = Readonly<[string, boolean]>;
 // 在 TypeScript 3.4 中代码会如何运行
 
 // { readonly a: string, readonly b: number }
-type A = Readonly<{ a: string, b: number }>;
+type A = Readonly<{ a: string; b: number }>;
 
 // readonly number[]
 type B = Readonly<number[]>;
@@ -259,13 +251,13 @@ type C = Readonly<[string, boolean]>;
 
 ```typescript
 type Writable<T> = {
-  -readonly [K in keyof T]: T[K]
-}
+  -readonly [K in keyof T]: T[K];
+};
 
 // { a: string, b: number }
 type A = Writable<{
   readonly a: string;
-  readonly b: number
+  readonly b: number;
 }>;
 
 // number[]
@@ -292,32 +284,32 @@ let okay: readonly boolean[]; // 有效
 
 TypeScript 3.4 引入了一个叫 _`const`_ 断言的字面量值的新构造。 它的语法是用 `const` 代替类型名称的类型断言（例如 `123 as const`）。 当我们用 `const` 断言构造新的字面量表达式时，我们可以用来表示：
 
-* 该表达式中的字面量类型不应粗化（例如，不要从 `'hello'` 到`string`）
-* 对象字面量获得 `readonly` 属性
-* 数组字面量成为 `readonly` 元组
+- 该表达式中的字面量类型不应粗化（例如，不要从 `'hello'` 到`string`）
+- 对象字面量获得 `readonly` 属性
+- 数组字面量成为 `readonly` 元组
 
 ```typescript
 // Type '"hello"'
-let x = "hello" as const;
+let x = 'hello' as const;
 
 // Type 'readonly [10, 20]'
 let y = [10, 20] as const;
 
 // Type '{ readonly text: "hello" }'
-let z = { text: "hello" } as const;
+let z = { text: 'hello' } as const;
 ```
 
 也可以使用尖括号断言语法，除了 `.tsx` 文件之外。
 
 ```typescript
 // Type '"hello"'
-let x = <const>"hello";
+let x = <const>'hello';
 
 // Type 'readonly [10, 20]'
 let y = <const>[10, 20];
 
 // Type '{ readonly text: "hello" }'
-let z = <const>{ text: "hello" };
+let z = <const>{ text: 'hello' };
 ```
 
 此功能意味着通常可以省略掉仅用于将不可变性示意给编译器的类型。
@@ -327,8 +319,8 @@ let z = <const>{ text: "hello" };
 // 我们只需要一个 const 断言。
 function getShapes() {
   let result = [
-    { kind: "circle", radius: 100, },
-    { kind: "square", sideLength: 50, },
+    { kind: 'circle', radius: 100 },
+    { kind: 'square', sideLength: 50 },
   ] as const;
 
   return result;
@@ -336,11 +328,10 @@ function getShapes() {
 
 for (const shape of getShapes()) {
   // 完美细化
-  if (shape.kind === "circle") {
-    console.log("Circle radius", shape.radius);
-  }
-  else {
-    console.log("Square side length", shape.sideLength);
+  if (shape.kind === 'circle') {
+    console.log('Circle radius', shape.radius);
+  } else {
+    console.log('Square side length', shape.sideLength);
   }
 }
 ```
@@ -351,17 +342,17 @@ for (const shape of getShapes()) {
 
 ```typescript
 export const Colors = {
-  red: "RED",
-  blue: "BLUE",
-  green: "GREEN",
+  red: 'RED',
+  blue: 'BLUE',
+  green: 'GREEN',
 } as const;
 
 // 或者使用 'export default'
 
 export default {
-  red: "RED",
-  blue: "BLUE",
-  green: "GREEN",
+  red: 'RED',
+  blue: 'BLUE',
+  green: 'GREEN',
 } as const;
 ```
 
@@ -374,9 +365,7 @@ export default {
 let a = (Math.random() < 0.5 ? 0 : 1) as const;
 
 // 有效！
-let b = Math.random() < 0.5 ?
-  0 as const :
-  1 as const;
+let b = Math.random() < 0.5 ? (0 as const) : (1 as const);
 ```
 
 另一件得记住的事是 `const` 上下文不会直接将表达式转换为完全不可变的。
@@ -385,12 +374,12 @@ let b = Math.random() < 0.5 ?
 let arr = [1, 2, 3, 4];
 
 let foo = {
-  name: "foo",
+  name: 'foo',
   contents: arr,
 } as const;
 
-foo.name = "bar";   // 错误！
-foo.contents = [];  // 错误！
+foo.name = 'bar'; // 错误！
+foo.contents = []; // 错误！
 
 foo.contents.push(5); // ...有效！
 ```
@@ -425,5 +414,4 @@ globalThis.answer = 333333;
 
 ## 参考
 
-* [原文](https://github.com/microsoft/TypeScript-Handbook/blob/master/pages/release%20notes/TypeScript%203.4.md)
-
+- [原文](https://github.com/microsoft/TypeScript-Handbook/blob/master/pages/release%20notes/TypeScript%203.4.md)

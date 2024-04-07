@@ -4,23 +4,23 @@ TypeScript 提供一些工具类型来帮助常见的类型转换。这些类型
 
 ## 目录
 
--   [`Partial<T>`，TypeScript 2.1](#partialtype)
--   [`Readonly<Type>`，TypeScript 2.1](#readonlytype)
--   [`Record<Keys, Type>`，TypeScript 2.1](#recordkeys-type)
--   [`Pick<Type, Keys>`，TypeScript 2.1](#picktype-keys)
--   [`Omit<Type, Keys>`，TypeScript 3.5](#omittype-keys)
--   [`Exclude<Type, ExcludedUnion>`，TypeScript 2.8](#excludetype-excludedunion)
--   [`Extract<Type, Union>`，TypeScript 2.8](#extracttype-union)
--   [`NonNullable<Type>`，TypeScript 2.8](#nonnullabletype)
--   [`Parameters<Type>`](#parameterstype)
--   [`ConstructorParameters<Type>`](#constructorparameterstype)
--   [`ReturnType<Type>`，TypeScript 2.8](#returntypetype)
--   [`InstanceType<Type>`，TypeScript 2.8](#instancetypetype)
--   [`Required<Type>`，TypeScript 2.8](#requiredtype)
--   [`ThisParameterType<Type>`](#thisparametertypetype)
--   [`OmitThisParameter<Type>`](#omitthisparametertype)
--   [`ThisType<Type>`，TypeScript 2.8](#thistypetype)
--   [操作字符串的类型](#操作字符串的类型)
+- [`Partial<T>`，TypeScript 2.1](#partialtype)
+- [`Readonly<Type>`，TypeScript 2.1](#readonlytype)
+- [`Record<Keys, Type>`，TypeScript 2.1](#recordkeys-type)
+- [`Pick<Type, Keys>`，TypeScript 2.1](#picktype-keys)
+- [`Omit<Type, Keys>`，TypeScript 3.5](#omittype-keys)
+- [`Exclude<Type, ExcludedUnion>`，TypeScript 2.8](#excludetype-excludedunion)
+- [`Extract<Type, Union>`，TypeScript 2.8](#extracttype-union)
+- [`NonNullable<Type>`，TypeScript 2.8](#nonnullabletype)
+- [`Parameters<Type>`](#parameterstype)
+- [`ConstructorParameters<Type>`](#constructorparameterstype)
+- [`ReturnType<Type>`，TypeScript 2.8](#returntypetype)
+- [`InstanceType<Type>`，TypeScript 2.8](#instancetypetype)
+- [`Required<Type>`，TypeScript 2.8](#requiredtype)
+- [`ThisParameterType<Type>`](#thisparametertypetype)
+- [`OmitThisParameter<Type>`](#omitthisparametertype)
+- [`ThisType<Type>`，TypeScript 2.8](#thistypetype)
+- [操作字符串的类型](#操作字符串的类型)
 
 ## `Partial<Type>`
 
@@ -30,21 +30,21 @@ TypeScript 提供一些工具类型来帮助常见的类型转换。这些类型
 
 ```typescript
 interface Todo {
-    title: string;
-    description: string;
+  title: string;
+  description: string;
 }
 
 function updateTodo(todo: Todo, fieldsToUpdate: Partial<Todo>) {
-    return { ...todo, ...fieldsToUpdate };
+  return { ...todo, ...fieldsToUpdate };
 }
 
 const todo1 = {
-    title: 'organize desk',
-    description: 'clear clutter',
+  title: 'organize desk',
+  description: 'clear clutter',
 };
 
 const todo2 = updateTodo(todo1, {
-    description: 'throw out trash',
+  description: 'throw out trash',
 });
 ```
 
@@ -56,11 +56,11 @@ const todo2 = updateTodo(todo1, {
 
 ```typescript
 interface Todo {
-    title: string;
+  title: string;
 }
 
 const todo: Readonly<Todo> = {
-    title: 'Delete inactive users',
+  title: 'Delete inactive users',
 };
 
 todo.title = 'Hello'; // Error: cannot reassign a readonly property
@@ -82,15 +82,15 @@ function freeze<T>(obj: T): Readonly<T>;
 
 ```typescript
 interface PageInfo {
-    title: string;
+  title: string;
 }
 
 type Page = 'home' | 'about' | 'contact';
 
 const x: Record<Page, PageInfo> = {
-    about: { title: 'about' },
-    contact: { title: 'contact' },
-    home: { title: 'home' },
+  about: { title: 'about' },
+  contact: { title: 'contact' },
+  home: { title: 'home' },
 };
 ```
 
@@ -102,16 +102,16 @@ const x: Record<Page, PageInfo> = {
 
 ```typescript
 interface Todo {
-    title: string;
-    description: string;
-    completed: boolean;
+  title: string;
+  description: string;
+  completed: boolean;
 }
 
 type TodoPreview = Pick<Todo, 'title' | 'completed'>;
 
 const todo: TodoPreview = {
-    title: 'Clean room',
-    completed: false,
+  title: 'Clean room',
+  completed: false,
 };
 ```
 
@@ -123,16 +123,16 @@ const todo: TodoPreview = {
 
 ```typescript
 interface Todo {
-    title: string;
-    description: string;
-    completed: boolean;
+  title: string;
+  description: string;
+  completed: boolean;
 }
 
 type TodoPreview = Omit<Todo, 'description'>;
 
 const todo: TodoPreview = {
-    title: 'Clean room',
-    completed: false,
+  title: 'Clean room',
+  completed: false,
 };
 ```
 
@@ -227,7 +227,7 @@ type T4 = ConstructorParameters<Function>;
 
 ### 例子
 
-```
+```ts
 type T0 = ReturnType<() => string>;  // string
 type T1 = ReturnType<(s: string) => void>;  // void
 type T2 = ReturnType<(<T>() => T)>;  // {}
@@ -247,8 +247,8 @@ type T8 = ReturnType<Function>;  // Error
 
 ```typescript
 class C {
-    x = 0;
-    y = 0;
+  x = 0;
+  y = 0;
 }
 
 type T0 = InstanceType<typeof C>; // C
@@ -267,8 +267,8 @@ type T4 = InstanceType<Function>; // Error
 
 ```typescript
 interface Props {
-    a?: number;
-    b?: string;
+  a?: number;
+  b?: string;
 }
 
 const obj: Props = { a: 5 }; // OK
@@ -285,11 +285,11 @@ const obj2: Required<Props> = { a: 5 }; // Error: property 'b' missing
 
 ```ts
 function toHex(this: Number) {
-    return this.toString(16);
+  return this.toString(16);
 }
 
 function numberToString(n: ThisParameterType<typeof toHex>) {
-    return toHex.apply(n);
+  return toHex.apply(n);
 }
 ```
 
@@ -304,7 +304,7 @@ function numberToString(n: ThisParameterType<typeof toHex>) {
 
 ```ts
 function toHex(this: Number) {
-    return this.toString(16);
+  return this.toString(16);
 }
 
 const fiveToHex: OmitThisParameter<typeof toHex> = toHex.bind(5);
@@ -324,24 +324,24 @@ console.log(fiveToHex());
 // Compile with --noImplicitThis
 
 type ObjectDescriptor<D, M> = {
-    data?: D;
-    methods?: M & ThisType<D & M>; // Type of 'this' in methods is D & M
+  data?: D;
+  methods?: M & ThisType<D & M>; // Type of 'this' in methods is D & M
 };
 
 function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M {
-    let data: object = desc.data || {};
-    let methods: object = desc.methods || {};
-    return { ...data, ...methods } as D & M;
+  let data: object = desc.data || {};
+  let methods: object = desc.methods || {};
+  return { ...data, ...methods } as D & M;
 }
 
 let obj = makeObject({
-    data: { x: 0, y: 0 },
-    methods: {
-        moveBy(dx: number, dy: number) {
-            this.x += dx; // Strongly typed this
-            this.y += dy; // Strongly typed this
-        },
+  data: { x: 0, y: 0 },
+  methods: {
+    moveBy(dx: number, dy: number) {
+      this.x += dx; // Strongly typed this
+      this.y += dy; // Strongly typed this
     },
+  },
 });
 
 obj.x = 10;

@@ -16,8 +16,8 @@ TypeScript 使用了一系列规则来推测是否该在显示类型时使用类
 export type BasicPrimitive = number | string | boolean;
 
 export function doStuff(value: BasicPrimitive) {
-    let x = value;
-    return x;
+  let x = value;
+  return x;
 }
 ```
 
@@ -30,11 +30,11 @@ export function doStuff(value: BasicPrimitive) {
 export type BasicPrimitive = number | string | boolean;
 
 export function doStuff(value: BasicPrimitive) {
-    if (Math.random() < 0.5) {
-        return undefined;
-    }
+  if (Math.random() < 0.5) {
+    return undefined;
+  }
 
-    return value;
+  return value;
 }
 ```
 
@@ -112,10 +112,10 @@ bar = [true, 'some', 'separated', 'text', false];
 
 ```ts twoslash
 interface Clown {
-    /*...*/
+  /*...*/
 }
 interface Joker {
-    /*...*/
+  /*...*/
 }
 
 let StealersWheel: [...Clown[], 'me', ...Joker[]];
@@ -129,7 +129,7 @@ let StringsAndMaybeBoolean: [...string[], boolean?];
 
 ```ts
 declare function doStuff(
-    ...args: [...names: string[], shouldCapitalize: boolean]
+  ...args: [...names: string[], shouldCapitalize: boolean]
 ): void;
 
 doStuff(/*shouldCapitalize:*/ false);
@@ -161,12 +161,12 @@ TypeScript 4.2 确保了该错误能够在编译时被捕获。
 
 ```ts
 interface SomeType {
-    /** 这是索引签名 */
-    [propName: string]: any;
+  /** 这是索引签名 */
+  [propName: string]: any;
 }
 
 function doStuff(value: SomeType) {
-    let x = value['someProperty'];
+  let x = value['someProperty'];
 }
 ```
 
@@ -175,22 +175,22 @@ function doStuff(value: SomeType) {
 
 ```ts
 interface Options {
-    /** 要排除的文件模式。 */
-    exclude?: string[];
+  /** 要排除的文件模式。 */
+  exclude?: string[];
 
-    /**
-     * 这会将其余所有未声明的属性定义为 'any' 类型。
-     */
-    [x: string]: any;
+  /**
+   * 这会将其余所有未声明的属性定义为 'any' 类型。
+   */
+  [x: string]: any;
 }
 
 function processOptions(opts: Options) {
-    // 注意，我们想要访问 `excludes` 而不是 `exclude`
-    if (opts.excludes) {
-        console.error(
-            'The option `excludes` is not valid. Did you mean `exclude`?'
-        );
-    }
+  // 注意，我们想要访问 `excludes` 而不是 `exclude`
+  if (opts.excludes) {
+    console.error(
+      'The option `excludes` is not valid. Did you mean `exclude`?'
+    );
+  }
 }
 ```
 
@@ -201,23 +201,23 @@ function processOptions(opts: Options) {
 
 ```ts
 interface Options {
-    /** 要排除的文件模式。 */
-    exclude?: string[];
+  /** 要排除的文件模式。 */
+  exclude?: string[];
 
-    /**
-     * 这会将其余所有未声明的属性定义为 'any' 类型。
-     */
-    [x: string]: any;
+  /**
+   * 这会将其余所有未声明的属性定义为 'any' 类型。
+   */
+  [x: string]: any;
 }
 // ---cut---
 function processOptions(opts: Options) {
-    // ...
+  // ...
 
-    // 注意，我们不小心访问了错误的 `excludes`。
-    // 但是！这是合法的！
-    for (const excludePattern of opts.excludes) {
-        // ...
-    }
+  // 注意，我们不小心访问了错误的 `excludes`。
+  // 但是！这是合法的！
+  for (const excludePattern of opts.excludes) {
+    // ...
+  }
 }
 ```
 
@@ -237,23 +237,23 @@ TypeScript 允许将一个类标记为 _abstract_。
 
 ```ts twoslash
 abstract class Shape {
-    abstract getArea(): number;
+  abstract getArea(): number;
 }
 
 // 不能创建抽象类的实例
 new Shape();
 
 class Square extends Shape {
-    #sideLength: number;
+  #sideLength: number;
 
-    constructor(sideLength: number) {
-        super();
-        this.#sideLength = sideLength;
-    }
+  constructor(sideLength: number) {
+    super();
+    this.#sideLength = sideLength;
+  }
 
-    getArea() {
-        return this.#sideLength ** 2;
-    }
+  getArea() {
+    return this.#sideLength ** 2;
+  }
 }
 
 // 没问题
@@ -264,11 +264,11 @@ new Square(42);
 
 ```ts twoslash
 abstract class Shape {
-    abstract getArea(): number;
+  abstract getArea(): number;
 }
 
 interface HasArea {
-    getArea(): number;
+  getArea(): number;
 }
 
 // 不能将抽象构造函数类型赋值给非抽象构造函数类型。
@@ -279,19 +279,19 @@ let Ctor: new () => HasArea = Shape;
 
 ```ts
 abstract class Shape {
-    abstract getArea(): number;
+  abstract getArea(): number;
 }
 
 interface HasArea {
-    getArea(): number;
+  getArea(): number;
 }
 
 function makeSubclassWithArea(Ctor: new () => HasArea) {
-    return class extends Ctor {
-        getArea() {
-            return 42;
-        }
-    };
+  return class extends Ctor {
+    getArea() {
+      return 42;
+    }
+  };
 }
 
 // 不能将抽象构造函数类型赋值给非抽象构造函数类型。
@@ -314,7 +314,7 @@ abstract class Shape {
 }
 // ---cut---
 interface HasArea {
-    getArea(): number;
+  getArea(): number;
 }
 
 // Works!
@@ -329,25 +329,25 @@ let Ctor: abstract new () => HasArea = Shape;
 
 ```ts
 abstract class SuperClass {
-    abstract someMethod(): void;
-    badda() {}
+  abstract someMethod(): void;
+  badda() {}
 }
 
-type AbstractConstructor<T> = abstract new (...args: any[]) => T
+type AbstractConstructor<T> = abstract new (...args: any[]) => T;
 
 function withStyles<T extends AbstractConstructor<object>>(Ctor: T) {
-    abstract class StyledClass extends Ctor {
-        getStyles() {
-            // ...
-        }
+  abstract class StyledClass extends Ctor {
+    getStyles() {
+      // ...
     }
-    return StyledClass;
+  }
+  return StyledClass;
 }
 
 class SubClass extends withStyles(SuperClass) {
-    someMethod() {
-        this.someMethod()
-    }
+  someMethod() {
+    this.someMethod();
+  }
 }
 ```
 
@@ -382,7 +382,7 @@ tsc --explainFiles | code -
 
 通常，输出结果首先会给列出包含 `lib.d.ts` 文件的原因，然后是本地文件，再然后是 `node_modules` 文件。
 
-```
+```ts
 TS_Compiler_Directory/4.2.2/lib/lib.es5.d.ts
   Library referenced via 'es5' from file 'TS_Compiler_Directory/4.2.2/lib/lib.es2015.d.ts'
 TS_Compiler_Directory/4.2.2/lib/lib.es2015.d.ts
@@ -419,15 +419,15 @@ foo.ts
 
 ```ts
 function shouldDisplayElement(element: Element) {
-    // ...
-    return true;
+  // ...
+  return true;
 }
 
 function getVisibleItems(elements: Element[]) {
-    return elements.filter((e) => shouldDisplayElement && e.children.length);
-    //                          ~~~~~~~~~~~~~~~~~~~~
-    // 该条件表达式永远返回 true，因为函数永远是定义了的。
-    // 你是否想要调用它？
+  return elements.filter(e => shouldDisplayElement && e.children.length);
+  //                          ~~~~~~~~~~~~~~~~~~~~
+  // 该条件表达式永远返回 true，因为函数永远是定义了的。
+  // 你是否想要调用它？
 }
 ```
 
@@ -454,7 +454,7 @@ let [_first, second] = getValues();
 const movieWatchCount: { [key: string]: number } = {};
 
 function watchMovie(title: string) {
-    movieWatchCount[title] = (movieWatchCount[title] ?? 0) + 1;
+  movieWatchCount[title] = (movieWatchCount[title] ?? 0) + 1;
 }
 ```
 
@@ -463,10 +463,10 @@ function watchMovie(title: string) {
 
 ```ts
 type WesAndersonWatchCount = {
-    'Fantastic Mr. Fox'?: number;
-    'The Royal Tenenbaums'?: number;
-    'Moonrise Kingdom'?: number;
-    'The Grand Budapest Hotel'?: number;
+  'Fantastic Mr. Fox'?: number;
+  'The Royal Tenenbaums'?: number;
+  'Moonrise Kingdom'?: number;
+  'The Grand Budapest Hotel'?: number;
 };
 
 declare const wesAndersonWatchCount: WesAndersonWatchCount;
@@ -483,9 +483,9 @@ TypeScript 4.2 允许这样赋值。
 
 ```ts
 type BatmanWatchCount = {
-    'Batman Begins': number | undefined;
-    'The Dark Knight': number | undefined;
-    'The Dark Knight Rises': number | undefined;
+  'Batman Begins': number | undefined;
+  'The Dark Knight': number | undefined;
+  'The Dark Knight Rises': number | undefined;
 };
 
 declare const batmanWatchCount: BatmanWatchCount;

@@ -17,7 +17,7 @@ export { Stream, writeToStream as write };  // writeToStream 导出为 write
 引入声明也可以使用 `as` 语句来指定一个不同的导入名称. 比如:
 
 ```typescript
-import { read, write, standardOutput as stdout } from "./inout";
+import { read, write, standardOutput as stdout } from './inout';
 var s = read(stdout);
 write(stdout, s);
 ```
@@ -25,7 +25,7 @@ write(stdout, s);
 作为单独导入的候选项, 命名空间导入可以导入整个模块:
 
 ```typescript
-import * as io from "./inout";
+import * as io from './inout';
 var s = io.read(io.standardOutput);
 io.write(io.standardOutput, s);
 ```
@@ -35,7 +35,7 @@ io.write(io.standardOutput, s);
 使用 `from` 语句一个模块可以复制指定模块的导出项到当前模块, 而无需创建本地名称.
 
 ```typescript
-export { read, write, standardOutput as stdout } from "./inout";
+export { read, write, standardOutput as stdout } from './inout';
 ```
 
 `export *` 可以用来重新导出另一个模块的所有导出项. 在创建一个聚合了其他几个模块导出项的模块时很方便.
@@ -52,16 +52,16 @@ export * from "./mod2";
 
 ```typescript
 export default class Greeter {
-    sayHello() {
-        console.log("Greetings!");
-    }
+  sayHello() {
+    console.log('Greetings!');
+  }
 }
 ```
 
 对应的可以使用默认导入:
 
 ```typescript
-import Greeter from "./greeter";
+import Greeter from './greeter';
 var g = new Greeter();
 g.sayHello();
 ```
@@ -71,7 +71,7 @@ g.sayHello();
 "无导入加载" 可以被用来加载某些只需要其副作用的模块.
 
 ```typescript
-import "./polyfills";
+import './polyfills';
 ```
 
 了解更多关于模块的信息, 请参见 [ES6 模块支持规范](https://github.com/Microsoft/TypeScript/issues/2242).
@@ -99,12 +99,12 @@ var [x, y, z = 10] = getSomeArray();
 相似的, 解构可以用在函数的参数声明中:
 
 ```typescript
-function drawText({ text = "", location: [x, y] = [0, 0], bold = false }) {
-    // 画出文本
+function drawText({ text = '', location: [x, y] = [0, 0], bold = false }) {
+  // 画出文本
 }
 
 // 以一个对象字面量为参数调用 drawText
-var item = { text: "someText", location: [1,2,3], style: "italics" };
+var item = { text: 'someText', location: [1, 2, 3], style: 'italics' };
 drawText(item);
 ```
 
@@ -158,9 +158,8 @@ const MAX = 100;
 if (true) {
   let a = 4;
   // 使用变量 a
-}
-else {
-  let a = "string";
+} else {
+  let a = 'string';
   // 使用变量 a
 }
 
@@ -176,14 +175,15 @@ TypeScript 1.5 增加了 ES6 `for...of` 循环编译到 ES3/ES5 时对数组的�
 TypeScript 编译器会转译 `for...of` 数组到具有语义的 ES3/ES5 JavaScript \(如果被设置为编译到这些版本\).
 
 ```typescript
-for (var v of expr) { }
+for (var v of expr) {
+}
 ```
 
 会输出为:
 
 ```javascript
 for (var _i = 0, _a = expr; _i < _a.length; _i++) {
-    var v = _a[_i];
+  var v = _a[_i];
 }
 ```
 
@@ -193,10 +193,10 @@ for (var _i = 0, _a = expr; _i < _a.length; _i++) {
 
 一个装饰器是:
 
-* 一个表达式
-* 并且值为一个函数
-* 接受 `target`, `name`, 以及属性描述对象作为参数
-* 可选返回一个会被应用到目标对象的属性描述对象
+- 一个表达式
+- 并且值为一个函数
+- 接受 `target`, `name`, 以及属性描述对象作为参数
+- 可选返回一个会被应用到目标对象的属性描述对象
 
 > 了解更多, 请参见 [装饰器](https://github.com/Microsoft/TypeScript/issues/2249) 提案.
 
@@ -208,17 +208,17 @@ for (var _i = 0, _a = expr; _i < _a.length; _i++) {
 class C {
   @readonly
   @enumerable(false)
-  method() { }
+  method() {}
 }
 
 function readonly(target, key, descriptor) {
-    descriptor.writable = false;
+  descriptor.writable = false;
 }
 
 function enumerable(value) {
   return function (target, key, descriptor) {
-     descriptor.enumerable = value;
-  }
+    descriptor.enumerable = value;
+  };
 }
 ```
 
@@ -228,12 +228,12 @@ function enumerable(value) {
 
 ```typescript
 type NeighborMap = { [name: string]: Node };
-type Node = { name: string; neighbors: NeighborMap;}
+type Node = { name: string; neighbors: NeighborMap };
 
 function makeNode(name: string, initialNeighbor: Node): Node {
-    var neighbors: NeighborMap = {};
-    neighbors[initialNeighbor.name] = initialNeighbor;
-    return { name: name, neighbors: neighbors };
+  var neighbors: NeighborMap = {};
+  neighbors[initialNeighbor.name] = initialNeighbor;
+  return { name: name, neighbors: neighbors };
 }
 ```
 
@@ -241,12 +241,12 @@ function makeNode(name: string, initialNeighbor: Node): Node {
 
 ```typescript
 function makeNode(name: string, initialNeighbor: Node): Node {
-    return {
-        name: name,
-        neighbors: {
-            [initialNeighbor.name]: initialNeighbor
-        }
-    }
+  return {
+    name: name,
+    neighbors: {
+      [initialNeighbor.name]: initialNeighbor,
+    },
+  };
 }
 ```
 
@@ -278,21 +278,23 @@ TypeScript 1.4 中, 我们添加了模板字符串编译到所有 ES 版本的�
 
 ```typescript
 function oddRawStrings(strs: TemplateStringsArray, n1, n2) {
-    return strs.raw.filter((raw, index) => index % 2 === 1);
+  return strs.raw.filter((raw, index) => index % 2 === 1);
 }
 
-oddRawStrings `Hello \n${123} \t ${456}\n world`
+oddRawStrings`Hello \n${123} \t ${456}\n world`;
 ```
 
 会被输出为:
 
 ```typescript
 function oddRawStrings(strs, n1, n2) {
-    return strs.raw.filter(function (raw, index) {
-        return index % 2 === 1;
-    });
+  return strs.raw.filter(function (raw, index) {
+    return index % 2 === 1;
+  });
 }
-(_a = ["Hello \n", " \t ", "\n world"], _a.raw = ["Hello \\n", " \\t ", "\\n world"], oddRawStrings(_a, 123, 456));
+(_a = ['Hello \n', ' \t ', '\n world']),
+  (_a.raw = ['Hello \\n', ' \\t ', '\\n world']),
+  oddRawStrings(_a, 123, 456);
 var _a;
 ```
 
@@ -304,15 +306,19 @@ var _a;
 
 ```typescript
 /// <amd-dependency path="legacy/moduleA" name="moduleA"/>
-declare var moduleA:MyType
-moduleA.callStuff()
+declare var moduleA: MyType;
+moduleA.callStuff();
 ```
 
 生成的 JS 代码:
 
 ```typescript
-define(["require", "exports", "legacy/moduleA"], function (require, exports, moduleA) {
-    moduleA.callStuff()
+define(['require', 'exports', 'legacy/moduleA'], function (
+  require,
+  exports,
+  moduleA
+) {
+  moduleA.callStuff();
 });
 ```
 
@@ -320,8 +326,8 @@ define(["require", "exports", "legacy/moduleA"], function (require, exports, mod
 
 通过添加 `tsconfig.json` 到一个目录指明这是一个 TypeScript 项目的根目录. `tsconfig.json` 文件指定了根文件以及编译项目需要的编译器选项. 一个项目可以由以下方式编译:
 
-* 调用 tsc 并不指定输入文件, 此时编译器会从当前目录开始往上级目录寻找 `tsconfig.json` 文件.
-* 调用 tsc 并不指定输入文件, 使用 `-project` \(或者 `-p`\) 命令行选项指定包含了 `tsconfig.json` 文件的目录.
+- 调用 tsc 并不指定输入文件, 此时编译器会从当前目录开始往上级目录寻找 `tsconfig.json` 文件.
+- 调用 tsc 并不指定输入文件, 使用 `-project` \(或者 `-p`\) 命令行选项指定包含了 `tsconfig.json` 文件的目录.
 
 ### 例子
 
@@ -356,4 +362,3 @@ TypeScript 编译器在需要的时候会输出一些像 `__extends` 这样的�
 ## `--inlineSourceMap` and `inlineSources` 命令行选项
 
 `--inlineSourceMap` 将内嵌源文件映射到 `.js` 文件, 而不是在单独的 `.js.map` 文件中. `--inlineSources` 允许进一步将 `.ts` 文件内容包含到输出文件中.
-

@@ -2,57 +2,57 @@
 
 ## 介绍
 
-自ECMAScript 2015起，`symbol`成为了一种新的原生类型，就像`number`和`string`一样。
+自 ECMAScript 2015 起，`symbol`成为了一种新的原生类型，就像`number`和`string`一样。
 
 `symbol`类型的值是通过`Symbol`构造函数创建的。
 
 ```typescript
 let sym1 = Symbol();
 
-let sym2 = Symbol("key"); // 可选的字符串key
+let sym2 = Symbol('key'); // 可选的字符串key
 ```
 
-Symbols是不可改变且唯一的。
+Symbols 是不可改变且唯一的。
 
 ```typescript
-let sym2 = Symbol("key");
-let sym3 = Symbol("key");
+let sym2 = Symbol('key');
+let sym3 = Symbol('key');
 
 sym2 === sym3; // false, symbols是唯一的
 ```
 
-像字符串一样，symbols也可以被用做对象属性的键。
+像字符串一样，symbols 也可以被用做对象属性的键。
 
 ```typescript
 const sym = Symbol();
 
 let obj = {
-    [sym]: "value"
+  [sym]: 'value',
 };
 
 console.log(obj[sym]); // "value"
 ```
 
-Symbols也可以与计算出的属性名声明相结合来声明对象的属性和类成员。
+Symbols 也可以与计算出的属性名声明相结合来声明对象的属性和类成员。
 
 ```typescript
 const getClassNameSymbol = Symbol();
 
 class C {
-    [getClassNameSymbol](){
-       return "C";
-    }
+  [getClassNameSymbol]() {
+    return 'C';
+  }
 }
 
 let c = new C();
 let className = c[getClassNameSymbol](); // "C"
 ```
 
-## 众所周知的Symbols
+## 众所周知的 Symbols
 
-除了用户定义的symbols，还有一些已经众所周知的内置symbols。 内置symbols用来表示语言内部的行为。
+除了用户定义的 symbols，还有一些已经众所周知的内置 symbols。 内置 symbols 用来表示语言内部的行为。
 
-以下为这些symbols的列表：
+以下为这些 symbols 的列表：
 
 ### `Symbol.hasInstance`
 
@@ -97,4 +97,3 @@ let className = c[getClassNameSymbol](); // "C"
 ### `Symbol.unscopables`
 
 对象，它自己拥有的属性会被`with`作用域排除在外。
-

@@ -4,7 +4,7 @@
 比如，你可能想要这样一个模块，可以用或不用`new`来创建不同的类型，在不同层级上暴露出不同的命名类型，且模块对象上还带有一些属性。
 
 阅读这篇指南后，你就会了解如何编写复杂的声明文件来提供友好的 API 。
-这篇指南针对于模块（或UMD）代码库，因为它们的选择具有更高的可变性。
+这篇指南针对于模块（或 UMD）代码库，因为它们的选择具有更高的可变性。
 
 ## 核心概念
 
@@ -14,11 +14,11 @@
 
 如果你正在阅读这篇指南，你可能已经大概了解 TypeScript 里的类型指是什么。 明确一下，*类型*通过以下方式引入：
 
--   类型别名声明（`type sn = number | string;`）
--   接口声明（`interface I { x: number[]; }`）
--   类声明（`class C { }`）
--   枚举声明（`enum E { A, B, C }`）
--   指向某个类型的`import`声明
+- 类型别名声明（`type sn = number | string;`）
+- 接口声明（`interface I { x: number[]; }`）
+- 类声明（`class C { }`）
+- 枚举声明（`enum E { A, B, C }`）
+- 指向某个类型的`import`声明
 
 以上每种声明形式都会创建一个新的类型名称。
 
@@ -30,12 +30,12 @@
 
 同样地，以下方式能够创建值：
 
--   `let`，`const`，和`var`声明
--   包含值的`namespace`或`module`声明
--   `enum`声明
--   `class`声明
--   指向值的`import`声明
--   `function`声明
+- `let`，`const`，和`var`声明
+- 包含值的`namespace`或`module`声明
+- `enum`声明
+- `class`声明
+- 指向值的`import`声明
+- `function`声明
 
 ### 命名空间
 
@@ -72,7 +72,7 @@ export interface SomeType {
 这样使用它：
 
 ```ts
-import * as foo from "./foo";
+import * as foo from './foo';
 let x: foo.SomeType = foo.SomeVar.a;
 console.log(x.count);
 ```
@@ -90,7 +90,7 @@ export interface Bar {
 这提供了使用解构的机会：
 
 ```ts
-import { Bar } from "./foo";
+import { Bar } from './foo';
 let x: Bar = Bar.a;
 console.log(x.count);
 ```
@@ -192,20 +192,20 @@ type X = string;
 
 在这个例子里，第一个代码块创建了以下名字与含义：
 
--   一个值`X`（因为`namespace`声明包含一个值，`Z`）
--   一个命名空间`X`（因为`namespace`声明包含一个类型，`Y`）
--   在命名空间`X`里的类型`Y`
--   在命名空间`X`里的类型`Z`（类的实例结构）
--   值`X`的一个属性值`Z`（类的构造函数）
+- 一个值`X`（因为`namespace`声明包含一个值，`Z`）
+- 一个命名空间`X`（因为`namespace`声明包含一个类型，`Y`）
+- 在命名空间`X`里的类型`Y`
+- 在命名空间`X`里的类型`Z`（类的实例结构）
+- 值`X`的一个属性值`Z`（类的构造函数）
 
 第二个代码块创建了以下名字与含义：
 
--   值`Y`（`number`类型），它是值`X`的一个属性
--   一个命名空间`Z`
--   值`Z`，它是值`X`的一个属性
--   在`X.Z`命名空间下的类型`C`
--   值`X.Z`的一个属性值`C`
--   类型`X`
+- 值`Y`（`number`类型），它是值`X`的一个属性
+- 一个命名空间`Z`
+- 值`Z`，它是值`X`的一个属性
+- 在`X.Z`命名空间下的类型`C`
+- 值`X.Z`的一个属性值`C`
+- 类型`X`
 
 ## 使用`export =`或`import`
 

@@ -1,10 +1,10 @@
 # 命名空间
 
-> **关于术语的一点说明:** 请务必注意一点，TypeScript 1.5里术语名已经发生了变化。 “内部模块”现在称做“命名空间”。 “外部模块”现在则简称为“模块”，这是为了与[ECMAScript 2015](http://www.ecma-international.org/ecma-262/6.0/)里的术语保持一致，\(也就是说 `module X {` 相当于现在推荐的写法 `namespace X {`\)。
+> **关于术语的一点说明:** 请务必注意一点，TypeScript 1.5 里术语名已经发生了变化。 “内部模块”现在称做“命名空间”。 “外部模块”现在则简称为“模块”，这是为了与[ECMAScript 2015](http://www.ecma-international.org/ecma-262/6.0/)里的术语保持一致，\(也就是说 `module X {` 相当于现在推荐的写法 `namespace X {`\)。
 
 ## 介绍
 
-这篇文章描述了如何在TypeScript里使用命名空间（之前叫做“内部模块”）来组织你的代码。 就像我们在术语说明里提到的那样，“内部模块”现在叫做“命名空间”。 另外，任何使用`module`关键字来声明一个内部模块的地方都应该使用`namespace`关键字来替换。 这就避免了让新的使用者被相似的名称所迷惑。
+这篇文章描述了如何在 TypeScript 里使用命名空间（之前叫做“内部模块”）来组织你的代码。 就像我们在术语说明里提到的那样，“内部模块”现在叫做“命名空间”。 另外，任何使用`module`关键字来声明一个内部模块的地方都应该使用`namespace`关键字来替换。 这就避免了让新的使用者被相似的名称所迷惑。
 
 ## 第一步
 
@@ -14,38 +14,38 @@
 
 ```typescript
 interface StringValidator {
-    isAcceptable(s: string): boolean;
+  isAcceptable(s: string): boolean;
 }
 
 let lettersRegexp = /^[A-Za-z]+$/;
 let numberRegexp = /^[0-9]+$/;
 
 class LettersOnlyValidator implements StringValidator {
-    isAcceptable(s: string) {
-        return lettersRegexp.test(s);
-    }
+  isAcceptable(s: string) {
+    return lettersRegexp.test(s);
+  }
 }
 
 class ZipCodeValidator implements StringValidator {
-    isAcceptable(s: string) {
-        return s.length === 5 && numberRegexp.test(s);
-    }
+  isAcceptable(s: string) {
+    return s.length === 5 && numberRegexp.test(s);
+  }
 }
 
 // Some samples to try
-let strings = ["Hello", "98052", "101"];
+let strings = ['Hello', '98052', '101'];
 
 // Validators to use
-let validators: { [s: string]: StringValidator; } = {};
-validators["ZIP code"] = new ZipCodeValidator();
-validators["Letters only"] = new LettersOnlyValidator();
+let validators: { [s: string]: StringValidator } = {};
+validators['ZIP code'] = new ZipCodeValidator();
+validators['Letters only'] = new LettersOnlyValidator();
 
 // Show whether each string passed each validator
 for (let s of strings) {
-    for (let name in validators) {
-        let isMatch = validators[name].isAcceptable(s);
-        console.log(`'${ s }' ${ isMatch ? "matches" : "does not match" } '${ name }'.`);
-    }
+  for (let name in validators) {
+    let isMatch = validators[name].isAcceptable(s);
+    console.log(`'${s}' ${isMatch ? 'matches' : 'does not match'} '${name}'.`);
+  }
 }
 ```
 
@@ -59,39 +59,43 @@ for (let s of strings) {
 
 ```typescript
 namespace Validation {
-    export interface StringValidator {
-        isAcceptable(s: string): boolean;
-    }
+  export interface StringValidator {
+    isAcceptable(s: string): boolean;
+  }
 
-    const lettersRegexp = /^[A-Za-z]+$/;
-    const numberRegexp = /^[0-9]+$/;
+  const lettersRegexp = /^[A-Za-z]+$/;
+  const numberRegexp = /^[0-9]+$/;
 
-    export class LettersOnlyValidator implements StringValidator {
-        isAcceptable(s: string) {
-            return lettersRegexp.test(s);
-        }
+  export class LettersOnlyValidator implements StringValidator {
+    isAcceptable(s: string) {
+      return lettersRegexp.test(s);
     }
+  }
 
-    export class ZipCodeValidator implements StringValidator {
-        isAcceptable(s: string) {
-            return s.length === 5 && numberRegexp.test(s);
-        }
+  export class ZipCodeValidator implements StringValidator {
+    isAcceptable(s: string) {
+      return s.length === 5 && numberRegexp.test(s);
     }
+  }
 }
 
 // Some samples to try
-let strings = ["Hello", "98052", "101"];
+let strings = ['Hello', '98052', '101'];
 
 // Validators to use
-let validators: { [s: string]: Validation.StringValidator; } = {};
-validators["ZIP code"] = new Validation.ZipCodeValidator();
-validators["Letters only"] = new Validation.LettersOnlyValidator();
+let validators: { [s: string]: Validation.StringValidator } = {};
+validators['ZIP code'] = new Validation.ZipCodeValidator();
+validators['Letters only'] = new Validation.LettersOnlyValidator();
 
 // Show whether each string passed each validator
 for (let s of strings) {
-    for (let name in validators) {
-        console.log(`"${ s }" - ${ validators[name].isAcceptable(s) ? "matches" : "does not match" } ${ name }`);
-    }
+  for (let name in validators) {
+    console.log(
+      `"${s}" - ${
+        validators[name].isAcceptable(s) ? 'matches' : 'does not match'
+      } ${name}`
+    );
+  }
 }
 ```
 
@@ -107,9 +111,9 @@ for (let s of strings) {
 
 ```typescript
 namespace Validation {
-    export interface StringValidator {
-        isAcceptable(s: string): boolean;
-    }
+  export interface StringValidator {
+    isAcceptable(s: string): boolean;
+  }
 }
 ```
 
@@ -118,12 +122,12 @@ namespace Validation {
 ```typescript
 /// <reference path="Validation.ts" />
 namespace Validation {
-    const lettersRegexp = /^[A-Za-z]+$/;
-    export class LettersOnlyValidator implements StringValidator {
-        isAcceptable(s: string) {
-            return lettersRegexp.test(s);
-        }
+  const lettersRegexp = /^[A-Za-z]+$/;
+  export class LettersOnlyValidator implements StringValidator {
+    isAcceptable(s: string) {
+      return lettersRegexp.test(s);
     }
+  }
 }
 ```
 
@@ -132,12 +136,12 @@ namespace Validation {
 ```typescript
 /// <reference path="Validation.ts" />
 namespace Validation {
-    const numberRegexp = /^[0-9]+$/;
-    export class ZipCodeValidator implements StringValidator {
-        isAcceptable(s: string) {
-            return s.length === 5 && numberRegexp.test(s);
-        }
+  const numberRegexp = /^[0-9]+$/;
+  export class ZipCodeValidator implements StringValidator {
+    isAcceptable(s: string) {
+      return s.length === 5 && numberRegexp.test(s);
     }
+  }
 }
 ```
 
@@ -149,18 +153,22 @@ namespace Validation {
 /// <reference path="ZipCodeValidator.ts" />
 
 // Some samples to try
-let strings = ["Hello", "98052", "101"];
+let strings = ['Hello', '98052', '101'];
 
 // Validators to use
-let validators: { [s: string]: Validation.StringValidator; } = {};
-validators["ZIP code"] = new Validation.ZipCodeValidator();
-validators["Letters only"] = new Validation.LettersOnlyValidator();
+let validators: { [s: string]: Validation.StringValidator } = {};
+validators['ZIP code'] = new Validation.ZipCodeValidator();
+validators['Letters only'] = new Validation.LettersOnlyValidator();
 
 // Show whether each string passed each validator
 for (let s of strings) {
-    for (let name in validators) {
-        console.log(`"${ s }" - ${ validators[name].isAcceptable(s) ? "matches" : "does not match" } ${ name }`);
-    }
+  for (let name in validators) {
+    console.log(
+      `"${s}" - ${
+        validators[name].isAcceptable(s) ? 'matches' : 'does not match'
+      } ${name}`
+    );
+  }
 }
 ```
 
@@ -178,7 +186,7 @@ tsc --outFile sample.js Test.ts
 tsc --outFile sample.js Validation.ts LettersOnlyValidator.ts ZipCodeValidator.ts Test.ts
 ```
 
-第二种方式，我们可以编译每一个文件（默认方式），那么每个源文件都会对应生成一个JavaScript文件。 然后，在页面上通过`<script>`标签把所有生成的JavaScript文件按正确的顺序引进来，比如：
+第二种方式，我们可以编译每一个文件（默认方式），那么每个源文件都会对应生成一个 JavaScript 文件。 然后，在页面上通过`<script>`标签把所有生成的 JavaScript 文件按正确的顺序引进来，比如：
 
 #### MyTestPage.html \(excerpt\)
 
@@ -195,10 +203,10 @@ tsc --outFile sample.js Validation.ts LettersOnlyValidator.ts ZipCodeValidator.t
 
 ```typescript
 namespace Shapes {
-    export namespace Polygons {
-        export class Triangle { }
-        export class Square { }
-    }
+  export namespace Polygons {
+    export class Triangle {}
+    export class Square {}
+  }
 }
 
 import polygons = Shapes.Polygons;
@@ -207,37 +215,36 @@ let sq = new polygons.Square(); // Same as "new Shapes.Polygons.Square()"
 
 注意，我们并没有使用`require`关键字，而是直接使用导入符号的限定名赋值。 这与使用`var`相似，但它还适用于类型和导入的具有命名空间含义的符号。 重要的是，对于值来讲，`import`会生成与原始符号不同的引用，所以改变别名的`var`值并不会影响原始变量的值。
 
-## 使用其它的JavaScript库
+## 使用其它的 JavaScript 库
 
-为了描述不是用TypeScript编写的类库的类型，我们需要声明类库导出的API。 由于大部分程序库只提供少数的顶级对象，命名空间是用来表示它们的一个好办法。
+为了描述不是用 TypeScript 编写的类库的类型，我们需要声明类库导出的 API。 由于大部分程序库只提供少数的顶级对象，命名空间是用来表示它们的一个好办法。
 
-我们称其为声明是因为它不是外部程序的具体实现。 我们通常在`.d.ts`里写这些声明。 如果你熟悉C/C++，你可以把它们当做`.h`文件。 让我们看一些例子。
+我们称其为声明是因为它不是外部程序的具体实现。 我们通常在`.d.ts`里写这些声明。 如果你熟悉 C/C++，你可以把它们当做`.h`文件。 让我们看一些例子。
 
 ### 外部命名空间
 
-流行的程序库D3在全局对象`d3`里定义它的功能。 因为这个库通过一个`<script>`标签加载（不是通过模块加载器），它的声明文件使用内部模块来定义它的类型。 为了让TypeScript编译器识别它的类型，我们使用外部命名空间声明。 比如，我们可以像下面这样写：
+流行的程序库 D3 在全局对象`d3`里定义它的功能。 因为这个库通过一个`<script>`标签加载（不是通过模块加载器），它的声明文件使用内部模块来定义它的类型。 为了让 TypeScript 编译器识别它的类型，我们使用外部命名空间声明。 比如，我们可以像下面这样写：
 
 #### D3.d.ts \(部分摘录\)
 
 ```typescript
 declare namespace D3 {
-    export interface Selectors {
-        select: {
-            (selector: string): Selection;
-            (element: EventTarget): Selection;
-        };
-    }
+  export interface Selectors {
+    select: {
+      (selector: string): Selection;
+      (element: EventTarget): Selection;
+    };
+  }
 
-    export interface Event {
-        x: number;
-        y: number;
-    }
+  export interface Event {
+    x: number;
+    y: number;
+  }
 
-    export interface Base extends Selectors {
-        event: Event;
-    }
+  export interface Base extends Selectors {
+    event: Event;
+  }
 }
 
 declare var d3: D3.Base;
 ```
-

@@ -9,7 +9,7 @@
 关闭 `strictNullChecks` 时，下例中 `A` 的类型为 `null`，而 `B` 的类型为 `undefined`：
 
 ```typescript
-type A = { a: number } & null;      // null
+type A = { a: number } & null; // null
 type B = { a: number } & undefined; // undefined
 ```
 
@@ -21,5 +21,4 @@ type B = { a: number } & undefined; // undefined
 
 ## 参考
 
-* [原文](https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#typescript-30)
-
+- [原文](https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#typescript-30)

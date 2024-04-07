@@ -6,7 +6,7 @@
 
 ```ts twoslash
 function setVerticalAlignment(location: 'top' | 'middle' | 'bottom') {
-    // ...
+  // ...
 }
 
 setVerticalAlignment('middel');
@@ -21,10 +21,7 @@ setVerticalAlignment('middel');
 
 ```ts
 type Options = {
-    [K in
-        | 'noImplicitAny'
-        | 'strictNullChecks'
-        | 'strictFunctionTypes']?: boolean;
+  [K in 'noImplicitAny' | 'strictNullChecks' | 'strictFunctionTypes']?: boolean;
 };
 // same as
 //   type Options = {
@@ -74,7 +71,7 @@ type HorizontalAlignment = 'left' | 'center' | 'right';
 //   | "bottom-left" | "bottom-center" | "bottom-right"
 
 declare function setAlignment(
-    value: `${VerticalAlignment}-${HorizontalAlignment}`
+  value: `${VerticalAlignment}-${HorizontalAlignment}`
 ): void;
 
 setAlignment('top-left'); // works!
@@ -90,13 +87,13 @@ setAlignment('top-pot'); // error! but good doughnuts if you're ever in Seattle
 
 ```ts
 let person = makeWatchedObject({
-    firstName: 'Homer',
-    age: 42,
-    location: 'Springfield',
+  firstName: 'Homer',
+  age: 42,
+  location: 'Springfield',
 });
 
 person.on('firstNameChanged', () => {
-    console.log(`firstName was changed!`);
+  console.log(`firstName was changed!`);
 });
 ```
 
@@ -105,7 +102,7 @@ person.on('firstNameChanged', () => {
 
 ```ts twslash
 type PropEventSource<T> = {
-    on(eventName: `${string & keyof T}Changed`, callback: () => void): void;
+  on(eventName: `${string & keyof T}Changed`, callback: () => void): void;
 };
 
 /// Create a "watched object" with an 'on' method
@@ -117,13 +114,13 @@ declare function makeWatchedObject<T>(obj: T): T & PropEventSource<T>;
 
 ```ts twoslash
 type PropEventSource<T> = {
-    on(eventName: `${string & keyof T}Changed`, callback: () => void): void;
+  on(eventName: `${string & keyof T}Changed`, callback: () => void): void;
 };
 declare function makeWatchedObject<T>(obj: T): T & PropEventSource<T>;
 let person = makeWatchedObject({
-    firstName: 'Homer',
-    age: 42,
-    location: 'Springfield',
+  firstName: 'Homer',
+  age: 42,
+  location: 'Springfield',
 });
 
 // error!
@@ -138,31 +135,31 @@ person.on('frstNameChanged', () => {});
 
 ```ts twoslash
 type PropEventSource<T> = {
-    on<K extends string & keyof T>(
-        eventName: `${K}Changed`,
-        callback: (newValue: T[K]) => void
-    ): void;
+  on<K extends string & keyof T>(
+    eventName: `${K}Changed`,
+    callback: (newValue: T[K]) => void
+  ): void;
 };
 
 declare function makeWatchedObject<T>(obj: T): T & PropEventSource<T>;
 
 let person = makeWatchedObject({
-    firstName: 'Homer',
-    age: 42,
-    location: 'Springfield',
+  firstName: 'Homer',
+  age: 42,
+  location: 'Springfield',
 });
 
 // works! 'newName' is typed as 'string'
-person.on('firstNameChanged', (newName) => {
-    // 'newName' has the type of 'firstName'
-    console.log(`new name is ${newName.toUpperCase()}`);
+person.on('firstNameChanged', newName => {
+  // 'newName' has the type of 'firstName'
+  console.log(`new name is ${newName.toUpperCase()}`);
 });
 
 // works! 'newAge' is typed as 'number'
-person.on('ageChanged', (newAge) => {
-    if (newAge < 0) {
-        console.log('warning! negative age');
-    }
+person.on('ageChanged', newAge => {
+  if (newAge < 0) {
+    console.log('warning! negative age');
+  }
 });
 ```
 
@@ -194,10 +191,7 @@ type HELLO = EnthusiasticGreeting<'hello'>;
 
 ```ts
 type Options = {
-    [K in
-        | 'noImplicitAny'
-        | 'strictNullChecks'
-        | 'strictFunctionTypes']?: boolean;
+  [K in 'noImplicitAny' | 'strictNullChecks' | 'strictFunctionTypes']?: boolean;
 };
 // same as
 //   type Options = {
@@ -212,7 +206,7 @@ type Options = {
 ```ts
 /// 'Partial<T>' 等同于 'T'，只是把每个属性标记为可选的。
 type Partial<T> = {
-    [K in keyof T]?: T[K];
+  [K in keyof T]?: T[K];
 };
 ```
 
@@ -222,9 +216,9 @@ type Partial<T> = {
 
 ```ts
 type MappedTypeWithNewKeys<T> = {
-    [K in keyof T as NewKeyType]: T[K];
-    //            ^^^^^^^^^^^^^
-    //            这里是新的语法！
+  [K in keyof T as NewKeyType]: T[K];
+  //            ^^^^^^^^^^^^^
+  //            这里是新的语法！
 };
 ```
 
@@ -232,13 +226,13 @@ type MappedTypeWithNewKeys<T> = {
 
 ```ts twoslash
 type Getters<T> = {
-    [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
+  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
 };
 
 interface Person {
-    name: string;
-    age: number;
-    location: string;
+  name: string;
+  age: number;
+  location: string;
 }
 
 type LazyPerson = Getters<Person>;
@@ -255,23 +249,23 @@ type LazyPerson = Getters<Person>;
 ```ts twoslash
 // 删除 'kind' 属性
 type RemoveKindField<T> = {
-    [K in keyof T as Exclude<K, 'kind'>]: T[K];
+  [K in keyof T as Exclude<K, 'kind'>]: T[K];
 };
 
 interface Circle {
-    kind: 'circle';
-    radius: number;
+  kind: 'circle';
+  radius: number;
 }
 
 type KindlessCircle = RemoveKindField<Circle>;
 
 type RemoveKindField<T> = {
-    [K in keyof T as Exclude<K, 'kind'>]: T[K];
+  [K in keyof T as Exclude<K, 'kind'>]: T[K];
 };
 
 interface Circle {
-    kind: 'circle';
-    radius: number;
+  kind: 'circle';
+  radius: number;
 }
 
 type KindlessCircle = RemoveKindField<Circle>;
@@ -300,7 +294,7 @@ TypeScript 4.1 取消了对有条件类型的一些限制 - 因此它现在可�
 type ElementType<T> = T extends ReadonlyArray<infer U> ? ElementType<U> : T;
 
 function deepFlatten<T extends readonly unknown[]>(x: T): ElementType<T>[] {
-    throw 'not implemented';
+  throw 'not implemented';
 }
 
 // All of these return the type 'number[]':
@@ -316,8 +310,8 @@ type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T;
 
 /// 类似于 `promise.then(...)`，但是类型更准确
 declare function customThen<T, U>(
-    p: Promise<T>,
-    onFulfilled: (value: Awaited<T>) => U
+  p: Promise<T>,
+  onFulfilled: (value: Awaited<T>) => U
 ): Promise<Awaited<U>>;
 ```
 
@@ -339,22 +333,22 @@ TypeScript 支持一个叫做*索引签名*的功能。
 
 ```ts twoslash
 interface Options {
-    path: string;
-    permissions: number;
+  path: string;
+  permissions: number;
 
-    // 额外的属性可以被这个签名捕获
-    [propName: string]: string | number;
+  // 额外的属性可以被这个签名捕获
+  [propName: string]: string | number;
 }
 
 function checkOptions(opts: Options) {
-    opts.path; // string
-    opts.permissions; // number
+  opts.path; // string
+  opts.permissions; // number
 
-    // 以下都是允许的
-    // 它们的类型为 'string | number'
-    opts.yadda.toString();
-    opts['foo bar baz'].toString();
-    opts[Math.random()].toString();
+  // 以下都是允许的
+  // 它们的类型为 'string | number'
+  opts.yadda.toString();
+  opts['foo bar baz'].toString();
+  opts[Math.random()].toString();
 }
 ```
 
@@ -368,44 +362,44 @@ function checkOptions(opts: Options) {
 例如在上例中，`opts.yadda`的类型为`string | number | undefined`，而不是`string | number`。
 如果需要访问那个属性，你可以先检查属性是否存在或者使用非空断言运算符（`!`后缀字符）。
 
-```ts twoslash
+```ts
 // @noUncheckedIndexedAccess
 interface Options {
-    path: string;
-    permissions: number;
+  path: string;
+  permissions: number;
 
-    // 额外的属性可以被这个签名捕获
-    [propName: string]: string | number;
+  // 额外的属性可以被这个签名捕获
+  [propName: string]: string | number;
 }
 // ---cut---
 function checkOptions(opts: Options) {
-    opts.path; // string
-    opts.permissions; // number
+  opts.path; // string
+  opts.permissions; // number
 
-    // 在 noUncheckedIndexedAccess 下，以下操作不允许
-    opts.yadda.toString();
-    opts['foo bar baz'].toString();
-    opts[Math.random()].toString();
+  // 在 noUncheckedIndexedAccess 下，以下操作不允许
+  opts.yadda.toString();
+  opts['foo bar baz'].toString();
+  opts[Math.random()].toString();
 
-    // 首先检查是否存在
-    if (opts.yadda) {
-        console.log(opts.yadda.toString());
-    }
+  // 首先检查是否存在
+  if (opts.yadda) {
+    console.log(opts.yadda.toString());
+  }
 
-    // 使用 ! 非空断言，“我知道在做什么”
-    opts.yadda!.toString();
+  // 使用 ! 非空断言，“我知道在做什么”
+  opts.yadda!.toString();
 }
 ```
 
 使用`--noUncheckedIndexedAccess`的一个结果是，通过索引访问数组元素时也会进行严格类型检查，就算是在遍历检查过边界的数组时。
 
-```ts twoslash
+```ts
 // @noUncheckedIndexedAccess
 function screamLines(strs: string[]) {
-    // 下面会有问题
-    for (let i = 0; i < strs.length; i++) {
-        console.log(strs[i].toUpperCase());
-    }
+  // 下面会有问题
+  for (let i = 0; i < strs.length; i++) {
+    console.log(strs[i].toUpperCase());
+  }
 }
 ```
 
@@ -414,15 +408,15 @@ function screamLines(strs: string[]) {
 ```ts twoslash
 // @noUncheckedIndexedAccess
 function screamLines(strs: string[]) {
-    // 可以正常工作
-    for (const str of strs) {
-        console.log(str.toUpperCase());
-    }
+  // 可以正常工作
+  for (const str of strs) {
+    console.log(str.toUpperCase());
+  }
 
-    // 可以正常工作
-    strs.forEach((str) => {
-        console.log(str.toUpperCase());
-    });
+  // 可以正常工作
+  strs.forEach(str => {
+    console.log(str.toUpperCase());
+  });
 }
 ```
 
@@ -451,8 +445,8 @@ function screamLines(strs: string[]) {
 
 TypeScript 4.1 通过以下两个编译选项来支持 React 17 中的`jsx`和`jsxs`工厂函数：
 
--   `react-jsx`
--   `react-jsxdev`
+- `react-jsx`
+- `react-jsxdev`
 
 这两个编译选项分别用于生产环境和开发环境中。
 通常，编译选项之间可以继承。
@@ -461,13 +455,13 @@ TypeScript 4.1 通过以下两个编译选项来支持 React 17 中的`jsx`和`j
 ```json tsconfig
 // ./src/tsconfig.json
 {
-    "compilerOptions": {
-        "module": "esnext",
-        "target": "es2015",
-        "jsx": "react-jsx",
-        "strict": true
-    },
-    "include": ["./**/*"]
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es2015",
+    "jsx": "react-jsx",
+    "strict": true
+  },
+  "include": ["./**/*"]
 }
 ```
 
@@ -476,10 +470,10 @@ TypeScript 4.1 通过以下两个编译选项来支持 React 17 中的`jsx`和`j
 ```json tsconfig
 // ./src/tsconfig.dev.json
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "jsx": "react-jsxdev"
-    }
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsxdev"
+  }
 }
 ```
 
@@ -538,7 +532,7 @@ let x = foo && somethingElse;
 
 ```ts
 function isThing(x: any): boolean {
-    return x && typeof x === 'object' && x.blah === 'foo';
+  return x && typeof x === 'object' && x.blah === 'foo';
 }
 ```
 
@@ -549,17 +543,17 @@ function isThing(x: any): boolean {
 在编写如下的代码时
 
 ```ts
-new Promise((resolve) => {
-    doSomethingAsync(() => {
-        doSomething();
-        resolve();
-    });
+new Promise(resolve => {
+  doSomethingAsync(() => {
+    doSomething();
+    resolve();
+  });
 });
 ```
 
 你可能会得到如下的错误：
 
-```
+```ts
   resolve()
   ~~~~~~~~~
 error TS2554: Expected 1 arguments, but got 0.
@@ -571,13 +565,13 @@ error TS2554: Expected 1 arguments, but got 0.
 典型的修复方法是传入正确的参数，以及添加明确的类型参数。
 
 ```ts
-new Promise<number>((resolve) => {
-    //     ^^^^^^^^
-    doSomethingAsync((value) => {
-        doSomething();
-        resolve(value);
-        //      ^^^^^
-    });
+new Promise<number>(resolve => {
+  //     ^^^^^^^^
+  doSomethingAsync(value => {
+    doSomething();
+    resolve(value);
+    //      ^^^^^
+  });
 });
 ```
 
@@ -586,12 +580,12 @@ new Promise<number>((resolve) => {
 它利用了 TypeScript 4.1 中的一个新功能，一个潜在的`void`类型的末尾参数会变成可选参数。
 
 ```ts
-new Promise<void>((resolve) => {
-    //     ^^^^^^
-    doSomethingAsync(() => {
-        doSomething();
-        resolve();
-    });
+new Promise<void>(resolve => {
+  //     ^^^^^^
+  doSomethingAsync(() => {
+    doSomething();
+    resolve();
+  });
 });
 ```
 
@@ -606,30 +600,30 @@ TypeScript 4.1 提供了快速修复选项来解决该问题。
 
 ```ts
 interface Person {
-    name: string;
-    age: number;
-    location: string;
+  name: string;
+  age: number;
+  location: string;
 }
 
 interface Animal {
-    name: string;
-    owner: Person;
+  name: string;
+  owner: Person;
 }
 
 function copyOwner(pet?: Animal) {
-    return {
-        ...(pet && pet.owner),
-        otherStuff: 123,
-    };
+  return {
+    ...(pet && pet.owner),
+    otherStuff: 123,
+  };
 }
 
 // We could also use optional chaining here:
 
 function copyOwner(pet?: Animal) {
-    return {
-        ...pet?.owner,
-        otherStuff: 123,
-    };
+  return {
+    ...pet?.owner,
+    otherStuff: 123,
+  };
 }
 ```
 
@@ -638,7 +632,7 @@ function copyOwner(pet?: Animal) {
 在之前，`copyOwner`的返回值类型为基于每个展开运算结果的联合类型：
 The return type of `copyOwner` was previously a union type based on each spread:
 
-```
+```ts
 { x: number } | { x: number, name: string, age: number, location: string }
 ```
 
@@ -650,7 +644,7 @@ The return type of `copyOwner` was previously a union type based on each spread:
 
 在 TypeScript 4.1 中，返回值类型有时会使用全部的可选类型。
 
-```
+```ts
 {
     x: number;
     name?: string;

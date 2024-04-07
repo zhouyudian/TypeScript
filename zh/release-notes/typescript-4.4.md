@@ -8,12 +8,12 @@ TypeScript 能够理解这些检查，并将它们称作为*类型守卫*。
 
 例如，可以这样写
 
-```ts twoslash
+```ts
 function foo(arg: unknown) {
-    if (typeof arg === 'string') {
-        console.log(arg.toUpperCase());
-        //           ^?
-    }
+  if (typeof arg === 'string') {
+    console.log(arg.toUpperCase());
+    //           ^?
+  }
 }
 ```
 
@@ -27,12 +27,12 @@ TypeScript 识别出了 `typeof arg === "string"` 检查，它被当作是一个
 // 在 TS 4.3 及以下版本
 
 function foo(arg: unknown) {
-    const argIsString = typeof arg === 'string';
-    if (argIsString) {
-        console.log(arg.toUpperCase());
-        //              ~~~~~~~~~~~
-        // 错误！'unknown' 类型上不存在 'toUpperCase' 属性。
-    }
+  const argIsString = typeof arg === 'string';
+  if (argIsString) {
+    console.log(arg.toUpperCase());
+    //              ~~~~~~~~~~~
+    // 错误！'unknown' 类型上不存在 'toUpperCase' 属性。
+  }
 }
 ```
 
@@ -50,18 +50,18 @@ function foo(arg: unknown) {
 
 ```ts twoslash
 type Shape =
-    | { kind: 'circle'; radius: number }
-    | { kind: 'square'; sideLength: number };
+  | { kind: 'circle'; radius: number }
+  | { kind: 'square'; sideLength: number };
 
 function area(shape: Shape): number {
-    const isCircle = shape.kind === 'circle';
-    if (isCircle) {
-        // 知道此处为 circle
-        return Math.PI * shape.radius ** 2;
-    } else {
-        // 知道此处为 square
-        return shape.sideLength ** 2;
-    }
+  const isCircle = shape.kind === 'circle';
+  if (isCircle) {
+    // 知道此处为 circle
+    return Math.PI * shape.radius ** 2;
+  } else {
+    // 知道此处为 square
+    return shape.sideLength ** 2;
+  }
 }
 ```
 
@@ -69,20 +69,20 @@ function area(shape: Shape): number {
 
 ```ts twoslash
 type Shape =
-    | { kind: 'circle'; radius: number }
-    | { kind: 'square'; sideLength: number };
+  | { kind: 'circle'; radius: number }
+  | { kind: 'square'; sideLength: number };
 
 function area(shape: Shape): number {
-    // Extract out the 'kind' field first.
-    const { kind } = shape;
+  // Extract out the 'kind' field first.
+  const { kind } = shape;
 
-    if (kind === 'circle') {
-        // We know we have a circle here!
-        return Math.PI * shape.radius ** 2;
-    } else {
-        // We know we're left with a square here!
-        return shape.sideLength ** 2;
-    }
+  if (kind === 'circle') {
+    // We know we have a circle here!
+    return Math.PI * shape.radius ** 2;
+  } else {
+    // We know we're left with a square here!
+    return shape.sideLength ** 2;
+  }
 }
 ```
 
@@ -90,17 +90,17 @@ function area(shape: Shape): number {
 
 ```ts twoslash
 function doSomeChecks(
-    inputA: string | undefined,
-    inputB: string | undefined,
-    shouldDoExtraWork: boolean
+  inputA: string | undefined,
+  inputB: string | undefined,
+  shouldDoExtraWork: boolean
 ) {
-    const mustDoWork = inputA && inputB && shouldDoExtraWork;
-    if (mustDoWork) {
-        // We can access 'string' properties on both 'inputA' and 'inputB'!
-        const upperA = inputA.toUpperCase();
-        const upperB = inputB.toUpperCase();
-        // ...
-    }
+  const mustDoWork = inputA && inputB && shouldDoExtraWork;
+  if (mustDoWork) {
+    // We can access 'string' properties on both 'inputA' and 'inputB'!
+    const upperA = inputA.toUpperCase();
+    const upperB = inputB.toUpperCase();
+    // ...
+  }
 }
 ```
 
@@ -112,16 +112,16 @@ TypeScript 可以通过这些常量来理解在它们背后执行的检查。
 
 ```ts twoslash
 function f(x: string | number | boolean) {
-    const isString = typeof x === 'string';
-    const isNumber = typeof x === 'number';
-    const isStringOrNumber = isString || isNumber;
-    if (isStringOrNumber) {
-        x;
-        //  ^?
-    } else {
-        x;
-        //  ^?
-    }
+  const isString = typeof x === 'string';
+  const isNumber = typeof x === 'number';
+  const isStringOrNumber = isString || isNumber;
+  if (isStringOrNumber) {
+    x;
+    //  ^?
+  } else {
+    x;
+    //  ^?
+  }
 }
 ```
 
@@ -140,7 +140,7 @@ TypeScript 支持使用*索引签名*来为对象的每个属性定义类型。
 
 ```ts twoslash
 interface BooleanDictionary {
-    [key: string]: boolean;
+  [key: string]: boolean;
 }
 
 declare let myDict: BooleanDictionary;
@@ -160,9 +160,9 @@ myDict['baz'] = 'oops';
 ```ts
 // 这是 TypeScript 内置的部分 Array 类型
 interface Array<T> {
-    [index: number]: T;
+  [index: number]: T;
 
-    // ...
+  // ...
 }
 
 let arr = new Array<string>();
@@ -185,7 +185,7 @@ TypeScript 4.4 解决了这个问题，允许 `symbol` 索引签名以及模版�
 
 ```ts twoslash
 interface Colors {
-    [sym: symbol]: number;
+  [sym: symbol]: number;
 }
 
 const red = Symbol('red');
@@ -209,51 +209,51 @@ colors[blue] = 'da ba dee';
 
 ```ts
 interface Options {
-    width?: number;
-    height?: number;
+  width?: number;
+  height?: number;
 }
 
 let a: Options = {
-    width: 100,
-    height: 100,
+  width: 100,
+  height: 100,
 
-    'data-blah': true,
+  'data-blah': true,
 };
 
 interface OptionsWithDataProps extends Options {
-    // 允许以 'data-' 开头的属性
-    [optName: `data-${string}`]: unknown;
+  // 允许以 'data-' 开头的属性
+  [optName: `data-${string}`]: unknown;
 }
 
 let b: OptionsWithDataProps = {
-    width: 100,
-    height: 100,
-    'data-blah': true,
+  width: 100,
+  height: 100,
+  'data-blah': true,
 
-    // 使用未知属性会报错，不包括以 'data-' 开始的属性
-    'unknown-property': true,
+  // 使用未知属性会报错，不包括以 'data-' 开始的属性
+  'unknown-property': true,
 };
 ```
 
 最后，索引签名现在支持联合类型，只要它们是无限域原始类型的联合 - 尤其是：
 
--   `string`
--   `number`
--   `symbol`
--   模版字符串（例如 `` `hello-${string}` ``）
+- `string`
+- `number`
+- `symbol`
+- 模版字符串（例如 `` `hello-${string}` ``）
 
 带有以上类型的联合的索引签名会展开为不同的索引签名。
 
 ```ts
 interface Data {
-    [optName: string | symbol]: any;
+  [optName: string | symbol]: any;
 }
 
 // 等同于
 
 interface Data {
-    [optName: string]: any;
-    [optName: symbol]: any;
+  [optName: string]: any;
+  [optName: symbol]: any;
 }
 ```
 
@@ -268,12 +268,12 @@ interface Data {
 
 ```ts
 try {
-    // 谁知道它会抛出什么东西
-    executeSomeThirdPartyCode();
+  // 谁知道它会抛出什么东西
+  executeSomeThirdPartyCode();
 } catch (err) {
-    // err: any
-    console.error(err.message); // 可以，因为类型为 'any'
-    err.thisWillProbablyFail(); // 可以，因为类型为 'any' :(
+  // err: any
+  console.error(err.message); // 可以，因为类型为 'any'
+  err.thisWillProbablyFail(); // 可以，因为类型为 'any' :(
 }
 ```
 
@@ -288,17 +288,17 @@ try {
 declare function executeSomeThirdPartyCode(): void;
 
 try {
-    executeSomeThirdPartyCode();
+  executeSomeThirdPartyCode();
 } catch (err) {
-    // err: unknown
+  // err: unknown
 
-    // Error! Property 'message' does not exist on type 'unknown'.
+  // Error! Property 'message' does not exist on type 'unknown'.
+  console.error(err.message);
+
+  // Works! We can narrow 'err' from 'unknown' to 'Error'.
+  if (err instanceof Error) {
     console.error(err.message);
-
-    // Works! We can narrow 'err' from 'unknown' to 'Error'.
-    if (err instanceof Error) {
-        console.error(err.message);
-    }
+  }
 }
 ```
 
@@ -306,7 +306,7 @@ try {
 也就是说如果你启用了 `--strict`，那么该标记也自动启用了。
 在 TypeScript 4.4 中，你可能会看到如下的错误：
 
-```
+```ts
 Property 'message' does not exist on type 'unknown'.
 Property 'name' does not exist on type 'unknown'.
 Property 'stack' does not exist on type 'unknown'.
@@ -318,9 +318,9 @@ Property 'stack' does not exist on type 'unknown'.
 declare function executeSomeThirdPartyCode(): void;
 
 try {
-    executeSomeThirdPartyCode();
+  executeSomeThirdPartyCode();
 } catch (err: any) {
-    console.error(err.message); // Works again!
+  console.error(err.message); // Works again!
 }
 ```
 
@@ -335,8 +335,8 @@ try {
 
 ```ts
 interface Person {
-    name: string;
-    age?: number;
+  name: string;
+  age?: number;
 }
 ```
 
@@ -344,8 +344,8 @@ interface Person {
 
 ```ts
 interface Person {
-    name: string;
-    age?: number | undefined;
+  name: string;
+  age?: number | undefined;
 }
 ```
 
@@ -353,8 +353,8 @@ interface Person {
 
 ```ts
 const p: Person = {
-    name: 'Daniel',
-    age: undefined, // This is okay by default.
+  name: 'Daniel',
+  age: undefined, // This is okay by default.
 };
 ```
 
@@ -367,14 +367,14 @@ const p: Person = {
 
 ```ts twoslash
 interface Person {
-    name: string;
-    age?: number;
+  name: string;
+  age?: number;
 }
 
 // 启用 'exactOptionalPropertyTypes'
 const p: Person = {
-    name: 'Daniel',
-    age: undefined, // 错误！undefined 不是一个成员
+  name: 'Daniel',
+  age: undefined, // 错误！undefined 不是一个成员
 };
 ```
 
@@ -389,17 +389,17 @@ const p: Person = {
 TypeScript 4.4 支持了 [类中的 `static` 语句块](https://github.com/tc39/proposal-class-static-block#ecmascript-class-static-initialization-blocks)，一个即将到来的 ECMAScript 特性，它能够帮助编写复杂的静态成员初始化代码。
 
 ```ts
-declare function someCondition(): boolean
+declare function someCondition(): boolean;
 
 class Foo {
-    static count = 0;
+  static count = 0;
 
-    // 静态语句块：
-    static {
-        if (someCondition()) {
-            Foo.count++;
-        }
+  // 静态语句块：
+  static {
+    if (someCondition()) {
+      Foo.count++;
     }
+  }
 }
 ```
 
@@ -407,22 +407,21 @@ class Foo {
 也就是说在初始化代码中能够编写语句，不会暴露变量，并且可以完全访问类的内部信息。
 
 ```ts
-declare function loadLastInstances(): any[]
+declare function loadLastInstances(): any[];
 
 class Foo {
-    static #count = 0;
+  static #count = 0;
 
-    get count() {
-        return Foo.#count;
-    }
+  get count() {
+    return Foo.#count;
+  }
 
-    static {
-        try {
-            const lastInstances = loadLastInstances();
-            Foo.#count += lastInstances.length;
-        }
-        catch {}
-    }
+  static {
+    try {
+      const lastInstances = loadLastInstances();
+      Foo.#count += lastInstances.length;
+    } catch {}
+  }
 }
 ```
 
@@ -436,16 +435,16 @@ class Foo {
 //    2
 //    3
 class Foo {
-    static prop = 1
-    static {
-        console.log(Foo.prop++);
-    }
-    static {
-        console.log(Foo.prop++);
-    }
-    static {
-        console.log(Foo.prop++);
-    }
+  static prop = 1;
+  static {
+    console.log(Foo.prop++);
+  }
+  static {
+    console.log(Foo.prop++);
+  }
+  static {
+    console.log(Foo.prop++);
+  }
 }
 ```
 
@@ -551,119 +550,3 @@ TypeScript 4.4 支持了*内嵌提示*特性，它能帮助显示参数名和返
 
 由于该计算可能很昂贵，当补全列表包含许多条目时最终的模块描述符会在你输入更多的字符时显示出来。
 你仍可能看到基于 workspace 的相对路径；然而，当编辑器“预热”后，再多输入几个字符它们会被替换为真正的路径。
-
-<!--
-## Breaking Changes
-
-### `lib.d.ts` Changes for TypeScript 4.4
-
-As with every TypeScript version, declarations for `lib.d.ts` (especially the declarations generated for web contexts), have changed.
-You can consult [our list of known `lib.dom.d.ts` changes](https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1029#issuecomment-869224737) to understand what is impacted.
-
-### More-Compliant Indirect Calls for Imported Functions
-
-In earlier versions of TypeScript, calling an import from CommonJS, AMD, and other non-ES module systems would set the `this` value of the called function.
-Specifically, in the following example, when calling `fooModule.foo()`, the `foo()` method will have `fooModule` set as the value of `this`.
-
-```ts
-// Imagine this is our imported module, and it has an export named 'foo'.
-let fooModule = {
-    foo() {
-        console.log(this);
-    },
-};
-
-fooModule.foo();
-```
-
-This is not the way exported functions in ECMAScript are supposed to work when we call them.
-That's why TypeScript 4.4 intentionally discards the `this` value when calling imported functions, by using the following emit.
-
-```ts
-// Imagine this is our imported module, and it has an export named 'foo'.
-let fooModule = {
-    foo() {
-        console.log(this);
-    },
-};
-
-// Notice we're actually calling '(0, fooModule.foo)' now, which is subtly different.
-(0, fooModule.foo)();
-```
-
-You can [read up more about the changes here](https://github.com/microsoft/TypeScript/pull/44624).
-
-### Using `unknown` in Catch Variables
-
-Users running with the `--strict` flag may see new errors around `catch` variables being `unknown`, especially if the existing code assumes only `Error` values have been caught.
-This often results in error messages such as:
-
-```
-Property 'message' does not exist on type 'unknown'.
-Property 'name' does not exist on type 'unknown'.
-Property 'stack' does not exist on type 'unknown'.
-```
-
-To get around this, you can specifically add runtime checks to ensure that the thrown type matches your expected type.
-Otherwise, you can just use a type assertion, add an explicit `: any` to your catch variable, or turn off `--useUnknownInCatchVariables`.
-
-### Broader Always-Truthy Promise Checks
-
-In prior versions, TypeScript introduced "Always Truthy Promise checks" to catch code where an `await` may have been forgotten;
-however, the checks only applied to named declarations.
-That meant that while this code would correctly receive an error...
-
-```ts
-async function foo(): Promise<boolean> {
-    return false;
-}
-
-async function bar(): Promise<string> {
-    const fooResult = foo();
-    if (fooResult) {
-        // <- error! :D
-        return 'true';
-    }
-    return 'false';
-}
-```
-
-...the following code would not.
-
-```ts
-async function foo(): Promise<boolean> {
-    return false;
-}
-
-async function bar(): Promise<string> {
-    if (foo()) {
-        // <- no error :(
-        return 'true';
-    }
-    return 'false';
-}
-```
-
-TypeScript 4.4 now flags both.
-For more information, [read up on the original change](https://github.com/microsoft/TypeScript/pull/44491).
-
-### Abstract Properties Do Not Allow Initializers
-
-The following code is now an error because abstract properties may not have initializers:
-
-```ts
-abstract class C {
-    abstract prop = 1;
-    //       ~~~~
-    // Property 'prop' cannot have an initializer because it is marked abstract.
-}
-```
-
-Instead, you may only specify a type for the property:
-
-```ts
-abstract class C {
-    abstract prop: number;
-}
-```
--->

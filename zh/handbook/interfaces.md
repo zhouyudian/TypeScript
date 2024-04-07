@@ -2,7 +2,7 @@
 
 ## 介绍
 
-TypeScript 的核心原则之一是对值所具有的_结构_进行类型检查。 它有时被称做“鸭式辨型法”或“结构性子类型化”。 在 TypeScript 里，接口的作用就是为这些类型命名和为你的代码或第三方代码定义契约。
+TypeScript 的核心原则之一是对值所具有的*结构*进行类型检查。 它有时被称做“鸭式辨型法”或“结构性子类型化”。 在 TypeScript 里，接口的作用就是为这些类型命名和为你的代码或第三方代码定义契约。
 
 ## 接口初探
 
@@ -13,7 +13,7 @@ function printLabel(labeledObj: { label: string }) {
   console.log(labeledObj.label);
 }
 
-let myObj = { size: 10, label: "Size 10 Object" };
+let myObj = { size: 10, label: 'Size 10 Object' };
 printLabel(myObj);
 ```
 
@@ -30,7 +30,7 @@ function printLabel(labeledObj: LabeledValue) {
   console.log(labeledObj.label);
 }
 
-let myObj = { size: 10, label: "Size 10 Object" };
+let myObj = { size: 10, label: 'Size 10 Object' };
 printLabel(myObj);
 ```
 
@@ -51,7 +51,7 @@ interface SquareConfig {
 }
 
 function createSquare(config: SquareConfig): { color: string; area: number } {
-  let newSquare = { color: "white", area: 100 };
+  let newSquare = { color: 'white', area: 100 };
   if (config.color) {
     newSquare.color = config.color;
   }
@@ -61,7 +61,7 @@ function createSquare(config: SquareConfig): { color: string; area: number } {
   return newSquare;
 }
 
-let mySquare = createSquare({ color: "black" });
+let mySquare = createSquare({ color: 'black' });
 ```
 
 带有可选属性的接口与普通的接口定义差不多，只是在可选属性名字定义的后面加一个`?`符号。
@@ -75,7 +75,7 @@ interface SquareConfig {
 }
 
 function createSquare(config: SquareConfig): { color: string; area: number } {
-  let newSquare = { color: "white", area: 100 };
+  let newSquare = { color: 'white', area: 100 };
   if (config.clor) {
     // Error: Property 'clor' does not exist on type 'SquareConfig'
     newSquare.color = config.clor;
@@ -86,7 +86,7 @@ function createSquare(config: SquareConfig): { color: string; area: number } {
   return newSquare;
 }
 
-let mySquare = createSquare({ color: "black" });
+let mySquare = createSquare({ color: 'black' });
 ```
 
 ## 只读属性
@@ -144,18 +144,18 @@ function createSquare(config: SquareConfig): { color: string; area: number } {
   // ...
 }
 
-let mySquare = createSquare({ colour: "red", width: 100 });
+let mySquare = createSquare({ colour: 'red', width: 100 });
 ```
 
 注意传入`createSquare`的参数拼写为`colour`而不是`color`。 在 JavaScript 里，这会默默地失败。
 
 你可能会争辩这个程序已经正确地类型化了，因为`width`属性是兼容的，不存在`color`属性，而且额外的`colour`属性是无意义的。
 
-然而，TypeScript 会认为这段代码可能存在 bug。 对象字面量会被特殊对待而且会经过_额外属性检查_，当将它们赋值给变量或作为参数传递的时候。 如果一个对象字面量存在任何“目标类型”不包含的属性时，你会得到一个错误。
+然而，TypeScript 会认为这段代码可能存在 bug。 对象字面量会被特殊对待而且会经过*额外属性检查*，当将它们赋值给变量或作为参数传递的时候。 如果一个对象字面量存在任何“目标类型”不包含的属性时，你会得到一个错误。
 
 ```typescript
 // error: Object literal may only specify known properties, but 'colour' does not exist in type 'SquareConfig'. Did you mean to write 'color'?
-let mySquare = createSquare({ colour: "red", width: 100 });
+let mySquare = createSquare({ colour: 'red', width: 100 });
 ```
 
 绕开这些检查非常简单。 最简便的方法是使用类型断言：
@@ -164,7 +164,7 @@ let mySquare = createSquare({ colour: "red", width: 100 });
 let mySquare = createSquare({ width: 100, opacity: 0.5 } as SquareConfig);
 ```
 
-然而，最佳的方式是能够添加一个字符串索引签名，前提是你能够确定这个对象可能具有某些做为特殊用途使用的额外属性。 如果`SquareConfig`带有上面定义的类型的`color`和`width`属性，并且_还会_带有任意数量的其它属性，那么我们可以这样定义它：
+然而，最佳的方式是能够添加一个字符串索引签名，前提是你能够确定这个对象可能具有某些做为特殊用途使用的额外属性。 如果`SquareConfig`带有上面定义的类型的`color`和`width`属性，并且*还会*带有任意数量的其它属性，那么我们可以这样定义它：
 
 ```typescript
 interface SquareConfig {
@@ -179,14 +179,14 @@ interface SquareConfig {
 还有最后一种跳过这些检查的方式，这可能会让你感到惊讶，它就是将这个对象赋值给一个另一个变量： 因为`squareOptions`不会经过额外属性检查，所以编译器不会报错。
 
 ```typescript
-let squareOptions = { colour: "red", width: 100 };
+let squareOptions = { colour: 'red', width: 100 };
 let mySquare = createSquare(squareOptions);
 ```
 
 上面的方法只在`squareOptions`和`SquareConfig`之间有共同的属性时才好用。 在这个例子中，这个属性为`width`。如果变量间不存在共同的对象属性将会报错。例如：
 
 ```typescript
-let squareOptions = { colour: "red" };
+let squareOptions = { colour: 'red' };
 let mySquare = createSquare(squareOptions);
 ```
 
@@ -208,7 +208,7 @@ interface SearchFunc {
 
 ```typescript
 let mySearch: SearchFunc;
-mySearch = function(source: string, subString: string) {
+mySearch = function (source: string, subString: string) {
   let result = source.search(subString);
   return result > -1;
 };
@@ -218,7 +218,7 @@ mySearch = function(source: string, subString: string) {
 
 ```typescript
 let mySearch: SearchFunc;
-mySearch = function(src: string, sub: string): boolean {
+mySearch = function (src: string, sub: string): boolean {
   let result = src.search(sub);
   return result > -1;
 };
@@ -228,7 +228,7 @@ mySearch = function(src: string, sub: string): boolean {
 
 ```typescript
 let mySearch: SearchFunc;
-mySearch = function(src, sub) {
+mySearch = function (src, sub) {
   let result = src.search(sub);
   return result > -1;
 };
@@ -241,15 +241,15 @@ let mySearch: SearchFunc;
 
 // error: Type '(src: string, sub: string) => string' is not assignable to type 'SearchFunc'.
 // Type 'string' is not assignable to type 'boolean'.
-mySearch = function(src, sub) {
+mySearch = function (src, sub) {
   let result = src.search(sub);
-  return "string";
+  return 'string';
 };
 ```
 
 ## 可索引的类型
 
-与使用接口描述函数类型差不多，我们也可以描述那些能够“通过索引得到”的类型，比如`a[10]`或`ageMap["daniel"]`。 可索引类型具有一个_索引签名_，它描述了对象索引的类型，还有相应的索引返回值类型。 让我们看一个例子：
+与使用接口描述函数类型差不多，我们也可以描述那些能够“通过索引得到”的类型，比如`a[10]`或`ageMap["daniel"]`。 可索引类型具有一个*索引签名*，它描述了对象索引的类型，还有相应的索引返回值类型。 让我们看一个例子：
 
 ```typescript
 interface StringArray {
@@ -257,7 +257,7 @@ interface StringArray {
 }
 
 let myArray: StringArray;
-myArray = ["Bob", "Fred"];
+myArray = ['Bob', 'Fred'];
 
 let myStr: string = myArray[0];
 ```
@@ -295,9 +295,9 @@ interface NumberDictionary {
 
 ```typescript
 interface NumberOrStringDictionary {
-   [index: string]: number | string;
-   length: number;    // ok, length is a number
-   name: string;      // ok, name is a string
+  [index: string]: number | string;
+  length: number; // ok, length is a number
+  name: string; // ok, name is a string
 }
 ```
 
@@ -307,8 +307,8 @@ interface NumberOrStringDictionary {
 interface ReadonlyStringArray {
   readonly [index: number]: string;
 }
-let myArray: ReadonlyStringArray = ["Alice", "Bob"];
-myArray[2] = "Mallory"; // error!
+let myArray: ReadonlyStringArray = ['Alice', 'Bob'];
+myArray[2] = 'Mallory'; // error!
 ```
 
 你不能设置`myArray[2]`，因为索引签名是只读的。
@@ -387,13 +387,13 @@ function createClock(
 class DigitalClock implements ClockInterface {
   constructor(h: number, m: number) {}
   tick() {
-    console.log("beep beep");
+    console.log('beep beep');
   }
 }
 class AnalogClock implements ClockInterface {
   constructor(h: number, m: number) {}
   tick() {
-    console.log("tick tock");
+    console.log('tick tock');
   }
 }
 
@@ -417,7 +417,7 @@ interface ClockInterface {
 const Clock: ClockConstructor = class Clock implements ClockInterface {
   constructor(h: number, m: number) {}
   tick() {
-    console.log("beep beep");
+    console.log('beep beep');
   }
 };
 ```
@@ -436,7 +436,7 @@ interface Square extends Shape {
 }
 
 let square = {} as Square;
-square.color = "blue";
+square.color = 'blue';
 square.sideLength = 10;
 ```
 
@@ -456,7 +456,7 @@ interface Square extends Shape, PenStroke {
 }
 
 let square = {} as Square;
-square.color = "blue";
+square.color = 'blue';
 square.sideLength = 10;
 square.penWidth = 5.0;
 ```
@@ -475,9 +475,9 @@ interface Counter {
 }
 
 function getCounter(): Counter {
-  let counter = function(start: number) {} as Counter;
+  let counter = function (start: number) {} as Counter;
   counter.interval = 123;
-  counter.reset = function() {};
+  counter.reset = function () {};
   return counter;
 }
 
@@ -513,8 +513,8 @@ class TextBox extends Control {
 }
 
 class ImageControl implements SelectableControl {
-// Error: Class 'ImageControl' incorrectly implements interface 'SelectableControl'.
-//  Types have separate declarations of a private property 'state'.
+  // Error: Class 'ImageControl' incorrectly implements interface 'SelectableControl'.
+  //  Types have separate declarations of a private property 'state'.
   private state: any;
   select() {}
 }
@@ -523,4 +523,3 @@ class ImageControl implements SelectableControl {
 在上面的例子里，`SelectableControl`包含了`Control`的所有成员，包括私有成员`state`。 因为`state`是私有成员，所以只能够是`Control`的子类们才能实现`SelectableControl`接口。 因为只有`Control`的子类才能够拥有一个声明于`Control`的私有成员`state`，这对私有成员的兼容性是必需的。
 
 在`Control`类内部，是允许通过`SelectableControl`的实例来访问私有成员`state`的。 实际上，`SelectableControl`就像`Control`一样，并拥有一个`select`方法。 `Button`和`TextBox`类是`SelectableControl`的子类（因为它们都继承自`Control`并有`select`方法）。而对于 `ImageControl` 类，它有自身的私有成员 `state` 而不是通过继承 `Control` 得来的，所以它不可以实现 `SelectableControl` 。
-

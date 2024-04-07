@@ -4,7 +4,7 @@
 
 ```ts twoslash
 function padLeft(padding: number | string, input: string): string {
-  throw new Error("尚未实现！");
+  throw new Error('尚未实现！');
 }
 ```
 
@@ -13,7 +13,7 @@ function padLeft(padding: number | string, input: string): string {
 ```ts twoslash
 // @errors: 2345
 function padLeft(padding: number | string, input: string) {
-  return " ".repeat(padding) + input;
+  return ' '.repeat(padding) + input;
 }
 ```
 
@@ -21,8 +21,8 @@ function padLeft(padding: number | string, input: string) {
 
 ```ts twoslash
 function padLeft(padding: number | string, input: string) {
-  if (typeof padding === "number") {
-    return " ".repeat(padding) + input;
+  if (typeof padding === 'number') {
+    return ' '.repeat(padding) + input;
   }
   return padding + input;
 }
@@ -36,8 +36,8 @@ function padLeft(padding: number | string, input: string) {
 
 ```ts twoslash
 function padLeft(padding: number | string, input: string) {
-  if (typeof padding === "number") {
-    return " ".repeat(padding) + input;
+  if (typeof padding === 'number') {
+    return ' '.repeat(padding) + input;
     //                ^?
   }
   return padding + input;
@@ -67,11 +67,11 @@ TypeScript 可以理解几种不同的缩小类型的构造。
 ```ts twoslash
 // @errors: 2531 18047
 function printAll(strs: string | string[] | null) {
-  if (typeof strs === "object") {
+  if (typeof strs === 'object') {
     for (const s of strs) {
       console.log(s);
     }
-  } else if (typeof strs === "string") {
+  } else if (typeof strs === 'string') {
     console.log(strs);
   } else {
     // 什么都不做
@@ -96,7 +96,7 @@ function getUsersOnlineMessage(numUsersOnline: number) {
   if (numUsersOnline) {
     return `现在有 ${numUsersOnline} 人在线！`;
   }
-  return "这里没有人。 :(";
+  return '这里没有人。 :(';
 }
 ```
 
@@ -113,19 +113,19 @@ function getUsersOnlineMessage(numUsersOnline: number) {
 
 ```ts twoslash
 // 这两个都会得到 ‘true’
-Boolean("hello"); // 类型: boolean, 值: true
-!!"world"; // 类型: true,    值: true
+Boolean('hello'); // 类型: boolean, 值: true
+!!'world'; // 类型: true,    值: true
 ```
 
 利用这种行为是相当流行的，特别是用于防范 `null` 或 `undefined` 等值。例如，让我们尝试将其应用于我们的 `printAll` 函数。
 
 ```ts twoslash
 function printAll(strs: string | string[] | null) {
-  if (strs && typeof strs === "object") {
+  if (strs && typeof strs === 'object') {
     for (const s of strs) {
       console.log(s);
     }
-  } else if (typeof strs === "string") {
+  } else if (typeof strs === 'string') {
     console.log(strs);
   }
 }
@@ -146,11 +146,11 @@ function printAll(strs: string | string[] | null) {
   //  继续阅读下去
   // !!!!!!!!!!!!!!!!
   if (strs) {
-    if (typeof strs === "object") {
+    if (typeof strs === 'object') {
       for (const s of strs) {
         console.log(s);
       }
-    } else if (typeof strs === "string") {
+    } else if (typeof strs === 'string') {
       console.log(strs);
     }
   }
@@ -171,7 +171,7 @@ function multiplyAll(
   if (!values) {
     return values;
   } else {
-    return values.map((x) => x * factor);
+    return values.map(x => x * factor);
   }
 }
 ```
@@ -204,12 +204,12 @@ function example(x: string | number, y: string | boolean) {
 ```ts twoslash
 function printAll(strs: string | string[] | null) {
   if (strs !== null) {
-    if (typeof strs === "object") {
+    if (typeof strs === 'object') {
       for (const s of strs) {
         //            ^?
         console.log(s);
       }
-    } else if (typeof strs === "string") {
+    } else if (typeof strs === 'string') {
       console.log(strs);
       //          ^?
     }
@@ -247,7 +247,7 @@ type Fish = { swim: () => void };
 type Bird = { fly: () => void };
 
 function move(animal: Fish | Bird) {
-  if ("swim" in animal) {
+  if ('swim' in animal) {
     return animal.swim();
   }
 
@@ -257,8 +257,7 @@ function move(animal: Fish | Bird) {
 
 需要强调的是，可选属性在缩小类型时将出现在两个分支中。例如，人类既可以游泳又可以飞行（通过正确的装备），因此应该在 `in` 检查的两个分支中都出现：
 
-<!-- prettier-ignore -->
-```ts twoslash
+```ts
 type Fish = { swim: () => void };
 type Bird = { fly: () => void };
 type Human = { swim?: () => void; fly?: () => void };
@@ -295,13 +294,13 @@ function logValue(x: Date | string) {
 正如我们之前提到的，当我们对任何变量进行赋值时，TypeScript 会查看赋值语句的右侧，并相应地缩小左侧的类型。
 
 ```ts twoslash
-let x = Math.random() < 0.5 ? 10 : "hello world!";
+let x = Math.random() < 0.5 ? 10 : 'hello world!';
 //  ^?
 x = 1;
 
 console.log(x);
 //          ^?
-x = "goodbye!";
+x = 'goodbye!';
 
 console.log(x);
 //          ^?
@@ -313,7 +312,7 @@ console.log(x);
 
 ```ts twoslash
 // @errors: 2322
-let x = Math.random() < 0.5 ? 10 : "hello world!";
+let x = Math.random() < 0.5 ? 10 : 'hello world!';
 //  ^?
 x = 1;
 
@@ -331,8 +330,8 @@ console.log(x);
 
 ```ts twoslash
 function padLeft(padding: number | string, input: string) {
-  if (typeof padding === "number") {
-    return " ".repeat(padding) + input;
+  if (typeof padding === 'number') {
+    return ' '.repeat(padding) + input;
   }
   return padding + input;
 }
@@ -352,7 +351,7 @@ function example() {
   //          ^?
 
   if (Math.random() < 0.5) {
-    x = "hello";
+    x = 'hello';
     console.log(x);
     //          ^?
   } else {
@@ -423,7 +422,7 @@ const underWater2: Fish[] = zoo.filter(isFish) as Fish[];
 
 // 对于更复杂的示例，可能需要重复使用类型断言
 const underWater3: Fish[] = zoo.filter((pet): pet is Fish => {
-  if (pet.name === "sharkey") return false;
+  if (pet.name === 'sharkey') return false;
   return isFish(pet);
 });
 ```
@@ -442,7 +441,7 @@ const underWater3: Fish[] = zoo.filter((pet): pet is Fish => {
 
 ```ts twoslash
 interface Shape {
-  kind: "circle" | "square";
+  kind: 'circle' | 'square';
   radius?: number;
   sideLength?: number;
 }
@@ -453,7 +452,7 @@ interface Shape {
 ```ts twoslash
 // @errors: 2367
 interface Shape {
-  kind: "circle" | "square";
+  kind: 'circle' | 'square';
   radius?: number;
   sideLength?: number;
 }
@@ -461,7 +460,7 @@ interface Shape {
 // ---cut---
 function handleShape(shape: Shape) {
   // 出错了！
-  if (shape.kind === "rect") {
+  if (shape.kind === 'rect') {
     // ...
   }
 }
@@ -472,7 +471,7 @@ function handleShape(shape: Shape) {
 ```ts twoslash
 // @errors: 2532 18048
 interface Shape {
-  kind: "circle" | "square";
+  kind: 'circle' | 'square';
   radius?: number;
   sideLength?: number;
 }
@@ -488,14 +487,14 @@ function getArea(shape: Shape) {
 ```ts twoslash
 // @errors: 2532 18048
 interface Shape {
-  kind: "circle" | "square";
+  kind: 'circle' | 'square';
   radius?: number;
   sideLength?: number;
 }
 
 // ---cut---
 function getArea(shape: Shape) {
-  if (shape.kind === "circle") {
+  if (shape.kind === 'circle') {
     return Math.PI * shape.radius ** 2;
   }
 }
@@ -505,14 +504,14 @@ function getArea(shape: Shape) {
 
 ```ts twoslash
 interface Shape {
-  kind: "circle" | "square";
+  kind: 'circle' | 'square';
   radius?: number;
   sideLength?: number;
 }
 
 // ---cut---
 function getArea(shape: Shape) {
-  if (shape.kind === "circle") {
+  if (shape.kind === 'circle') {
     return Math.PI * shape.radius! ** 2;
   }
 }
@@ -524,12 +523,12 @@ function getArea(shape: Shape) {
 
 ```ts twoslash
 interface Circle {
-  kind: "circle";
+  kind: 'circle';
   radius: number;
 }
 
 interface Square {
-  kind: "square";
+  kind: 'square';
   sideLength: number;
 }
 
@@ -543,12 +542,12 @@ type Shape = Circle | Square;
 ```ts twoslash
 // @errors: 2339
 interface Circle {
-  kind: "circle";
+  kind: 'circle';
   radius: number;
 }
 
 interface Square {
-  kind: "square";
+  kind: 'square';
   sideLength: number;
 }
 
@@ -566,12 +565,12 @@ function getArea(shape: Shape) {
 
 ```ts twoslash
 interface Circle {
-  kind: "circle";
+  kind: 'circle';
   radius: number;
 }
 
 interface Square {
-  kind: "square";
+  kind: 'square';
   sideLength: number;
 }
 
@@ -579,7 +578,7 @@ type Shape = Circle | Square;
 
 // ---cut---
 function getArea(shape: Shape) {
-  if (shape.kind === "circle") {
+  if (shape.kind === 'circle') {
     return Math.PI * shape.radius ** 2;
     //               ^?
   }
@@ -594,12 +593,12 @@ function getArea(shape: Shape) {
 
 ```ts twoslash
 interface Circle {
-  kind: "circle";
+  kind: 'circle';
   radius: number;
 }
 
 interface Square {
-  kind: "square";
+  kind: 'square';
   sideLength: number;
 }
 
@@ -608,10 +607,10 @@ type Shape = Circle | Square;
 // ---cut---
 function getArea(shape: Shape) {
   switch (shape.kind) {
-    case "circle":
+    case 'circle':
       return Math.PI * shape.radius ** 2;
     //                 ^?
-    case "square":
+    case 'square':
       return shape.sideLength ** 2;
     //       ^?
   }
@@ -637,12 +636,12 @@ function getArea(shape: Shape) {
 
 ```ts twoslash
 interface Circle {
-  kind: "circle";
+  kind: 'circle';
   radius: number;
 }
 
 interface Square {
-  kind: "square";
+  kind: 'square';
   sideLength: number;
 }
 // ---cut---
@@ -650,9 +649,9 @@ type Shape = Circle | Square;
 
 function getArea(shape: Shape) {
   switch (shape.kind) {
-    case "circle":
+    case 'circle':
       return Math.PI * shape.radius ** 2;
-    case "square":
+    case 'square':
       return shape.sideLength ** 2;
     default:
       const _exhaustiveCheck: never = shape;
@@ -666,17 +665,17 @@ function getArea(shape: Shape) {
 ```ts twoslash
 // @errors: 2322
 interface Circle {
-  kind: "circle";
+  kind: 'circle';
   radius: number;
 }
 
 interface Square {
-  kind: "square";
+  kind: 'square';
   sideLength: number;
 }
 // ---cut---
 interface Triangle {
-  kind: "triangle";
+  kind: 'triangle';
   sideLength: number;
 }
 
@@ -684,9 +683,9 @@ type Shape = Circle | Square | Triangle;
 
 function getArea(shape: Shape) {
   switch (shape.kind) {
-    case "circle":
+    case 'circle':
       return Math.PI * shape.radius ** 2;
-    case "square":
+    case 'square':
       return shape.sideLength ** 2;
     default:
       const _exhaustiveCheck: never = shape;

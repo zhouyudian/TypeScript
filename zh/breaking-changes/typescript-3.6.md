@@ -6,8 +6,8 @@
 
 ```typescript
 class C {
-  "constructor"() {
-    console.log("现在我是构造函数了。");
+  constructor() {
+    console.log('现在我是构造函数了。');
   }
 }
 ```
@@ -16,8 +16,8 @@ class C {
 
 ```typescript
 class D {
-  ["constructor"]() {
-    console.log("我只是一个纯粹的方法，不是构造函数！")
+  ['constructor']() {
+    console.log('我只是一个纯粹的方法，不是构造函数！');
   }
 }
 ```
@@ -26,10 +26,10 @@ class D {
 
 `lib.dom.d.ts` 中移除或者修改了大量的定义。其中包括（但不仅限于）以下这些：
 
-* 全局的 `window` 不再定义为 `Window`，它被更明确的定义 `type Window & typeof globalThis` 替代。在某些情况下，将它作为 `typeof window` 更好。
-* `GlobalFetch` 已经被移除。使用 `WindowOrWorkerGlobalScrope` 替代。
-* `Navigator` 上明确的非标准的属性已经被移除了。
-* `experimental-webgl` 上下文已经被移除了。使用 `webgl` 或 `webgl2` 替代。
+- 全局的 `window` 不再定义为 `Window`，它被更明确的定义 `type Window & typeof globalThis` 替代。在某些情况下，将它作为 `typeof window` 更好。
+- `GlobalFetch` 已经被移除。使用 `WindowOrWorkerGlobalScrope` 替代。
+- `Navigator` 上明确的非标准的属性已经被移除了。
+- `experimental-webgl` 上下文已经被移除了。使用 `webgl` 或 `webgl2` 替代。
 
 如果你认为其中的改变已经制造了错误，[请提交一个 issue](https://github.com/Microsoft/TSJS-lib-generator/)。
 
@@ -63,5 +63,4 @@ while (true) {
 
 ## 参考
 
-* [Announcing TypeScript 3.6](https://devblogs.microsoft.com/typescript/announcing-typescript-3-6/#breaking-changes)
-
+- [Announcing TypeScript 3.6](https://devblogs.microsoft.com/typescript/announcing-typescript-3-6/#breaking-changes)

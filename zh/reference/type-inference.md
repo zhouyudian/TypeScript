@@ -2,11 +2,11 @@
 
 ## 介绍
 
-这节介绍TypeScript里的类型推论。即，类型是在哪里如何被推断的。
+这节介绍 TypeScript 里的类型推论。即，类型是在哪里如何被推断的。
 
 ## 基础
 
-TypeScript里，在有些没有明确指出类型的地方，类型推论会帮助提供类型。如下面的例子
+TypeScript 里，在有些没有明确指出类型的地方，类型推论会帮助提供类型。如下面的例子
 
 ```typescript
 let x = 3;
@@ -32,7 +32,7 @@ let x = [0, 1, null];
 let zoo = [new Rhino(), new Elephant(), new Snake()];
 ```
 
-这里，我们想让zoo被推断为`Animal[]`类型，但是这个数组里没有对象是`Animal`类型的，因此不能推断出这个结果。 为了更正，当候选类型不能使用的时候我们需要明确的指出类型：
+这里，我们想让 zoo 被推断为`Animal[]`类型，但是这个数组里没有对象是`Animal`类型的，因此不能推断出这个结果。 为了更正，当候选类型不能使用的时候我们需要明确的指出类型：
 
 ```typescript
 let zoo: Animal[] = [new Rhino(), new Elephant(), new Snake()];
@@ -42,40 +42,40 @@ let zoo: Animal[] = [new Rhino(), new Elephant(), new Snake()];
 
 ## 上下文归类
 
-TypeScript类型推论也可能按照相反的方向进行。 这被叫做“上下文归类”。按上下文归类会发生在表达式的类型与所处的位置相关时。比如：
+TypeScript 类型推论也可能按照相反的方向进行。 这被叫做“上下文归类”。按上下文归类会发生在表达式的类型与所处的位置相关时。比如：
 
 ```typescript
-window.onmousedown = function(mouseEvent) {
-    console.log(mouseEvent.button);   //<- OK
-    console.log(mouseEvent.kangaroo); //<- Error!
+window.onmousedown = function (mouseEvent) {
+  console.log(mouseEvent.button); //<- OK
+  console.log(mouseEvent.kangaroo); //<- Error!
 };
 ```
 
-在这个例子里，TypeScript类型检查器会使用`Window.onmousedown`函数的类型来推断右边函数表达式的类型。 所以它能够推断出`mouseEvent`参数的[类型](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)中包含了`button`属性而不包含`kangaroo`属性。
+在这个例子里，TypeScript 类型检查器会使用`Window.onmousedown`函数的类型来推断右边函数表达式的类型。 所以它能够推断出`mouseEvent`参数的[类型](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)中包含了`button`属性而不包含`kangaroo`属性。
 
-TypeScript还能够很好地推断出其它上下文中的类型。
+TypeScript 还能够很好地推断出其它上下文中的类型。
 
 ```typescript
-window.onscroll = function(uiEvent) {
-    console.log(uiEvent.button); //<- Error!
-}
+window.onscroll = function (uiEvent) {
+  console.log(uiEvent.button); //<- Error!
+};
 ```
 
-上面的函数被赋值给`window.onscroll`，`TypeScript`能够知道`uiEvent`是[UIEvent](https://developer.mozilla.org/en-US/docs/Web/API/UIEvent)，而不是[MouseEvent](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)。`UIEvent`对象不包含`button`属性，因此TypeScript会报错。
+上面的函数被赋值给`window.onscroll`，`TypeScript`能够知道`uiEvent`是[UIEvent](https://developer.mozilla.org/en-US/docs/Web/API/UIEvent)，而不是[MouseEvent](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent)。`UIEvent`对象不包含`button`属性，因此 TypeScript 会报错。
 
 如果这个函数不是在上下文归类的位置上，那么这个函数的参数类型将隐式的成为`any`类型，而且也不会报错（除非你开启了`--noImplicitAny`选项）：
 
 ```typescript
-const handler = function(uiEvent) {
-    console.log(uiEvent.button); //<- OK
-}
+const handler = function (uiEvent) {
+  console.log(uiEvent.button); //<- OK
+};
 ```
 
 我们也可以明确地为函数参数类型赋值来覆写上下文类型：
 
 ```typescript
-window.onscroll = function(uiEvent: any) {
-    console.log(uiEvent.button);  //<- Now, no error is given
+window.onscroll = function (uiEvent: any) {
+  console.log(uiEvent.button); //<- Now, no error is given
 };
 ```
 
@@ -85,9 +85,8 @@ window.onscroll = function(uiEvent: any) {
 
 ```typescript
 function createZoo(): Animal[] {
-    return [new Rhino(), new Elephant(), new Snake()];
+  return [new Rhino(), new Elephant(), new Snake()];
 }
 ```
 
-这个例子里，最佳通用类型有4个候选者：`Animal`，`Rhino`，`Elephant`和`Snake`。 当然，`Animal`会被做为最佳通用类型。
-
+这个例子里，最佳通用类型有 4 个候选者：`Animal`，`Rhino`，`Elephant`和`Snake`。 当然，`Animal`会被做为最佳通用类型。

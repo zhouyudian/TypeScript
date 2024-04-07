@@ -50,7 +50,7 @@ export {};
 ```ts twoslash
 // @filename: hello.ts
 export default function helloWorld() {
-  console.log("Hello, world!");
+  console.log('Hello, world!');
 }
 ```
 
@@ -59,11 +59,11 @@ export default function helloWorld() {
 ```ts twoslash
 // @filename: hello.ts
 export default function helloWorld() {
-  console.log("Hello, world!");
+  console.log('Hello, world!');
 }
 // @filename: index.ts
 // ---cut---
-import helloWorld from "./hello.js";
+import helloWorld from './hello.js';
 helloWorld();
 ```
 
@@ -97,7 +97,7 @@ export function absolute(num: number) {
 }
 // @filename: app.ts
 // ---cut---
-import { pi, phi, absolute } from "./maths.js";
+import { pi, phi, absolute } from './maths.js';
 
 console.log(pi);
 const absPhi = absolute(phi);
@@ -113,7 +113,7 @@ const absPhi = absolute(phi);
 export var pi = 3.14;
 // @filename: app.ts
 // ---cut---
-import { pi as π } from "./maths.js";
+import { pi as π } from './maths.js';
 
 console.log(π);
 //          ^?
@@ -127,7 +127,7 @@ export const pi = 3.14;
 export default class RandomNumberGenerator {}
 
 // @filename: app.ts
-import RandomNumberGenerator, { pi as π } from "./maths.js";
+import RandomNumberGenerator, { pi as π } from './maths.js';
 
 RandomNumberGenerator;
 // ^?
@@ -150,7 +150,7 @@ export function absolute(num: number) {
 }
 // ---cut---
 // @filename: app.ts
-import * as math from "./maths.js";
+import * as math from './maths.js';
 
 console.log(math.pi);
 const positivePhi = math.absolute(math.phi);
@@ -164,9 +164,9 @@ const positivePhi = math.absolute(math.phi);
 export var pi = 3.14;
 // ---cut---
 // @filename: app.ts
-import "./maths.js";
+import './maths.js';
 
-console.log("3.14");
+console.log('3.14');
 ```
 
 在这种情况下，`import` 没有任何作用。然而，`maths.ts` 中的所有代码都被执行，这可能触发影响其他对象的副作用。
@@ -185,7 +185,7 @@ export interface Dog {
 }
 
 // @filename: app.ts
-import { Cat, Dog } from "./animal.js";
+import { Cat, Dog } from './animal.js';
 type Animals = Cat | Dog;
 ```
 
@@ -199,15 +199,15 @@ TypeScript 通过两个用来声明类型导入的概念，扩展了 `import` �
 // @filename: animal.ts
 export type Cat = { breed: string; yearOfBirth: number };
 export type Dog = { breeds: string[]; yearOfBirth: number };
-export const createCatName = () => "fluffy";
+export const createCatName = () => 'fluffy';
 
 // @filename: valid.ts
-import type { Cat, Dog } from "./animal.js";
+import type { Cat, Dog } from './animal.js';
 export type Animals = Cat | Dog;
 
 // @filename: app.ts
 // @errors: 1361
-import type { createCatName } from "./animal.js";
+import type { createCatName } from './animal.js';
 const name = createCatName();
 ```
 
@@ -219,10 +219,10 @@ TypeScript 4.5 还允许在个别导入中使用 `type` 前缀，以指示被导
 // @filename: animal.ts
 export type Cat = { breed: string; yearOfBirth: number };
 export type Dog = { breeds: string[]; yearOfBirth: number };
-export const createCatName = () => "fluffy";
+export const createCatName = () => 'fluffy';
 // ---cut---
 // @filename: app.ts
-import { createCatName, type Cat, type Dog } from "./animal.js";
+import { createCatName, type Cat, type Dog } from './animal.js';
 
 export type Animals = Cat | Dog;
 const name = createCatName();
@@ -238,8 +238,8 @@ TypeScript 具有 ES 模块语法，它与 CommonJS 和 AMD 的 `require` *直�
 /// <reference types="node" />
 // @module: commonjs
 // ---cut---
-import fs = require("fs");
-const code = fs.readFileSync("hello.ts", "utf8");
+import fs = require('fs');
+const code = fs.readFileSync('hello.ts', 'utf8');
 ```
 
 你可以在[模块参考页面](/docs/handbook/modules.html#export--and-import--require)了解更多关于此语法的信息。
@@ -287,7 +287,7 @@ module.exports = {
 };
 // @filename: index.ts
 // ---cut---
-const maths = require("./maths");
+const maths = require('./maths');
 maths.pi;
 //    ^?
 ```
@@ -311,7 +311,7 @@ module.exports = {
 };
 // @filename: index.ts
 // ---cut---
-const { squareTwo } = require("./maths");
+const { squareTwo } = require('./maths');
 squareTwo;
 // ^?
 ```
@@ -348,7 +348,7 @@ TypeScript 包括两种解析策略：经典解析和 Node 解析。经典解析
 export const valueOfPi = 3.142;
 // @filename: index.ts
 // ---cut---
-import { valueOfPi } from "./constants.js";
+import { valueOfPi } from './constants.js';
 
 export const twoPi = valueOfPi * 2;
 ```
@@ -359,7 +359,7 @@ export const twoPi = valueOfPi * 2;
 // @showEmit
 // @module: es2020
 // @noErrors
-import { valueOfPi } from "./constants.js";
+import { valueOfPi } from './constants.js';
 
 export const twoPi = valueOfPi * 2;
 ```
@@ -370,7 +370,7 @@ export const twoPi = valueOfPi * 2;
 // @showEmit
 // @module: commonjs
 // @noErrors
-import { valueOfPi } from "./constants.js";
+import { valueOfPi } from './constants.js';
 
 export const twoPi = valueOfPi * 2;
 ```
@@ -381,7 +381,7 @@ export const twoPi = valueOfPi * 2;
 // @showEmit
 // @module: umd
 // @noErrors
-import { valueOfPi } from "./constants.js";
+import { valueOfPi } from './constants.js';
 
 export const twoPi = valueOfPi * 2;
 ```

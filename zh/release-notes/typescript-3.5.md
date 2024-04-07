@@ -14,8 +14,8 @@ TypeScript 3.5 通过缓存计算状态的信息（编译器设置、寻找文�
 
 有关更多信息，你可以查看这些 pull requests
 
-* [缓存模块解析](https://github.com/Microsoft/TypeScript/pull/31100)
-* [缓存 `tsconfig.json` 计算](https://github.com/Microsoft/TypeScript/pull/31101)
+- [缓存模块解析](https://github.com/Microsoft/TypeScript/pull/31100)
+- [缓存 `tsconfig.json` 计算](https://github.com/Microsoft/TypeScript/pull/31101)
 
 ## `Omit` 辅助类型
 
@@ -28,7 +28,7 @@ type Person = {
   location: string;
 };
 
-type QuantumPerson = Omit<Person, "location">;
+type QuantumPerson = Omit<Person, 'location'>;
 
 // 相当于
 type QuantumPerson = {
@@ -58,13 +58,13 @@ type Label = {
 const thing: Point | Label = {
   x: 0,
   y: 0,
-  name: true // uh-oh!
+  name: true, // uh-oh!
 };
 ```
 
-以前，一个无区别的联合在它的成员上不会进行_任何_多余属性的检查，结果，类型错误的 `name` 属性溜了进来。
+以前，一个无区别的联合在它的成员上不会进行*任何*多余属性的检查，结果，类型错误的 `name` 属性溜了进来。
 
-在 TypeScript 3.5 中，类型检查器至少会验证所有提供的属性属于_某个_联合类型的成员，且类型恰当，这意味着，上面的例子会正确的进行错误提示。
+在 TypeScript 3.5 中，类型检查器至少会验证所有提供的属性属于*某个*联合类型的成员，且类型恰当，这意味着，上面的例子会正确的进行错误提示。
 
 注意，只要属性类型有效，仍允许部分重叠。
 
@@ -72,7 +72,7 @@ const thing: Point | Label = {
 const pl: Point | Label = {
   x: 0,
   y: 0,
-  name: "origin" // okay
+  name: 'origin', // okay
 };
 ```
 
@@ -93,10 +93,8 @@ export as namespace foo;
 在 TypeScript 3.4 以及之前的版本中，下面的例子会无效：
 
 ```typescript
-type S = { done: boolean, value: number }
-type T =
-  | { done: false, value: number }
-  | { done: true, value: number };
+type S = { done: boolean; value: number };
+type T = { done: false; value: number } | { done: true; value: number };
 
 declare let source: S;
 declare let target: T;
@@ -112,31 +110,31 @@ target = source;
 
 ```typescript
 interface Foo {
-  kind: "foo";
+  kind: 'foo';
   value: string;
 }
 
 interface Bar {
-  kind: "bar";
+  kind: 'bar';
   value: number;
 }
 
 function doSomething(x: Foo | Bar) {
-  if (x.kind === "foo") {
+  if (x.kind === 'foo') {
     x.value.toLowerCase();
   }
 }
 
 // uh-oh - 幸运的是， TypeScript 在这里会提示错误!
 doSomething({
-  kind: "foo",
+  kind: 'foo',
   value: 123,
 });
 ```
 
 然而，对于原始的例子，这有点过于严格。 如果你弄清除 `S` 的任何可能值的精确类型，你实际上可以看到它与 `T` 中的类型完全匹配。
 
-在 TypeScript 3.5 中，当分配具有辨别属性的类型时，如 `T`，实际上_将_进一步将类似 `S` 的类型分解为每个可能的成员类型的并集。 在这种情况下，由于 `boolean` 是 `true` 和 `false` 的联合，`S` 将被视为 `{done：false，value：number}` 和 `{done：true，value：number }`。
+在 TypeScript 3.5 中，当分配具有辨别属性的类型时，如 `T`，实际上*将*进一步将类似 `S` 的类型分解为每个可能的成员类型的并集。 在这种情况下，由于 `boolean` 是 `true` 和 `false` 的联合，`S` 将被视为 `{done：false，value：number}` 和 `{done：true，value：number }`。
 
 有关更多细节，你可以[在 GitHub 上查看原始的 pull request](https://github.com/microsoft/TypeScript/pull/30779)。
 
@@ -146,7 +144,7 @@ doSomething({
 
 ```typescript
 function compose<T, U, V>(f: (x: T) => U, g: (y: U) => V): (x: T) => V {
-  return x => g(f(x))
+  return x => g(f(x));
 }
 ```
 
@@ -157,7 +155,7 @@ function arrayify<T>(x: T): T[] {
   return [x];
 }
 
-type Box<U> = { value: U }
+type Box<U> = { value: U };
 function boxify<U>(y: U): Box<U> {
   return { value: y };
 }
@@ -171,7 +169,7 @@ TypeScript 3.5 在处理构造函数的时候推广了这种行为。
 
 ```typescript
 class Box<T> {
-  kind: "box";
+  kind: 'box';
   value: T;
   constructor(value: T) {
     this.value = value;
@@ -179,15 +177,18 @@ class Box<T> {
 }
 
 class Bag<U> {
-  kind: "bag";
+  kind: 'bag';
   value: U;
   constructor(value: U) {
     this.value = value;
   }
 }
 
-function composeCtor<T, U, V>(F: new (x: T) => U, G: new (y: U) => V): (x: T) => V {
-  return x => new G(new F(x))
+function composeCtor<T, U, V>(
+  F: new (x: T) => U,
+  G: new (y: U) => V
+): (x: T) => V {
+  return x => new G(new F(x));
 }
 
 let f = composeCtor(Box, Bag); // 拥有类型 '<T>(x: T) => Bag<Box<T>>'
@@ -205,9 +206,9 @@ declare class Component<P> {
 
 declare function myHoc<P>(C: ComponentClass<P>): ComponentClass<P>;
 
-type NestedProps<T> = { foo: number, stuff: T };
+type NestedProps<T> = { foo: number; stuff: T };
 
-declare class GenericComponent<T> extends Component<NestedProps<T>> { }
+declare class GenericComponent<T> extends Component<NestedProps<T>> {}
 
 // 类型为 'new <T>(props: NestedProps<T>) => Component<NestedProps<T>>'
 const GenericComponent2 = myHoc(GenericComponent);
@@ -217,5 +218,4 @@ const GenericComponent2 = myHoc(GenericComponent);
 
 ## 参考
 
-* [原文](https://github.com/microsoft/TypeScript-Handbook/blob/master/pages/release%20notes/TypeScript%203.5.md)
-
+- [原文](https://github.com/microsoft/TypeScript-Handbook/blob/master/pages/release%20notes/TypeScript%203.5.md)

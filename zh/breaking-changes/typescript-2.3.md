@@ -7,8 +7,7 @@
 **示例**
 
 ```typescript
-class X<> {}  // Error: Type parameter list cannot be empty.
-function f<>() {}  // Error: Type parameter list cannot be empty.
-const x: X<> = new X<>();  // Error: Type parameter list cannot be empty.
+class X<> {} // Error: Type parameter list cannot be empty.
+function f<>() {} // Error: Type parameter list cannot be empty.
+const x: X<> = new X<>(); // Error: Type parameter list cannot be empty.
 ```
-

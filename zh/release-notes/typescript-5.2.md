@@ -559,12 +559,12 @@ Symbol.metadata ??= Symbol('Symbol.metadata');
 
 你还需要将编译 `target` 设为 `es2022` 或以下，配置 `lib` 为 `"esnext"` 或者 `"esnext.decorators"`。
 
-```
+```json
 {
-    "compilerOptions": {
-        "target": "es2022",
-        "lib": ["es2022", "esnext.decorators", "dom"]
-    }
+  "compilerOptions": {
+    "target": "es2022",
+    "lib": ["es2022", "esnext.decorators", "dom"]
+  }
 }
 ```
 
@@ -707,7 +707,9 @@ doSomething(
 const myWeakMap = new WeakMap();
 
 const key = Symbol();
-const someObject = { /*...*/ };
+const someObject = {
+  /*...*/
+};
 
 // Works! ✅
 myWeakMap.set(key, someObject);
@@ -723,10 +725,10 @@ TypeScript 支持在类型导入路径里使用声明文件扩展名和实现文
 也意味着你现在可以编写 `import type` 语句并使用 `.ts`, `.mts`, `.cts` 以及 `.tsx` 文件扩展。
 
 ```ts
-import type { JustAType } from "./justTypes.ts";
+import type { JustAType } from './justTypes.ts';
 
 export function f(param: JustAType) {
-    // ...
+  // ...
 }
 ```
 
@@ -737,7 +739,7 @@ export function f(param: JustAType) {
  * @param {import("./justTypes.ts").JustAType} param
  */
 export function f(param) {
-    // ...
+  // ...
 }
 ```
 
@@ -777,13 +779,13 @@ TypeScript 5.2 现在具有一种重构方法，可以将变量的内容内联�
 
 ```ts
 interface A {
-    value: A;
-    other: string;
+  value: A;
+  other: string;
 }
 
 interface B {
-    value: B;
-    other: number;
+  value: B;
+  other: number;
 }
 ```
 
@@ -797,7 +799,7 @@ interface B {
 在 TypeScript 5.2 中，一个简单的 `Set` 就能跟踪这些信息。
 在使用了 drizzle 库的测试报告中，这项改动减少了超过 33% 的时间花费！
 
-```
+```txt
 Benchmark 1: old
   Time (mean ± σ):      3.115 s ±  0.067 s    [User: 4.403 s, System: 0.124 s]
   Range (min … max):    3.018 s …  3.196 s    10 runs

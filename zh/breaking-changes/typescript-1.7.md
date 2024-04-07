@@ -10,14 +10,14 @@
 
 ```typescript
 class Fighter {
-    /** @returns the winner of the fight. */
-    fight(opponent: Fighter) {
-        let theVeryBest = this;
-        if (Math.rand() < 0.5) {
-            theVeryBest = opponent; // error
-        }
-        return theVeryBest
+  /** @returns the winner of the fight. */
+  fight(opponent: Fighter) {
+    let theVeryBest = this;
+    if (Math.rand() < 0.5) {
+      theVeryBest = opponent; // error
     }
+    return theVeryBest;
+  }
 }
 ```
 
@@ -27,20 +27,20 @@ class Fighter {
 
 ```typescript
 class Fighter {
-    /** @returns the winner of the fight. */
-    fight(opponent: Fighter) {
-        let theVeryBest: Fighter = this;
-        if (Math.rand() < 0.5) {
-            theVeryBest = opponent; // no error
-        }
-        return theVeryBest
+  /** @returns the winner of the fight. */
+  fight(opponent: Fighter) {
+    let theVeryBest: Fighter = this;
+    if (Math.rand() < 0.5) {
+      theVeryBest = opponent; // no error
     }
+    return theVeryBest;
+  }
 }
 ```
 
 ## 类成员修饰符后面会自动插入分号
 
-关键字`abstract，public，protected`和`private`是ECMAScript 3里的_保留关键字_并适用于自动插入分号机制。 之前，在这些关键字出现的行尾，TypeScript是不会插入分号的。 现在，这已经被改正了，在上例中`abstract class D`不再能够正确地继承`C`了，而是声明了一个`m`方法和一个额外的属性`abstract`。
+关键字`abstract，public，protected`和`private`是 ECMAScript 3 里的*保留关键字*并适用于自动插入分号机制。 之前，在这些关键字出现的行尾，TypeScript 是不会插入分号的。 现在，这已经被改正了，在上例中`abstract class D`不再能够正确地继承`C`了，而是声明了一个`m`方法和一个额外的属性`abstract`。
 
 注意，`async`和`declare`已经能够正确自动插入分号了。
 
@@ -48,15 +48,14 @@ class Fighter {
 
 ```typescript
 abstract class C {
-    abstract m(): number;
+  abstract m(): number;
 }
 abstract class D extends C {
-    abstract
-    m(): number;
+  abstract;
+  m(): number;
 }
 ```
 
 **推荐：**
 
 在定义类成员时删除关键字后面的换行。通常来讲，要避免依赖于自动插入分号机制。
-

@@ -26,7 +26,7 @@ message();
 假设 `message` 是这样定义的：
 
 ```js
-const message = "Hello World!";
+const message = 'Hello World!';
 ```
 
 你可能很容易猜到，如果执行 `message.toLowerCase()`，我们将会得到一个所有字母都是小写的字符串。
@@ -65,7 +65,7 @@ function fn(x) {
 
 ```ts twoslash
 // @errors: 2349
-const message = "hello!";
+const message = 'hello!';
 
 message();
 ```
@@ -80,8 +80,8 @@ message();
 
 ```js
 const user = {
-    name: 'Daniel',
-    age: 26,
+  name: 'Daniel',
+  age: 26,
 };
 user.location; // 返回 undefined
 ```
@@ -91,7 +91,7 @@ user.location; // 返回 undefined
 ```ts twoslash
 // @errors: 2339
 const user = {
-  name: "Daniel",
+  name: 'Daniel',
   age: 26,
 };
 
@@ -104,12 +104,12 @@ user.location;
 
 ```ts twoslash
 // @noErrors
-const announcement = "Hello World!";
- 
+const announcement = 'Hello World!';
+
 // 你需要花多久才能注意到拼写错误？
 announcement.toLocaleLowercase();
 announcement.toLocalLowerCase();
- 
+
 // 实际上正确的拼写是这样的……
 announcement.toLocaleLowerCase();
 ```
@@ -129,11 +129,11 @@ function flipCoin() {
 
 ```ts twoslash
 // @errors: 2367
-const value = Math.random() < 0.5 ? "a" : "b";
-if (value !== "a") {
+const value = Math.random() < 0.5 ? 'a' : 'b';
+if (value !== 'a') {
   // ...
-} else if (value === "b") {
-// 永远无法到达这个分支
+} else if (value === 'b') {
+  // 永远无法到达这个分支
 }
 ```
 
@@ -145,17 +145,15 @@ TypeScript 可以在我们的代码出现错误时捕获 bug。这很好，但�
 
 这意味着 TypeScript 也能用于编辑代码。我们在编辑器中输入的时候，核心的类型检查器能够提供报错信息和代码补全。人们经常会谈到 TypeScript 在工具层面的作用，这就是一个典型的例子。
 
-<!-- prettier-ignore -->
-
-```ts twoslash
+```ts
 // @noErrors
 // @esModuleInterop
-import express from "express";
+import express from 'express';
 const app = express();
 
-app.get("/", function (req, res) {
+app.get('/', function (req, res) {
   res.sen
-//       ^|
+  //     ^|
 });
 
 app.listen(3000);
@@ -207,7 +205,7 @@ function greet(person, date) {
   console.log(`Hello ${person}, today is ${date}!`);
 }
 
-greet("Brendan");
+greet('Brendan');
 ```
 
 如果我们再次执行 `tsc hello.ts`，那么会注意到命令行抛出了错误！
@@ -252,7 +250,7 @@ function greet(person: string, date: Date) {
   console.log(`Hello ${person}, today is ${date.toDateString()}!`);
 }
 
-greet("Maddison", Date());
+greet('Maddison', Date());
 ```
 
 什么？TypeScript 报错提示第二个参数有问题，但这是为什么呢？你可能会有点惊讶，因为在 JavaScript 中直接调用 `Date()` 返回的是 `string`。另一方面，通过 `new Date()` 去构造 `Date`，则可以如预期那样返回 `Date` 对象。
@@ -263,14 +261,14 @@ greet("Maddison", Date());
 function greet(person: string, date: Date) {
   console.log(`Hello ${person}, today is ${date.toDateString()}!`);
 }
- 
-greet("Maddison", new Date());
+
+greet('Maddison', new Date());
 ```
 
 记住，我们并不总是需要显式地进行类型注解。在很多情况下，即使省略了类型注解，TypeScript 也可以为我们*推断出*（或者“搞清楚”）类型。
 
 ```ts twoslash
-let msg = "hello there!";
+let msg = 'hello there!';
 //  ^?
 ```
 
@@ -289,7 +287,7 @@ function greet(person: string, date: Date) {
   console.log(`Hello ${person}, today is ${date.toDateString()}!`);
 }
 
-greet("Maddison", new Date());
+greet('Maddison', new Date());
 ```
 
 注意到有两个变化：
@@ -312,7 +310,7 @@ greet("Maddison", new Date());
 被重写为：
 
 ```js
-"Hello " + person + ", today is " + date.toDateString() + "!";
+'Hello ' + person + ', today is ' + date.toDateString() + '!';
 ```
 
 为什么会这样子呢？
@@ -325,7 +323,7 @@ greet("Maddison", new Date());
 function greet(person, date) {
   console.log(`Hello ${person}, today is ${date.toDateString()}!`);
 }
-greet("Maddison", new Date());
+greet('Maddison', new Date());
 ```
 
 > 虽然默认的目标代码采用的是 ES3 语法，但现在浏览器大多数都已经支持 ES2015 了。 >

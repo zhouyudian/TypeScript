@@ -36,7 +36,7 @@ pt.y = 0;
 
 与其他位置一样，类型注解是可选的，但如果未指定，则会隐式为 `any` 类型。
 
-字段还可以有_初始化器_；当类被实例化时，它们将自动运行：
+字段还可以有*初始化器*；当类被实例化时，它们将自动运行：
 
 ```ts twoslash
 class Point {
@@ -59,7 +59,7 @@ class Point {
 }
 // ---cut---
 const pt = new Point();
-pt.x = "0";
+pt.x = '0';
 ```
 
 #### `--strictPropertyInitialization`
@@ -78,14 +78,14 @@ class GoodGreeter {
   name: string;
 
   constructor() {
-    this.name = "hello";
+    this.name = 'hello';
   }
 }
 ```
 
-请注意，字段需要在_构造函数内部_进行初始化。TypeScript 在检测初始化时不会分析从构造函数中调用的方法，因为派生类可能会覆写这些方法，并未初始化成员。
+请注意，字段需要在*构造函数内部*进行初始化。TypeScript 在检测初始化时不会分析从构造函数中调用的方法，因为派生类可能会覆写这些方法，并未初始化成员。
 
-如果你打算通过构造函数以外的方式明确初始化字段（例如，也许外部库填充类的一部分内容），你可以使用_明确赋值断言操作符_ `!`：
+如果你打算通过构造函数以外的方式明确初始化字段（例如，也许外部库填充类的一部分内容），你可以使用*明确赋值断言操作符* `!`：
 
 ```ts twoslash
 class OKGreeter {
@@ -101,7 +101,7 @@ class OKGreeter {
 ```ts twoslash
 // @errors: 2540 2540
 class Greeter {
-  readonly name: string = "world";
+  readonly name: string = 'world';
 
   constructor(otherName?: string) {
     if (otherName !== undefined) {
@@ -110,11 +110,11 @@ class Greeter {
   }
 
   err() {
-    this.name = "不可以";
+    this.name = '不可以';
   }
 }
 const g = new Greeter();
-g.name = "同样不可以";
+g.name = '同样不可以';
 ```
 
 ### 构造函数
@@ -185,7 +185,7 @@ class Derived extends Base {
    </p>
 </blockquote>
 
-类中的函数属性称为_方法_。方法可以使用与函数和构造函数相同的类型注解：
+类中的函数属性称为*方法*。方法可以使用与函数和构造函数相同的类型注解：
 
 ```ts twoslash
 class Point {
@@ -208,18 +208,18 @@ class Point {
 let x: number = 0;
 
 class C {
-  x: string = "hello";
+  x: string = 'hello';
 
   m() {
     // 这是尝试修改第 1 行的‘x’，而不是类属性
-    x = "world";
+    x = 'world';
   }
 }
 ```
 
 ### Getter / Setter
 
-类也可以拥有_访问器_：
+类也可以拥有*访问器*：
 
 ```ts twoslash
 class C {
@@ -299,13 +299,13 @@ interface Pingable {
 
 class Sonar implements Pingable {
   ping() {
-    console.log("ping!");
+    console.log('ping!');
   }
 }
 
 class Ball implements Pingable {
   pong() {
-    console.log("pong!");
+    console.log('pong!');
   }
 }
 ```
@@ -314,7 +314,7 @@ class Ball implements Pingable {
 
 #### 注意事项
 
-重要的是要理解，`implements` 子句仅仅是一个检查，用于判断类是否可以被视为接口类型。它_完全_不会改变类或其方法的类型。一个常见的错误是认为 `implements` 子句会改变类的类型——实际上并不会！
+重要的是要理解，`implements` 子句仅仅是一个检查，用于判断类是否可以被视为接口类型。它*完全*不会改变类或其方法的类型。一个常见的错误是认为 `implements` 子句会改变类的类型——实际上并不会！
 
 ```ts twoslash
 // @errors: 7006
@@ -325,7 +325,7 @@ interface Checkable {
 class NameChecker implements Checkable {
   check(s) {
     // 注意这里没有错误
-    return s.toLowerCase() === "ok";
+    return s.toLowerCase() === 'ok';
     //         ^?
   }
 }
@@ -361,14 +361,14 @@ c.y = 10;
 ```ts twoslash
 class Animal {
   move() {
-    console.log("继续前进！");
+    console.log('继续前进！');
   }
 }
 
 class Dog extends Animal {
   woof(times: number) {
     for (let i = 0; i < times; i++) {
-      console.log("汪！");
+      console.log('汪！');
     }
   }
 }
@@ -397,7 +397,7 @@ TypeScript 强制要求派生类始终是其基类的子类型。
 ```ts twoslash
 class Base {
   greet() {
-    console.log("你好，世界！");
+    console.log('你好，世界！');
   }
 }
 
@@ -413,7 +413,7 @@ class Derived extends Base {
 
 const d = new Derived();
 d.greet();
-d.greet("reader");
+d.greet('reader');
 ```
 
 派生类必须遵循其基类的约定。请记住，通过基类引用来引用派生类实例是非常常见的做法（并且始终是合法的）：
@@ -421,7 +421,7 @@ d.greet("reader");
 ```ts twoslash
 class Base {
   greet() {
-    console.log("你好，世界！");
+    console.log('你好，世界！');
   }
 }
 class Derived extends Base {}
@@ -439,7 +439,7 @@ b.greet();
 // @errors: 2416
 class Base {
   greet() {
-    console.log("你好，世界！");
+    console.log('你好，世界！');
   }
 }
 
@@ -500,14 +500,14 @@ JavaScript 类的初始化顺序在某些情况下可能会出人意料。让我
 
 ```ts twoslash
 class Base {
-  name = "基础";
+  name = '基础';
   constructor() {
-    console.log("我是" + this.name);
+    console.log('我是' + this.name);
   }
 }
 
 class Derived extends Base {
-  name = "派生";
+  name = '派生';
 }
 
 // 输出“基础”，而不是“派生”
@@ -541,7 +541,7 @@ class MsgError extends Error {
     super(m);
   }
   sayHello() {
-    return "你好" + this.message;
+    return '你好' + this.message;
   }
 }
 ```
@@ -563,7 +563,7 @@ class MsgError extends Error {
   }
 
   sayHello() {
-    return "hello " + this.message;
+    return 'hello ' + this.message;
   }
 }
 ```
@@ -583,7 +583,7 @@ class MsgError extends Error {
 ```ts twoslash
 class Greeter {
   public greet() {
-    console.log("嗨！");
+    console.log('嗨！');
   }
 }
 const g = new Greeter();
@@ -600,17 +600,17 @@ g.greet();
 // @errors: 2445
 class Greeter {
   public greet() {
-    console.log("你好，" + this.getName());
+    console.log('你好，' + this.getName());
   }
   protected getName() {
-    return "嗨";
+    return '嗨';
   }
 }
 
 class SpecialGreeter extends Greeter {
   public howdy() {
     // 可以在这里访问受保护的成员
-    console.log("Howdy, " + this.getName());
+    console.log('Howdy, ' + this.getName());
     //                          ^^^^^^^^^^^^^^
   }
 }
@@ -741,7 +741,7 @@ const s = new MySafe();
 console.log(s.secretKey);
 ```
 
-`private` 还允许在类型检查期间使用方括号表示法进行访问。这使得对 `private` 声明的字段的访问在单元测试等情况下更容易，缺点是这些字段是_软私有的_，不严格执行私有化。
+`private` 还允许在类型检查期间使用方括号表示法进行访问。这使得对 `private` 声明的字段的访问在单元测试等情况下更容易，缺点是这些字段是*软私有的*，不严格执行私有化。
 
 ```ts twoslash
 // @errors: 2341
@@ -755,15 +755,15 @@ const s = new MySafe();
 console.log(s.secretKey);
 
 // 可以
-console.log(s["secretKey"]);
+console.log(s['secretKey']);
 ```
 
-与 TypeScript 的 `private` 不同，JavaScript 的[私有字段](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Classes/Private_class_fields)（`#`）在编译后仍然保持私有，并且不提供先前提到的方括号访问等逃逸口，使得它们成为_硬私有_字段。
+与 TypeScript 的 `private` 不同，JavaScript 的[私有字段](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Classes/Private_class_fields)（`#`）在编译后仍然保持私有，并且不提供先前提到的方括号访问等逃逸口，使得它们成为*硬私有*字段。
 
 ```ts twoslash
 class Dog {
   #barkAmount = 0;
-  personality = "happy";
+  personality = 'happy';
 
   constructor() {}
 }
@@ -774,7 +774,7 @@ class Dog {
 // @showEmit
 class Dog {
   #barkAmount = 0;
-  personality = "happy";
+  personality = 'happy';
 
   constructor() {}
 }
@@ -785,9 +785,9 @@ class Dog {
 ```ts twoslash
 // @target: es2015
 // @showEmit
-class Dog{
+class Dog {
   #barkAmount = 0;
-  personality = "happy";
+  personality = 'happy';
 
   constructor() {}
 }
@@ -831,7 +831,7 @@ console.log(MyClass.x);
 ```ts twoslash
 class Base {
   static getGreeting() {
-    return "你好世界";
+    return '你好世界';
   }
 }
 class Derived extends Base {
@@ -846,7 +846,7 @@ class Derived extends Base {
 ```ts twoslash
 // @errors: 2699
 class S {
-  static name = "S!";
+  static name = 'S!';
 }
 ```
 
@@ -854,7 +854,7 @@ class S {
 
 TypeScript（以及 JavaScript）没有类似于 C# 的 `static class` 构造。
 
-这些构造的存在*仅*是因为这些语言强制要求所有的数据和函数都在类内部；因为 TypeScript 中不存在这种限制，所以也就没有必要使用它们。在 JavaScript/TypeScript 中，通常将只有一个实例的类表示为普通的_对象_。
+这些构造的存在*仅*是因为这些语言强制要求所有的数据和函数都在类内部；因为 TypeScript 中不存在这种限制，所以也就没有必要使用它们。在 JavaScript/TypeScript 中，通常将只有一个实例的类表示为普通的*对象*。
 
 例如，在 TypeScript 中我们不需要“static class”语法，因为普通的对象（甚至是顶级函数）同样可以完成工作：
 
@@ -878,22 +878,21 @@ const MyHelperObject = {
 静态块允许你编写一系列具有自己作用域的语句，这些语句可以访问包含类中的私有字段。这意味着我们可以编写具有所有语句编写功能、没有变量泄漏以及对类内部的完全访问权限的初始化代码。
 
 ```ts twoslash
-declare function loadLastInstances(): any[]
+declare function loadLastInstances(): any[];
 // ---cut---
 class Foo {
-    static #count = 0;
+  static #count = 0;
 
-    get count() {
-        return Foo.#count;
-    }
+  get count() {
+    return Foo.#count;
+  }
 
-    static {
-        try {
-            const lastInstances = loadLastInstances();
-            Foo.#count += lastInstances.length;
-        }
-        catch {}
-    }
+  static {
+    try {
+      const lastInstances = loadLastInstances();
+      Foo.#count += lastInstances.length;
+    } catch {}
+  }
 }
 ```
 
@@ -909,7 +908,7 @@ class Box<Type> {
   }
 }
 
-const b = new Box("你好！");
+const b = new Box('你好！');
 //    ^?
 ```
 
@@ -942,14 +941,14 @@ JavaScript 对 `this` 的处理方式确实有些不寻常：
 
 ```ts twoslash
 class MyClass {
-  name = "MyClass";
+  name = 'MyClass';
   getName() {
     return this.name;
   }
 }
 const c = new MyClass();
 const obj = {
-  name: "obj",
+  name: 'obj',
   getName: c.getName,
 };
 
@@ -973,7 +972,7 @@ console.log(obj.getName());
 
 ```ts twoslash
 class MyClass {
-  name = "MyClass";
+  name = 'MyClass';
   getName = () => {
     return this.name;
   };
@@ -1015,7 +1014,7 @@ TypeScript 检查调用带有 `this` 参数的函数时，确保使用了正确�
 ```ts twoslash
 // @errors: 2684
 class MyClass {
-  name = "MyClass";
+  name = 'MyClass';
   getName(this: MyClass) {
     return this.name;
   }
@@ -1039,12 +1038,11 @@ console.log(g());
 
 在类中，一个特殊的类型 `this` *动态地*指向当前类的类型。让我们看一下它的用法：
 
-<!-- prettier-ignore -->
-```ts twoslash
+```ts
 class Box {
-  contents: string = "";
+  contents: string = '';
   set(value: string) {
-//  ^?
+    //  ^?
     this.contents = value;
     return this;
   }
@@ -1053,9 +1051,9 @@ class Box {
 
 在这里，TypeScript 推断出 `set` 的返回类型是 `this`，而不是 `Box`。现在让我们创建 `Box` 的一个子类：
 
-```ts twoslash
+```ts
 class Box {
-  contents: string = "";
+  contents: string = '';
   set(value: string) {
     this.contents = value;
     return this;
@@ -1064,20 +1062,20 @@ class Box {
 // ---cut---
 class ClearableBox extends Box {
   clear() {
-    this.contents = "";
+    this.contents = '';
   }
 }
 
 const a = new ClearableBox();
-const b = a.set("你好");
+const b = a.set('你好');
 //    ^?
 ```
 
 你还可以在参数类型注释中使用 `this`：
 
-```ts twoslash
+```ts
 class Box {
-  content: string = "";
+  content: string = '';
   sameAs(other: this) {
     return other.content === this.content;
   }
@@ -1089,14 +1087,14 @@ class Box {
 ```ts twoslash
 // @errors: 2345
 class Box {
-  content: string = "";
+  content: string = '';
   sameAs(other: this) {
     return other.content === this.content;
   }
 }
 
 class DerivedBox extends Box {
-  otherContent: string = "?";
+  otherContent: string = '?';
 }
 
 const base = new Box();
@@ -1108,8 +1106,7 @@ derived.sameAs(base);
 
 在类和接口的方法中，你可以在返回位置使用 `this is Type`。当与类型缩小（例如 `if` 语句）混合使用时，目标对象的类型将缩小为指定的 `Type`。
 
-<!-- prettier-ignore -->
-```ts twoslash
+```ts
 // @strictPropertyInitialization: false
 class FileSystemObject {
   isFile(): this is FileRep {
@@ -1138,17 +1135,17 @@ interface Networked {
   host: string;
 }
 
-const fso: FileSystemObject = new FileRep("foo/bar.txt", "foo");
+const fso: FileSystemObject = new FileRep('foo/bar.txt', 'foo');
 
 if (fso.isFile()) {
   fso.content;
-// ^?
+  // ^?
 } else if (fso.isDirectory()) {
   fso.children;
-// ^?
+  // ^?
 } else if (fso.isNetworked()) {
   fso.host;
-// ^?
+  // ^?
 }
 ```
 
@@ -1164,7 +1161,7 @@ class Box<T> {
 }
 
 const box = new Box();
-box.value = "Gameboy";
+box.value = 'Gameboy';
 
 box.value;
 //  ^?
@@ -1214,7 +1211,7 @@ const someClass = class<Type> {
   }
 };
 
-const m = new someClass("你好，世界");
+const m = new someClass('你好，世界');
 //    ^?
 ```
 
@@ -1226,14 +1223,14 @@ JavaScript 类使用 `new` 运算符进行实例化。对于某个类本身的�
 class Point {
   createdAt: number;
   x: number;
-  y: number
+  y: number;
   constructor(x: number, y: number) {
-    this.createdAt = Date.now()
+    this.createdAt = Date.now();
     this.x = x;
     this.y = y;
   }
 }
-type PointInstance = InstanceType<typeof Point>
+type PointInstance = InstanceType<typeof Point>;
 
 function moveRight(point: PointInstance) {
   point.x += 5;
@@ -1260,7 +1257,7 @@ abstract class Base {
   abstract getName(): string;
 
   printName() {
-    console.log("你好，" + this.getName());
+    console.log('你好，' + this.getName());
   }
 }
 
@@ -1277,7 +1274,7 @@ abstract class Base {
 // ---cut---
 class Derived extends Base {
   getName() {
-    return "世界";
+    return '世界';
   }
 }
 
@@ -1313,7 +1310,7 @@ abstract class Base {
 }
 class Derived extends Base {
   getName() {
-    return "";
+    return '';
   }
 }
 // ---cut---
@@ -1342,7 +1339,7 @@ abstract class Base {
 }
 class Derived extends Base {
   getName() {
-    return "";
+    return '';
   }
 }
 // ---cut---

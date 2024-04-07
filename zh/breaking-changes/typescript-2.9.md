@@ -6,21 +6,21 @@ TypeScript 2.9 将索引类型泛化为包括 `number` 和 `symbol` 命名属性
 
 ```typescript
 function useKey<T, K extends keyof T>(o: T, k: K) {
-  var name: string = k;  // 错误: keyof T 不能分配给 `string`
+  var name: string = k; // 错误: keyof T 不能分配给 `string`
 }
 ```
 
 ### 建议
 
-* 如果你的函数只能处理名字符串属性的键，请在声明中使用 `Extract<keyof T，string>`：
+- 如果你的函数只能处理名字符串属性的键，请在声明中使用 `Extract<keyof T，string>`：
 
   ```typescript
   function useKey<T, K extends Extract<keyof T, string>>(o: T, k: K) {
-    var name: string = k;  // OK
+    var name: string = k; // OK
   }
   ```
 
-* 如果你的函数可以处理所有属性键，那么更改应该是顺畅的：
+- 如果你的函数可以处理所有属性键，那么更改应该是顺畅的：
 
   ```typescript
   function useKey<T, K extends keyof T>(o: T, k: K) {
@@ -28,17 +28,16 @@ function useKey<T, K extends keyof T>(o: T, k: K) {
   }
   ```
 
-* 除此之外，还可以使用 `--keyofStringsOnly` 编译器选项禁用新行为。
+- 除此之外，还可以使用 `--keyofStringsOnly` 编译器选项禁用新行为。
 
 ## 剩余参数后面不允许尾后逗号
 
 以下代码是一个自 [\#22262](https://github.com/Microsoft/TypeScript/pull/22262) 开始的编译器错误：
 
 ```typescript
-function f(
-  a: number,
-  ...b: number[], // 违规的尾随逗号
-) {}
+function f(a: number, ...b: number[]) {
+  // 违规的尾随逗号
+}
 ```
 
 剩余参数上的尾随逗号不是有效的 JavaScript，并且，这个语法现在在 TypeScript 中也是一个错误。
@@ -57,5 +56,4 @@ function f<T>(x: T) {
 
 ## 参考
 
-* [原文](https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#typescript-29)
-
+- [原文](https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#typescript-29)

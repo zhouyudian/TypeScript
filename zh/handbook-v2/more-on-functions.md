@@ -8,7 +8,7 @@
 
 ```ts twoslash
 function greeter(fn: (a: string) => void) {
-  fn("Hello, World");
+  fn('Hello, World');
 }
 
 function printToConsole(s: string) {
@@ -41,13 +41,13 @@ type DescribableFunction = {
   (someArg: number): boolean;
 };
 function doSomething(fn: DescribableFunction) {
-  console.log(fn.description + " 返回了 " + fn(6));
+  console.log(fn.description + ' 返回了 ' + fn(6));
 }
 
 function myFunc(someArg: number) {
   return someArg > 3;
 }
-myFunc.description = "默认描述";
+myFunc.description = '默认描述';
 
 doSomething(myFunc);
 ```
@@ -65,7 +65,7 @@ type SomeConstructor = {
   new (s: string): SomeObject;
 };
 function fn(ctor: SomeConstructor) {
-  return new ctor("你好");
+  return new ctor('你好');
 }
 ```
 
@@ -104,7 +104,7 @@ function firstElement<Type>(arr: Type[]): Type | undefined {
 declare function firstElement<Type>(arr: Type[]): Type | undefined;
 // ---cut---
 // s 的类型是 'string'
-const s = firstElement(["a", "b", "c"]);
+const s = firstElement(['a', 'b', 'c']);
 // n 的类型是 'number'
 const n = firstElement([1, 2, 3]);
 // u 的类型是 undefined
@@ -125,7 +125,7 @@ function map<Input, Output>(arr: Input[], func: (arg: Input) => Output): Output[
 
 // 参数 'n' 的类型是 'string'
 // 'parsed' 的类型是 'number[]'
-const parsed = map(["1", "2", "3"], (n) => parseInt(n));
+const parsed = map(['1', '2', '3'], n => parseInt(n));
 ```
 
 请注意，在这个示例中，TypeScript 可以（根据给定的 `string` 数组）推断出 `Input` 类型参数的类型，同时根据函数表达式的返回值（`number`）推断出 `Output` 类型参数的类型。
@@ -149,12 +149,12 @@ function longest<Type extends { length: number }>(a: Type, b: Type) {
 // longerArray 的类型为 'number[]'
 const longerArray = longest([1, 2], [1, 2, 3]);
 // longerString 的类型为 'alice' | 'bob'
-const longerString = longest("alice", "bob");
+const longerString = longest('alice', 'bob');
 // 错误！数字没有 'length' 属性
 const notOK = longest(10, 100);
 ```
 
-这个例子中有几个有趣的地方。我们允许 TypeScript *推断* `longest` 的返回类型。返回类型推断也适用于泛型函数。
+这个例子中有几个有趣的地方。我们允许 TypeScript _推断_ `longest` 的返回类型。返回类型推断也适用于泛型函数。
 
 由于我们将 `Type` 约束为 `{ length: number }`，我们可以访问 `a` 和 `b` 参数的 `.length` 属性。如果没有类型约束，我们将无法访问这些属性，因为这些值可能是没有 length 属性的其他类型。
 
@@ -210,7 +210,7 @@ function combine<Type>(arr1: Type[], arr2: Type[]): Type[] {
 // @errors: 2322
 declare function combine<Type>(arr1: Type[], arr2: Type[]): Type[];
 // ---cut---
-const arr = combine([1, 2, 3], ["hello"]);
+const arr = combine([1, 2, 3], ['hello']);
 ```
 
 然而，如果你打算这样做，可以手动指定 `Type`：
@@ -218,7 +218,7 @@ const arr = combine([1, 2, 3], ["hello"]);
 ```ts twoslash
 declare function combine<Type>(arr1: Type[], arr2: Type[]): Type[];
 // ---cut---
-const arr = combine<string | number>([1, 2, 3], ["hello"]);
+const arr = combine<string | number>([1, 2, 3], ['hello']);
 ```
 
 ### 编写良好的泛型函数的指南
@@ -275,17 +275,17 @@ function filter2<Type, Func extends (arg: Type) => boolean>(
 
 ```ts twoslash
 function greet<Str extends string>(s: Str) {
-  console.log("你好，" + s);
+  console.log('你好，' + s);
 }
 
-greet("世界");
+greet('世界');
 ```
 
 我们也可以写一个更简单的版本：
 
 ```ts twoslash
 function greet(s: string) {
-  console.log("你好，" + s);
+  console.log('你好，' + s);
 }
 ```
 
@@ -356,11 +356,11 @@ declare function myForEach(
   callback: (arg: any, index?: number) => void
 ): void;
 // ---cut---
-myForEach([1, 2, 3], (a) => console.log(a));
+myForEach([1, 2, 3], a => console.log(a));
 myForEach([1, 2, 3], (a, i) => console.log(a, i));
 ```
 
-然而，*实际上*这样的话 *`callback` 只可能会被传递一个参数*。换句话说，函数定义表示其实现可能如下所示：
+然而，*实际上*这样的话 _`callback` 只可能会被传递一个参数_。换句话说，函数定义表示其实现可能如下所示：
 
 ```ts twoslash
 // @errors: 2532 18048
@@ -374,8 +374,7 @@ function myForEach(arr: any[], callback: (arg: any, index?: number) => void) {
 
 然后，TypeScript 将强制执行这个含义，并发出实际上不可能的错误：
 
-<!-- prettier-ignore -->
-```ts twoslash
+```ts
 // @errors: 2532 18048
 declare function myForEach(
   arr: any[],
@@ -452,7 +451,7 @@ function fn(x: string): string;
 // 返回类型不正确
 function fn(x: number): boolean;
 function fn(x: string | number) {
-  return "oops";
+  return 'oops';
 }
 ```
 
@@ -477,9 +476,9 @@ function len(x: any) {
 declare function len(s: string): number;
 declare function len(arr: any[]): number;
 // ---cut---
-len(""); // OK
+len(''); // OK
 len([0]); // OK
-len(Math.random() > 0.5 ? "hello" : [0]);
+len(Math.random() > 0.5 ? 'hello' : [0]);
 ```
 
 由于两个重载具有相同的参数数量和相同的返回类型，我们可以使用非重载版本的函数：
@@ -567,7 +566,7 @@ function noop() {
 
 ### `object`
 
-特殊类型 `object` 指代任何非原始类型（`string`、`number`、`bigint`、`boolean`、`symbol`、`null` 或 `undefined`）的值。这与 *空对象类型* `{ }` 不同，也不同于全局类型 `Object`。你可能永远不会使用 `Object`。
+特殊类型 `object` 指代任何非原始类型（`string`、`number`、`bigint`、`boolean`、`symbol`、`null` 或 `undefined`）的值。这与 _空对象类型_ `{ }` 不同，也不同于全局类型 `Object`。你可能永远不会使用 `Object`。
 
 > `object` 不是 `Object`。请**总是**使用 `object`！
 
@@ -618,9 +617,9 @@ function fail(msg: string): never {
 
 ```ts twoslash
 function fn(x: string | number) {
-  if (typeof x === "string") {
+  if (typeof x === 'string') {
     // 做一些操作
-  } else if (typeof x === "number") {
+  } else if (typeof x === 'number') {
     // 做另一些操作
   } else {
     x; // 的类型为 'never'!
@@ -659,7 +658,7 @@ function doSomething(f: Function) {
 
 ```ts twoslash
 function multiply(n: number, ...m: number[]) {
-  return m.map((x) => n * x);
+  return m.map(x => n * x);
 }
 // 'a' 的值为 [10, 20, 30, 40]
 const a = multiply(10, 1, 2, 3, 4);
@@ -786,7 +785,7 @@ const v3 = f3();
 const src = [1, 2, 3];
 const dst = [0];
 
-src.forEach((el) => dst.push(el));
+src.forEach(el => dst.push(el));
 ```
 
 还有另一种特殊情况需要注意，当字面函数定义的返回类型为 `void` 时，该函数必须**不**返回任何内容。

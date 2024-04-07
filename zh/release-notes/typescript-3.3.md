@@ -5,8 +5,8 @@
 在 TypeScript 之前的版本中，将可调用类型联合后仅在它们具有相同的参数列表时才能被调用。
 
 ```typescript
-type Fruit = "apple" | "orange";
-type Color = "red" | "orange";
+type Fruit = 'apple' | 'orange';
+type Color = 'red' | 'orange';
 
 type FruitEater = (fruit: Fruit) => number; // eats and ranks the fruit
 type ColorConsumer = (color: Color) => string; // consumes and describes the colors
@@ -15,7 +15,7 @@ declare let f: FruitEater | ColorConsumer;
 
 // Cannot invoke an expression whose type lacks a call signature.
 //   Type 'FruitEater | ColorConsumer' has no compatible call signatures.ts(2349)
-f("orange");
+f('orange');
 ```
 
 然而，上例中，`FruitEater`和`ColorConsumer`应该都可以使用`"orange"`，并返回`number`或`string`。
@@ -23,19 +23,19 @@ f("orange");
 在 TypeScript 3.3 里，这个错误不存在了。
 
 ```typescript
-type Fruit = "apple" | "orange";
-type Color = "red" | "orange";
+type Fruit = 'apple' | 'orange';
+type Color = 'red' | 'orange';
 
 type FruitEater = (fruit: Fruit) => number; // eats and ranks the fruit
 type ColorConsumer = (color: Color) => string; // consumes and describes the colors
 
 declare let f: FruitEater | ColorConsumer;
 
-f("orange"); // It works! Returns a 'number | string'.
+f('orange'); // It works! Returns a 'number | string'.
 
-f("apple"); // error - Argument of type '"apple"' is not assignable to parameter of type '"orange"'.
+f('apple'); // error - Argument of type '"apple"' is not assignable to parameter of type '"orange"'.
 
-f("red"); // error - Argument of type '"red"' is not assignable to parameter of type '"orange"'.
+f('red'); // error - Argument of type '"red"' is not assignable to parameter of type '"orange"'.
 ```
 
 TypeScript 3.3，这些签名的参数被连结在一起构成了一个新的签名。
@@ -46,8 +46,8 @@ TypeScript 3.3，这些签名的参数被连结在一起构成了一个新的签
 
 这个新行为仅在满足如下情形时生效：
 
-* 联合类型中最多有一个类型具有多个重载，
-* 联合类型中最多有一个类型有泛型签名。
+- 联合类型中最多有一个类型具有多个重载，
+- 联合类型中最多有一个类型有泛型签名。
 
 这意味着，像`map`这种操作`number[] | string[]`的方法，还是不能调用，因为`map`是泛型函数。
 
@@ -55,11 +55,11 @@ TypeScript 3.3，这些签名的参数被连结在一起构成了一个新的签
 
 ```typescript
 interface Dog {
-  kind: "dog";
+  kind: 'dog';
   dogProp: any;
 }
 interface Cat {
-  kind: "cat";
+  kind: 'cat';
   catProp: any;
 }
 
@@ -75,20 +75,20 @@ catOrDogArray.forEach(animal => {
 
 ```typescript
 interface Dog {
-  kind: "dog";
+  kind: 'dog';
   dogProp: any;
 }
 interface Cat {
-  kind: "cat";
+  kind: 'cat';
   catProp: any;
 }
 
 const catOrDogArray: Dog[] | Cat[] = [];
 catOrDogArray.forEach((animal: Dog | Cat) => {
-  if (animal.kind === "dog") {
+  if (animal.kind === 'dog') {
     animal.dogProp;
     // ...
-  } else if (animal.kind === "cat") {
+  } else if (animal.kind === 'cat') {
     animal.catProp;
     // ...
   }
@@ -104,4 +104,3 @@ TypeScript 2.7 还引入了`--watch`构建模式，它使用了新的增量"buil
 在 3.3 之前，使用`--build --watch`构建复合工程不会真正地使用增量文件检测机制。 在`--build --watch`模式下，一个工程里的一处改动会导致整个工程重新构建，而非仅检查那些真正受到影响的文件。
 
 在 TypeScript 3.3 里，`--build`模式的`--watch`标记也会使用增量文件检测。 因此`--build --watch`模式下构建非常快。 我们的测试结果显示，这个功能会减少 50%到 75%的构建时间，相比于原先的`--build --watch`。 具体数字在这这个[pull request](https://github.com/Microsoft/TypeScript/pull/29161)里，我们相信大多数复合工程用户会看到明显效果。
-

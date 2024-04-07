@@ -455,8 +455,7 @@ interface BasicAddress {
 
 在某些情况下，这已经足够了，但是地址经常会有一个单元号与之关联，比如某个地址对应的建筑物有多个单元。我们可以描述 `AddressWithUnit` 类型。
 
-<!-- prettier-ignore -->
-```ts twoslash
+```ts
 interface AddressWithUnit {
   name?: string;
   unit: string;

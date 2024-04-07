@@ -44,7 +44,7 @@ function reverse(s: string): string;
 ```ts
 /* 错误 */
 function fn(x: () => any) {
-    x();
+  x();
 }
 ```
 
@@ -53,7 +53,7 @@ function fn(x: () => any) {
 ```ts
 /* 正确 */
 function fn(x: () => void) {
-    x();
+  x();
 }
 ```
 
@@ -61,8 +61,8 @@ _原因_：使用`void`相对安全，因为它能防止不小心使用了未经
 
 ```ts
 function fn(x: () => void) {
-    var k = x(); // oops! meant to do something else
-    k.doSomething(); // error, but would be OK if the return type had been 'any'
+  var k = x(); // oops! meant to do something else
+  k.doSomething(); // error, but would be OK if the return type had been 'any'
 }
 ```
 
@@ -73,7 +73,7 @@ function fn(x: () => void) {
 ```ts
 /* 错误 */
 interface Fetcher {
-    getObject(done: (data: any, elapsedTime?: number) => void): void;
+  getObject(done: (data: any, elapsedTime?: number) => void): void;
 }
 ```
 
@@ -86,7 +86,7 @@ interface Fetcher {
 ```ts
 /* 正确 */
 interface Fetcher {
-    getObject(done: (data: any, elapsedTime: number) => void): void;
+  getObject(done: (data: any, elapsedTime: number) => void): void;
 }
 ```
 
@@ -98,8 +98,8 @@ interface Fetcher {
 /* WRONG */
 declare function beforeAll(action: () => void, timeout?: number): void;
 declare function beforeAll(
-    action: (done: DoneFn) => void,
-    timeout?: number
+  action: (done: DoneFn) => void,
+  timeout?: number
 ): void;
 ```
 
@@ -108,8 +108,8 @@ declare function beforeAll(
 ```ts
 /* 正确 */
 declare function beforeAll(
-    action: (done: DoneFn) => void,
-    timeout?: number
+  action: (done: DoneFn) => void,
+  timeout?: number
 ): void;
 ```
 
@@ -154,9 +154,9 @@ _原因_：当解析函数调用的时候，TypeScript 会选择*匹配到的第
 ```ts
 /* WRONG */
 interface Example {
-    diff(one: string): number;
-    diff(one: string, two: string): number;
-    diff(one: string, two: string, three: boolean): number;
+  diff(one: string): number;
+  diff(one: string, two: string): number;
+  diff(one: string, two: string, three: boolean): number;
 }
 ```
 
@@ -165,7 +165,7 @@ interface Example {
 ```ts
 /* OK */
 interface Example {
-    diff(one: string, two?: string, three?: boolean): number;
+  diff(one: string, two?: string, three?: boolean): number;
 }
 ```
 
@@ -193,7 +193,7 @@ fn(x.diff);
 var x: Example;
 // When written with overloads, incorrectly an error because of passing 'undefined' to 'string'
 // When written with optionals, correctly OK
-x.diff("something", true ? undefined : "hour");
+x.diff('something', true ? undefined : 'hour');
 ```
 
 ### 使用联合类型

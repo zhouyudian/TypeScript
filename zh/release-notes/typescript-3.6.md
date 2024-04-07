@@ -7,7 +7,7 @@ TypeScript 3.6 对迭代器和生成器函数引入了更严格的检查。在�
 ```typescript
 function* foo() {
   if (Math.random() < 0.5) yield 100;
-  return "Finished!"
+  return 'Finished!';
 }
 
 let iter = foo();
@@ -15,7 +15,7 @@ let curr = iter.next();
 if (curr.done) {
   // TypeScript 3.5 以及之前的版本会认为 `value` 为 'string | number'。
   // 当 `done` 为 `true` 的时候，它应该知道 `value` 为 'string'！
-  curr.value
+  curr.value;
 }
 ```
 
@@ -48,7 +48,8 @@ interface Iterator<T, TReturn = any, TNext = undefined> {
 以此为基础，新的 `Generator` 类型是一个迭代器，它总是有 `return` 和 `throw` 方法，并且也是可迭代的。
 
 ```typescript
-interface Generator<T = unknown, TReturn = any, TNext = unknown> extends Iterator<T, TReturn, TNext> {
+interface Generator<T = unknown, TReturn = any, TNext = unknown>
+  extends Iterator<T, TReturn, TNext> {
   next(...args: [] | [TNext]): IteratorResult<T, TReturn>;
   return(value: TReturn): IteratorResult<T, TReturn>;
   throw(e: any): IteratorResult<T, TReturn>;
@@ -59,7 +60,9 @@ interface Generator<T = unknown, TReturn = any, TNext = unknown> extends Iterato
 为了允许在返回值和生成值之间进行区分，TypeScript 3.6 转变 `IteratorResult` 类型为一个区别对待的联合类型：
 
 ```typescript
-type IteratorResult<T, TReturn = any> = IteratorYieldResult<T> | IteratorReturnResult<TReturn>;
+type IteratorResult<T, TReturn = any> =
+  | IteratorYieldResult<T>
+  | IteratorReturnResult<TReturn>;
 
 interface IteratorYieldResult<TYield> {
   done?: false;
@@ -102,14 +105,14 @@ function* counter(): Generator<number, string, boolean> {
       break;
     }
   }
-  return "done!";
+  return 'done!';
 }
 
 var iter = counter();
-var curr = iter.next()
+var curr = iter.next();
 while (!curr.done) {
   console.log(curr.value);
-  curr = iter.next(curr.value === 5)
+  curr = iter.next(curr.value === 5);
 }
 console.log(curr.value.toUpperCase());
 
@@ -135,13 +138,13 @@ console.log(curr.value.toUpperCase());
 例如，以下示例：
 
 ```typescript
-[...Array(5)]
+[...Array(5)];
 ```
 
 相当于以下数组：
 
 ```typescript
-[undefined, undefined, undefined, undefined, undefined]
+[undefined, undefined, undefined, undefined, undefined];
 ```
 
 但是，TypeScript 会将原始代码转换为此代码：
@@ -153,8 +156,8 @@ Array(5).slice();
 这略有不同。 `Array(5)` 生成一个长度为 5 的数组，但并没有在其中插入任何元素！
 
 ```typescript
-1 in [undefined, undefined, undefined] // true
-1 in Array(3) // false
+1 in [undefined, undefined, undefined]; // true
+1 in Array(3); // false
 ```
 
 当 TypeScript 调用 `slice()` 时，它还会创建一个索引尚未设置的数组。
@@ -181,10 +184,10 @@ declare function displayUser(user: User): void;
 
 async function f() {
   displayUser(getUserData());
-//            ~~~~~~~~~~~~~
-// 'Promise <User>' 类型的参数不能分配给 'User' 类型的参数。
-//   ...
-// 你忘记使用 'await' 吗？
+  //            ~~~~~~~~~~~~~
+  // 'Promise <User>' 类型的参数不能分配给 'User' 类型的参数。
+  //   ...
+  // 你忘记使用 'await' 吗？
 }
 ```
 
@@ -192,8 +195,7 @@ async function f() {
 
 ```typescript
 async function getCuteAnimals() {
-  fetch("https://reddit.com/r/aww.json")
-    .json()
+  fetch('https://reddit.com/r/aww.json').json();
   // ~~~~
   // 'Promise <Response>'类型中不存在属性'json'。
   // 你忘记使用'await'吗？
@@ -204,7 +206,7 @@ async function getCuteAnimals() {
 
 与可发现性相同，让您的生活更轻松 - 除了 `Promises` 上更好的错误消息之外，我们现在还在某些情况下提供快速修复。
 
-![&#x6B63;&#x5728;&#x5E94;&#x7528;&#x5FEB;&#x901F;&#x4FEE;&#x590D;&#x4EE5;&#x6DFB;&#x52A0;&#x7F3A;&#x5C11;&#x7684; \`await\` &#x5173;&#x952E;&#x5B57;&#x3002;](https://user-images.githubusercontent.com/3277153/61071690-8ca53480-a3c6-11e9-9b08-4e6d9851c9db.gif)
+![正在应用快速修复以添加缺少的 `await` 关键字。](https://user-images.githubusercontent.com/3277153/61071690-8ca53480-a3c6-11e9-9b08-4e6d9851c9db.gif)
 
 有关更多详细信息，请[参阅原始问题以及链接回来的 pull request](https://github.com/microsoft/TypeScript/issues/30646)。
 
@@ -213,7 +215,7 @@ async function getCuteAnimals() {
 当发射到 ES2015 及更高版本的目标时，TypeScript 3.6 在标识符中包含对 Unicode 字符的更好支持。
 
 ```typescript
-const 𝓱𝓮𝓵𝓵𝓸 = "world"; // previously disallowed, now allowed in '--target es2015'
+const 𝓱𝓮𝓵𝓵𝓸 = 'world'; // previously disallowed, now allowed in '--target es2015'
 // 以前不允许，现在在 '--target es2015' 中允许
 ```
 
@@ -223,7 +225,7 @@ const 𝓱𝓮𝓵𝓵𝓸 = "world"; // previously disallowed, now allowed in '
 
 ```typescript
 // 此模块:
-console.log(import.meta.url)
+console.log(import.meta.url);
 
 // 获得如下的转变:
 System.register([], function (exports, context) {
@@ -231,7 +233,7 @@ System.register([], function (exports, context) {
     setters: [],
     execute: function () {
       console.log(context.meta.url);
-    }
+    },
   };
 });
 ```
@@ -250,7 +252,7 @@ declare class Foo {
 }
 ```
 
-在TypeScript 3.7中，编译器本身将利用此功能，以便生成的 `.d.ts` 文件也将生成 `get` / `set` 访问器。
+在 TypeScript 3.7 中，编译器本身将利用此功能，以便生成的 `.d.ts` 文件也将生成 `get` / `set` 访问器。
 
 ## 环境类和函数可以合并
 
@@ -269,13 +271,13 @@ export declare class Point2D {
 
 ```typescript
 export interface Point2D {
-    x: number;
-    y: number;
+  x: number;
+  y: number;
 }
 export declare var Point2D: {
-    (x: number, y: number): Point2D;
-    new (x: number, y: number): Point2D;
-}
+  (x: number, y: number): Point2D;
+  new (x: number, y: number): Point2D;
+};
 ```
 
 这样做的一个优点是可以很容易地表达可调用的构造函数模式，同时还允许名称空间与这些声明合并（因为 `var` 声明不能与名称空间合并）。
@@ -300,15 +302,15 @@ TypeScript Playground 已经获得了急需的刷新功能，并提供了便利�
 
 新的 Playground 现在支持许多新的选项，包括：
 
-* `target` 选项（允许用户切换输出 `es5` 到 `es3`、`es2015`、`esnext` 等）
-* 所有的严格检查标记（包括 `just strict`）
-* 支持纯 JavaScript 文件（使用 `allowJs` 和可选的 `checkJs`）
+- `target` 选项（允许用户切换输出 `es5` 到 `es3`、`es2015`、`esnext` 等）
+- 所有的严格检查标记（包括 `just strict`）
+- 支持纯 JavaScript 文件（使用 `allowJs` 和可选的 `checkJs`）
 
 当分享 Playground 的链接时，这些选项也会保存下来，允许用户更可靠地分享示例，而无需告诉受众“哦，别忘了打开 `noImplicitAny` 选项！”。
 
 在不久的将来，我们将更新 Playground 样本，添加 `JSX` 支持和改进自动类型获取，这意味着您将能够在 Playground 上体验到与编辑器中相同的体验。
 
-随着我们改进 Playground 和网站，我们欢迎GitHub上的[issue 和 pull request](https://github.com/microsoft/TypeScript-Website/)！
+随着我们改进 Playground 和网站，我们欢迎 GitHub 上的[issue 和 pull request](https://github.com/microsoft/TypeScript-Website/)！
 
 ## 代码编辑的分号感知
 
@@ -328,9 +330,8 @@ JavaScript 有大量不同的模块语法或者约定：EMACScript standard、Co
 
 要了解团队将要开展的工作，请[查看今年 7 月至 12 月的 6 个月路线图](https://github.com/microsoft/TypeScript/issues/33118)。
 
-与往常一样，我们希望这个版本的 TypeScript 能让编码体验更好，让您更快乐。如果您有任何建议或遇到任何问题，我们总是感兴趣，所以随时[在GitHub上提一个 issue](https://github.com/microsoft/TypeScript/issues/new/choose)。
+与往常一样，我们希望这个版本的 TypeScript 能让编码体验更好，让您更快乐。如果您有任何建议或遇到任何问题，我们总是感兴趣，所以随时[在 GitHub 上提一个 issue](https://github.com/microsoft/TypeScript/issues/new/choose)。
 
 ## 参考
 
-* [Announcing TypeScript 3.6](https://devblogs.microsoft.com/typescript/announcing-typescript-3-6/)
-
+- [Announcing TypeScript 3.6](https://devblogs.microsoft.com/typescript/announcing-typescript-3-6/)

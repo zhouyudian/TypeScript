@@ -300,7 +300,7 @@ TypeScript 现在支持 _链接编辑_ JSX 标签名。
 这个新特性在 TypeScript 和 JavaScript 里都可用，并且可以在 Visual Studio Code Insiders 版本中启用。
 在 Visual Studio Code 里，你既可以用设置界面的 `Editor: Linked Editing` 配置：
 
-![](https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/04/linkedEditing-5.1-vscode-ui-1.png)
+![x](https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/04/linkedEditing-5.1-vscode-ui-1.png)
 
 也可以用 JSON 配置文件中的 `editor.linkedEditing`：
 

@@ -2,7 +2,7 @@
 
 ## 介绍
 
-传统的JavaScript程序使用函数和基于原型的继承来创建可重用的组件，但对于熟悉使用面向对象方式的程序员来讲就有些棘手，因为他们用的是基于类的继承并且对象是由类构建出来的。 从ECMAScript 2015，也就是ECMAScript 6开始，JavaScript程序员将能够使用基于类的面向对象的方式。 使用TypeScript，我们允许开发者现在就使用这些特性，并且编译后的JavaScript可以在所有主流浏览器和平台上运行，而不需要等到下个JavaScript版本。
+传统的 JavaScript 程序使用函数和基于原型的继承来创建可重用的组件，但对于熟悉使用面向对象方式的程序员来讲就有些棘手，因为他们用的是基于类的继承并且对象是由类构建出来的。 从 ECMAScript 2015，也就是 ECMAScript 6 开始，JavaScript 程序员将能够使用基于类的面向对象的方式。 使用 TypeScript，我们允许开发者现在就使用这些特性，并且编译后的 JavaScript 可以在所有主流浏览器和平台上运行，而不需要等到下个 JavaScript 版本。
 
 ## 类
 
@@ -10,19 +10,19 @@
 
 ```typescript
 class Greeter {
-    greeting: string;
-    constructor(message: string) {
-        this.greeting = message;
-    }
-    greet() {
-        return "Hello, " + this.greeting;
-    }
+  greeting: string;
+  constructor(message: string) {
+    this.greeting = message;
+  }
+  greet() {
+    return 'Hello, ' + this.greeting;
+  }
 }
 
-let greeter = new Greeter("world");
+let greeter = new Greeter('world');
 ```
 
-如果你使用过C\#或Java，你会对这种语法非常熟悉。 我们声明一个`Greeter`类。这个类有3个成员：一个叫做`greeting`的属性，一个构造函数和一个`greet`方法。
+如果你使用过 C\#或 Java，你会对这种语法非常熟悉。 我们声明一个`Greeter`类。这个类有 3 个成员：一个叫做`greeting`的属性，一个构造函数和一个`greet`方法。
 
 你会注意到，我们在引用任何一个类成员的时候都用了`this`。 它表示我们访问的是类的成员。
 
@@ -30,21 +30,21 @@ let greeter = new Greeter("world");
 
 ## 继承
 
-在TypeScript里，我们可以使用常用的面向对象模式。 基于类的程序设计中一种最基本的模式是允许使用继承来扩展现有的类。
+在 TypeScript 里，我们可以使用常用的面向对象模式。 基于类的程序设计中一种最基本的模式是允许使用继承来扩展现有的类。
 
 看下面的例子：
 
 ```typescript
 class Animal {
-    move(distanceInMeters: number = 0) {
-        console.log(`Animal moved ${distanceInMeters}m.`);
-    }
+  move(distanceInMeters: number = 0) {
+    console.log(`Animal moved ${distanceInMeters}m.`);
+  }
 }
 
 class Dog extends Animal {
-    bark() {
-        console.log('Woof! Woof!');
-    }
+  bark() {
+    console.log('Woof! Woof!');
+  }
 }
 
 const dog = new Dog();
@@ -53,7 +53,7 @@ dog.move(10);
 dog.bark();
 ```
 
-这个例子展示了最基本的继承：类从基类中继承了属性和方法。 这里，`Dog`是一个_派生类_，它派生自`Animal`_基类_，通过`extends`关键字。 派生类通常被称作_子类_，基类通常被称作_超类_。
+这个例子展示了最基本的继承：类从基类中继承了属性和方法。 这里，`Dog`是一个*派生类*，它派生自`Animal`_基类_，通过`extends`关键字。 派生类通常被称作*子类*，基类通常被称作*超类*。
 
 因为`Dog`继承了`Animal`的功能，因此我们可以创建一个`Dog`的实例，它能够`bark()`和`move()`。
 
@@ -61,31 +61,37 @@ dog.bark();
 
 ```typescript
 class Animal {
-    name: string;
-    constructor(theName: string) { this.name = theName; }
-    move(distanceInMeters: number = 0) {
-        console.log(`${this.name} moved ${distanceInMeters}m.`);
-    }
+  name: string;
+  constructor(theName: string) {
+    this.name = theName;
+  }
+  move(distanceInMeters: number = 0) {
+    console.log(`${this.name} moved ${distanceInMeters}m.`);
+  }
 }
 
 class Snake extends Animal {
-    constructor(name: string) { super(name); }
-    move(distanceInMeters = 5) {
-        console.log("Slithering...");
-        super.move(distanceInMeters);
-    }
+  constructor(name: string) {
+    super(name);
+  }
+  move(distanceInMeters = 5) {
+    console.log('Slithering...');
+    super.move(distanceInMeters);
+  }
 }
 
 class Horse extends Animal {
-    constructor(name: string) { super(name); }
-    move(distanceInMeters = 45) {
-        console.log("Galloping...");
-        super.move(distanceInMeters);
-    }
+  constructor(name: string) {
+    super(name);
+  }
+  move(distanceInMeters = 45) {
+    console.log('Galloping...');
+    super.move(distanceInMeters);
+  }
 }
 
-let sam = new Snake("Sammy the Python");
-let tom: Animal = new Horse("Tommy the Palomino");
+let sam = new Snake('Sammy the Python');
+let tom: Animal = new Horse('Tommy the Palomino');
 
 sam.move();
 tom.move(34);
@@ -93,7 +99,7 @@ tom.move(34);
 
 这个例子展示了一些上面没有提到的特性。 这一次，我们使用`extends`关键字创建了`Animal`的两个子类：`Horse`和`Snake`。
 
-与前一个例子的不同点是，派生类包含了一个构造函数，它_必须_调用`super()`，它会执行基类的构造函数。 而且，在构造函数里访问`this`的属性之前，我们_一定_要调用`super()`。 这个是TypeScript强制执行的一条重要规则。
+与前一个例子的不同点是，派生类包含了一个构造函数，它*必须*调用`super()`，它会执行基类的构造函数。 而且，在构造函数里访问`this`的属性之前，我们*一定*要调用`super()`。 这个是 TypeScript 强制执行的一条重要规则。
 
 这个例子演示了如何在子类里可以重写父类的方法。 `Snake`类和`Horse`类都创建了`move`方法，它们重写了从`Animal`继承来的`move`方法，使得`move`方法根据不同的类而具有不同的功能。 注意，即使`tom`被声明为`Animal`类型，但因为它的值是`Horse`，调用`tom.move(34)`时，它会调用`Horse`里重写的方法：
 
@@ -108,17 +114,19 @@ Tommy the Palomino moved 34m.
 
 ### 默认为`public`
 
-在上面的例子里，我们可以自由的访问程序里定义的成员。 如果你对其它语言中的类比较了解，就会注意到我们在之前的代码里并没有使用`public`来做修饰；例如，C\#要求必须明确地使用`public`指定成员是可见的。 在TypeScript里，成员都默认为`public`。
+在上面的例子里，我们可以自由的访问程序里定义的成员。 如果你对其它语言中的类比较了解，就会注意到我们在之前的代码里并没有使用`public`来做修饰；例如，C\#要求必须明确地使用`public`指定成员是可见的。 在 TypeScript 里，成员都默认为`public`。
 
 你也可以明确的将一个成员标记成`public`。 我们可以用下面的方式来重写上面的`Animal`类：
 
 ```typescript
 class Animal {
-    public name: string;
-    public constructor(theName: string) { this.name = theName; }
-    public move(distanceInMeters: number) {
-        console.log(`${this.name} moved ${distanceInMeters}m.`);
-    }
+  public name: string;
+  public constructor(theName: string) {
+    this.name = theName;
+  }
+  public move(distanceInMeters: number) {
+    console.log(`${this.name} moved ${distanceInMeters}m.`);
+  }
 }
 ```
 
@@ -128,14 +136,16 @@ class Animal {
 
 ```typescript
 class Animal {
-    private name: string;
-    constructor(theName: string) { this.name = theName; }
+  private name: string;
+  constructor(theName: string) {
+    this.name = theName;
+  }
 }
 
-new Animal("Cat").name; // 错误: 'name' 是私有的.
+new Animal('Cat').name; // 错误: 'name' 是私有的.
 ```
 
-TypeScript使用的是结构性类型系统。 当我们比较两种不同的类型时，并不在乎它们从何处而来，如果所有成员的类型都是兼容的，我们就认为它们的类型是兼容的。
+TypeScript 使用的是结构性类型系统。 当我们比较两种不同的类型时，并不在乎它们从何处而来，如果所有成员的类型都是兼容的，我们就认为它们的类型是兼容的。
 
 然而，当我们比较带有`private`或`protected`成员的类型的时候，情况就不同了。 如果其中一个类型里包含一个`private`成员，那么只有当另外一个类型中也存在这样一个`private`成员， 并且它们都是来自同一处声明时，我们才认为这两个类型是兼容的。 对于`protected`成员也使用这个规则。
 
@@ -143,22 +153,28 @@ TypeScript使用的是结构性类型系统。 当我们比较两种不同的类
 
 ```typescript
 class Animal {
-    private name: string;
-    constructor(theName: string) { this.name = theName; }
+  private name: string;
+  constructor(theName: string) {
+    this.name = theName;
+  }
 }
 
 class Rhino extends Animal {
-    constructor() { super("Rhino"); }
+  constructor() {
+    super('Rhino');
+  }
 }
 
 class Employee {
-    private name: string;
-    constructor(theName: string) { this.name = theName; }
+  private name: string;
+  constructor(theName: string) {
+    this.name = theName;
+  }
 }
 
-let animal = new Animal("Goat");
+let animal = new Animal('Goat');
 let rhino = new Rhino();
-let employee = new Employee("Bob");
+let employee = new Employee('Bob');
 
 animal = rhino;
 animal = employee; // 错误: Animal 与 Employee 不兼容.
@@ -172,24 +188,26 @@ animal = employee; // 错误: Animal 与 Employee 不兼容.
 
 ```typescript
 class Person {
-    protected name: string;
-    constructor(name: string) { this.name = name; }
+  protected name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
 }
 
 class Employee extends Person {
-    private department: string;
+  private department: string;
 
-    constructor(name: string, department: string) {
-        super(name)
-        this.department = department;
-    }
+  constructor(name: string, department: string) {
+    super(name);
+    this.department = department;
+  }
 
-    public getElevatorPitch() {
-        return `Hello, my name is ${this.name} and I work in ${this.department}.`;
-    }
+  public getElevatorPitch() {
+    return `Hello, my name is ${this.name} and I work in ${this.department}.`;
+  }
 }
 
-let howard = new Employee("Howard", "Sales");
+let howard = new Employee('Howard', 'Sales');
 console.log(howard.getElevatorPitch());
 console.log(howard.name); // 错误
 ```
@@ -200,54 +218,56 @@ console.log(howard.name); // 错误
 
 ```typescript
 class Person {
-    protected name: string;
-    protected constructor(theName: string) { this.name = theName; }
+  protected name: string;
+  protected constructor(theName: string) {
+    this.name = theName;
+  }
 }
 
 // Employee 能够继承 Person
 class Employee extends Person {
-    private department: string;
+  private department: string;
 
-    constructor(name: string, department: string) {
-        super(name);
-        this.department = department;
-    }
+  constructor(name: string, department: string) {
+    super(name);
+    this.department = department;
+  }
 
-    public getElevatorPitch() {
-        return `Hello, my name is ${this.name} and I work in ${this.department}.`;
-    }
+  public getElevatorPitch() {
+    return `Hello, my name is ${this.name} and I work in ${this.department}.`;
+  }
 }
 
-let howard = new Employee("Howard", "Sales");
-let john = new Person("John"); // 错误: 'Person' 的构造函数是被保护的.
+let howard = new Employee('Howard', 'Sales');
+let john = new Person('John'); // 错误: 'Person' 的构造函数是被保护的.
 ```
 
-## readonly修饰符
+## readonly 修饰符
 
 你可以使用`readonly`关键字将属性设置为只读的。 只读属性必须在声明时或构造函数里被初始化。
 
 ```typescript
 class Octopus {
-    readonly name: string;
-    readonly numberOfLegs: number = 8;
-    constructor (theName: string) {
-        this.name = theName;
-    }
+  readonly name: string;
+  readonly numberOfLegs: number = 8;
+  constructor(theName: string) {
+    this.name = theName;
+  }
 }
-let dad = new Octopus("Man with the 8 strong legs");
-dad.name = "Man with the 3-piece suit"; // 错误! name 是只读的.
+let dad = new Octopus('Man with the 8 strong legs');
+dad.name = 'Man with the 3-piece suit'; // 错误! name 是只读的.
 ```
 
 ### 参数属性
 
-在上面的例子中，我们不得不在在`Person`类里定义一个只读成员`name`和一个构造函数参数`theName`。这样做是为了在`Octopus`构造函数被执行后，就可以访问`theName`的值。 这种情况经常会遇到。_参数属性_可以方便地让我们在一个地方定义并初始化一个成员。 下面的例子是对之前`Animal`类的修改版，使用了参数属性：
+在上面的例子中，我们不得不在在`Person`类里定义一个只读成员`name`和一个构造函数参数`theName`。这样做是为了在`Octopus`构造函数被执行后，就可以访问`theName`的值。 这种情况经常会遇到。*参数属性*可以方便地让我们在一个地方定义并初始化一个成员。 下面的例子是对之前`Animal`类的修改版，使用了参数属性：
 
 ```typescript
 class Animal {
-    constructor(private name: string) { }
-    move(distanceInMeters: number) {
-        console.log(`${this.name} moved ${distanceInMeters}m.`);
-    }
+  constructor(private name: string) {}
+  move(distanceInMeters: number) {
+    console.log(`${this.name} moved ${distanceInMeters}m.`);
+  }
 }
 ```
 
@@ -257,19 +277,19 @@ class Animal {
 
 ## 存取器
 
-TypeScript支持通过getters/setters来截取对对象成员的访问。 它能帮助你有效的控制对对象成员的访问。
+TypeScript 支持通过 getters/setters 来截取对对象成员的访问。 它能帮助你有效的控制对对象成员的访问。
 
 下面来看如何把一个简单的类改写成使用`get`和`set`。 首先，我们从一个没有使用存取器的例子开始。
 
 ```typescript
 class Employee {
-    fullName: string;
+  fullName: string;
 }
 
 let employee = new Employee();
-employee.fullName = "Bob Smith";
+employee.fullName = 'Bob Smith';
 if (employee.fullName) {
-    console.log(employee.fullName);
+  console.log(employee.fullName);
 }
 ```
 
@@ -283,25 +303,25 @@ if (employee.fullName) {
 const fullNameMaxLength = 10;
 
 class Employee {
-    private _fullName: string;
+  private _fullName: string;
 
-    get fullName(): string {
-        return this._fullName;
+  get fullName(): string {
+    return this._fullName;
+  }
+
+  set fullName(newName: string) {
+    if (newName && newName.length > fullNameMaxLength) {
+      throw new Error('fullName has a max length of ' + fullNameMaxLength);
     }
 
-    set fullName(newName: string) {
-        if (newName && newName.length > fullNameMaxLength) {
-            throw new Error("fullName has a max length of " + fullNameMaxLength);
-        }
-
-        this._fullName = newName;
-    }
+    this._fullName = newName;
+  }
 }
 
 let employee = new Employee();
-employee.fullName = "Bob Smith";
+employee.fullName = 'Bob Smith';
 if (employee.fullName) {
-    alert(employee.fullName);
+  alert(employee.fullName);
 }
 ```
 
@@ -309,7 +329,7 @@ if (employee.fullName) {
 
 对于存取器有下面几点需要注意的：
 
-首先，存取器要求你将编译器设置为输出ECMAScript 5或更高。 不支持降级到ECMAScript 3。 其次，只带有`get`不带有`set`的存取器自动被推断为`readonly`。 这在从代码生成`.d.ts`文件时是有帮助的，因为利用这个属性的用户会看到不允许够改变它的值。
+首先，存取器要求你将编译器设置为输出 ECMAScript 5 或更高。 不支持降级到 ECMAScript 3。 其次，只带有`get`不带有`set`的存取器自动被推断为`readonly`。 这在从代码生成`.d.ts`文件时是有帮助的，因为利用这个属性的用户会看到不允许够改变它的值。
 
 ## 静态属性
 
@@ -317,20 +337,20 @@ if (employee.fullName) {
 
 ```typescript
 class Grid {
-    static origin = {x: 0, y: 0};
-    calculateDistanceFromOrigin(point: {x: number; y: number;}) {
-        let xDist = (point.x - Grid.origin.x);
-        let yDist = (point.y - Grid.origin.y);
-        return Math.sqrt(xDist * xDist + yDist * yDist) / this.scale;
-    }
-    constructor (public scale: number) { }
+  static origin = { x: 0, y: 0 };
+  calculateDistanceFromOrigin(point: { x: number; y: number }) {
+    let xDist = point.x - Grid.origin.x;
+    let yDist = point.y - Grid.origin.y;
+    return Math.sqrt(xDist * xDist + yDist * yDist) / this.scale;
+  }
+  constructor(public scale: number) {}
 }
 
-let grid1 = new Grid(1.0);  // 1x scale
-let grid2 = new Grid(5.0);  // 5x scale
+let grid1 = new Grid(1.0); // 1x scale
+let grid2 = new Grid(5.0); // 5x scale
 
-console.log(grid1.calculateDistanceFromOrigin({x: 10, y: 10}));
-console.log(grid2.calculateDistanceFromOrigin({x: 10, y: 10}));
+console.log(grid1.calculateDistanceFromOrigin({ x: 10, y: 10 }));
+console.log(grid2.calculateDistanceFromOrigin({ x: 10, y: 10 }));
 ```
 
 ## 抽象类
@@ -339,10 +359,10 @@ console.log(grid2.calculateDistanceFromOrigin({x: 10, y: 10}));
 
 ```typescript
 abstract class Animal {
-    abstract makeSound(): void;
-    move(): void {
-        console.log("roaming the earth...");
-    }
+  abstract makeSound(): void;
+  move(): void {
+    console.log('roaming the earth...');
+  }
 }
 ```
 
@@ -350,30 +370,27 @@ abstract class Animal {
 
 ```typescript
 abstract class Department {
+  constructor(public name: string) {}
 
-    constructor(public name: string) {
-    }
+  printName(): void {
+    console.log('Department name: ' + this.name);
+  }
 
-    printName(): void {
-        console.log('Department name: ' + this.name);
-    }
-
-    abstract printMeeting(): void; // 必须在派生类中实现
+  abstract printMeeting(): void; // 必须在派生类中实现
 }
 
 class AccountingDepartment extends Department {
+  constructor() {
+    super('Accounting and Auditing'); // 在派生类的构造函数中必须调用 super()
+  }
 
-    constructor() {
-        super('Accounting and Auditing'); // 在派生类的构造函数中必须调用 super()
-    }
+  printMeeting(): void {
+    console.log('The Accounting Department meets each Monday at 10am.');
+  }
 
-    printMeeting(): void {
-        console.log('The Accounting Department meets each Monday at 10am.');
-    }
-
-    generateReports(): void {
-        console.log('Generating accounting reports...');
-    }
+  generateReports(): void {
+    console.log('Generating accounting reports...');
+  }
 }
 
 let department: Department; // 允许创建一个对抽象类型的引用
@@ -388,60 +405,59 @@ department.generateReports(); // 错误: 方法在声明的抽象类中不存在
 
 ### 构造函数
 
-当你在TypeScript里声明了一个类的时候，实际上同时声明了很多东西。 首先就是类的_实例_的类型。
+当你在 TypeScript 里声明了一个类的时候，实际上同时声明了很多东西。 首先就是类的*实例*的类型。
 
 ```typescript
 class Greeter {
-    greeting: string;
-    constructor(message: string) {
-        this.greeting = message;
-    }
-    greet() {
-        return "Hello, " + this.greeting;
-    }
+  greeting: string;
+  constructor(message: string) {
+    this.greeting = message;
+  }
+  greet() {
+    return 'Hello, ' + this.greeting;
+  }
 }
 
 let greeter: Greeter;
-greeter = new Greeter("world");
+greeter = new Greeter('world');
 console.log(greeter.greet());
 ```
 
 这里，我们写了`let greeter: Greeter`，意思是`Greeter`类的实例的类型是`Greeter`。 这对于用过其它面向对象语言的程序员来讲已经是老习惯了。
 
-我们也创建了一个叫做_构造函数_的值。 这个函数会在我们使用`new`创建类实例的时候被调用。 下面我们来看看，上面的代码被编译成JavaScript后是什么样子的：
+我们也创建了一个叫做*构造函数*的值。 这个函数会在我们使用`new`创建类实例的时候被调用。 下面我们来看看，上面的代码被编译成 JavaScript 后是什么样子的：
 
 ```typescript
 let Greeter = (function () {
-    function Greeter(message) {
-        this.greeting = message;
-    }
-    Greeter.prototype.greet = function () {
-        return "Hello, " + this.greeting;
-    };
-    return Greeter;
+  function Greeter(message) {
+    this.greeting = message;
+  }
+  Greeter.prototype.greet = function () {
+    return 'Hello, ' + this.greeting;
+  };
+  return Greeter;
 })();
 
 let greeter;
-greeter = new Greeter("world");
+greeter = new Greeter('world');
 console.log(greeter.greet());
 ```
 
-上面的代码里，`let Greeter`将被赋值为构造函数。 当我们调用`new`并执行了这个函数后，便会得到一个类的实例。 这个构造函数也包含了类的所有静态属性。 换个角度说，我们可以认为类具有_实例部分_与_静态部分_这两个部分。
+上面的代码里，`let Greeter`将被赋值为构造函数。 当我们调用`new`并执行了这个函数后，便会得到一个类的实例。 这个构造函数也包含了类的所有静态属性。 换个角度说，我们可以认为类具有*实例部分*与*静态部分*这两个部分。
 
 让我们稍微改写一下这个例子，看看它们之间的区别：
 
 ```typescript
 class Greeter {
-    static standardGreeting = "Hello, there";
-    greeting: string;
-    greet() {
-        if (this.greeting) {
-            return "Hello, " + this.greeting;
-        }
-        else {
-            return Greeter.standardGreeting;
-        }
+  static standardGreeting = 'Hello, there';
+  greeting: string;
+  greet() {
+    if (this.greeting) {
+      return 'Hello, ' + this.greeting;
+    } else {
+      return Greeter.standardGreeting;
     }
+  }
 }
 
 let greeter1: Greeter;
@@ -449,7 +465,7 @@ greeter1 = new Greeter();
 console.log(greeter1.greet());
 
 let greeterMaker: typeof Greeter = Greeter;
-greeterMaker.standardGreeting = "Hey there!";
+greeterMaker.standardGreeting = 'Hey there!';
 
 let greeter2: Greeter = new greeterMaker();
 console.log(greeter2.greet());
@@ -457,7 +473,7 @@ console.log(greeter2.greet());
 
 这个例子里，`greeter1`与之前看到的一样。 我们实例化`Greeter`类，并使用这个对象。 与我们之前看到的一样。
 
-再之后，我们直接使用类。 我们创建了一个叫做`greeterMaker`的变量。 这个变量保存了这个类或者说保存了类构造函数。 然后我们使用`typeof Greeter`，意思是取Greeter类的类型，而不是实例的类型。 或者更确切的说，"告诉我`Greeter`标识符的类型"，也就是构造函数的类型。 这个类型包含了类的所有静态成员和构造函数。 之后，就和前面一样，我们在`greeterMaker`上使用`new`，创建`Greeter`的实例。
+再之后，我们直接使用类。 我们创建了一个叫做`greeterMaker`的变量。 这个变量保存了这个类或者说保存了类构造函数。 然后我们使用`typeof Greeter`，意思是取 Greeter 类的类型，而不是实例的类型。 或者更确切的说，"告诉我`Greeter`标识符的类型"，也就是构造函数的类型。 这个类型包含了类的所有静态成员和构造函数。 之后，就和前面一样，我们在`greeterMaker`上使用`new`，创建`Greeter`的实例。
 
 ### 把类当做接口使用
 
@@ -465,14 +481,13 @@ console.log(greeter2.greet());
 
 ```typescript
 class Point {
-    x: number;
-    y: number;
+  x: number;
+  y: number;
 }
 
 interface Point3d extends Point {
-    z: number;
+  z: number;
 }
 
-let point3d: Point3d = {x: 1, y: 2, z: 3};
+let point3d: Point3d = { x: 1, y: 2, z: 3 };
 ```
-

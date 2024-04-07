@@ -9,18 +9,18 @@
 
 ```ts
 class Base {
-    // ...
+  // ...
 }
 
 class Derived extends Base {
-    someProperty = true;
+  someProperty = true;
 
-    constructor() {
-        // 错误！
-        // 必须先调用 'super()' 因为需要初始化 'someProperty'。
-        doSomeStuff();
-        super();
-    }
+  constructor() {
+    // 错误！
+    // 必须先调用 'super()' 因为需要初始化 'someProperty'。
+    doSomeStuff();
+    super();
+  }
 }
 ```
 
@@ -37,20 +37,19 @@ TypeScript 可以根据判别式属性来细化类型。
 
 ```ts
 type Action =
-    | { kind: "NumberContents", payload: number }
-    | { kind: "StringContents", payload: string };
+  | { kind: 'NumberContents'; payload: number }
+  | { kind: 'StringContents'; payload: string };
 
 function processAction(action: Action) {
-    if (action.kind === "NumberContents") {
-        // `action.payload` is a number here.
-        let num = action.payload * 2
-        // ...
-    }
-    else if (action.kind === "StringContents") {
-        // `action.payload` is a string here.
-        const str = action.payload.trim();
-        // ...
-    }
+  if (action.kind === 'NumberContents') {
+    // `action.payload` is a number here.
+    let num = action.payload * 2;
+    // ...
+  } else if (action.kind === 'StringContents') {
+    // `action.payload` is a string here.
+    const str = action.payload.trim();
+    // ...
+  }
 }
 ```
 
@@ -61,19 +60,18 @@ function processAction(action: Action) {
 
 ```ts
 type Action =
-    | { kind: "NumberContents", payload: number }
-    | { kind: "StringContents", payload: string };
+  | { kind: 'NumberContents'; payload: number }
+  | { kind: 'StringContents'; payload: string };
 
 function processAction(action: Action) {
-    const { kind, payload } = action;
-    if (kind === "NumberContents") {
-        let num = payload * 2
-        // ...
-    }
-    else if (kind === "StringContents") {
-        const str = payload.trim();
-        // ...
-    }
+  const { kind, payload } = action;
+  if (kind === 'NumberContents') {
+    let num = payload * 2;
+    // ...
+  } else if (kind === 'StringContents') {
+    const str = payload.trim();
+    // ...
+  }
 }
 ```
 
@@ -95,19 +93,19 @@ TypeScript 要面对一些有趣的挑战，因为它是构建在结构化类型
 
 ```ts
 interface Source {
-    prop: string;
+  prop: string;
 }
 
 interface Target {
-    prop: number;
+  prop: number;
 }
 
 function check(source: Source, target: Target) {
-    target = source;
-    // error!
-    // Type 'Source' is not assignable to type 'Target'.
-    //   Types of property 'prop' are incompatible.
-    //     Type 'string' is not assignable to type 'number'.
+  target = source;
+  // error!
+  // Type 'Source' is not assignable to type 'Target'.
+  //   Types of property 'prop' are incompatible.
+  //     Type 'string' is not assignable to type 'number'.
 }
 ```
 
@@ -119,15 +117,15 @@ function check(source: Source, target: Target) {
 
 ```ts
 interface Source<T> {
-    prop: Source<Source<T>>;
+  prop: Source<Source<T>>;
 }
 
 interface Target<T> {
-    prop: Target<Target<T>>;
+  prop: Target<Target<T>>;
 }
 
 function check(source: Source<string>, target: Target<number>) {
-    target = source;
+  target = source;
 }
 ```
 
@@ -143,7 +141,7 @@ TypeScript 使用了启发式的算法 - 当一个类型达到特定的检查深
 
 ```ts
 interface Foo<T> {
-    prop: T;
+  prop: T;
 }
 
 declare let x: Foo<Foo<Foo<Foo<Foo<Foo<string>>>>>>;
@@ -173,34 +171,34 @@ TypeScript 现在能够正确地推断通过索引访问到另一个映射对象
 
 ```ts
 interface TypeMap {
-    "number": number;
-    "string": string;
-    "boolean": boolean;
+  number: number;
+  string: string;
+  boolean: boolean;
 }
 
-type UnionRecord<P extends keyof TypeMap> = { [K in P]:
-    {
-        kind: K;
-        v: TypeMap[K];
-        f: (p: TypeMap[K]) => void;
-    }
+type UnionRecord<P extends keyof TypeMap> = {
+  [K in P]: {
+    kind: K;
+    v: TypeMap[K];
+    f: (p: TypeMap[K]) => void;
+  };
 }[P];
 
 function processRecord<K extends keyof TypeMap>(record: UnionRecord<K>) {
-    record.f(record.v);
+  record.f(record.v);
 }
 
 // 这个调用之前是有问题的，但现在没有问题
 processRecord({
-    kind: "string",
-    v: "hello!",
+  kind: 'string',
+  v: 'hello!',
 
-    // 'val' 之前会隐式地获得类型 'string | number | boolean'，
-    // 但现在会正确地推断为类型 'string'。
-    f: val => {
-        console.log(val.toUpperCase());
-    }
-})
+  // 'val' 之前会隐式地获得类型 'string | number | boolean'，
+  // 但现在会正确地推断为类型 'string'。
+  f: val => {
+    console.log(val.toUpperCase());
+  },
+});
 ```
 
 该模式已经被支持了并允许 TypeScript 判断 `record.f(record.v)` 调用是合理的，
@@ -215,8 +213,8 @@ TypeScript 4.6 改进了这个情况，因此在启用 `processRecord` 时不再
 函数签名可以声明为剩余参数且其类型可以为可辨识联合元组类型。
 
 ```ts
-function func(...args: ["str", string] | ["num", number]) {
-    // ...
+function func(...args: ['str', string] | ['num', number]) {
+  // ...
 }
 ```
 
@@ -227,19 +225,19 @@ function func(...args: ["str", string] | ["num", number]) {
 像这样 TypeScript 是由签名来推断函数类型时，TypeScript 能够根据依赖的参数来细化类型。
 
 ```ts
-type Func = (...args: ["a", number] | ["b", string]) => void;
+type Func = (...args: ['a', number] | ['b', string]) => void;
 
 const f1: Func = (kind, payload) => {
-    if (kind === "a") {
-        payload.toFixed();  // 'payload' narrowed to 'number'
-    }
-    if (kind === "b") {
-        payload.toUpperCase();  // 'payload' narrowed to 'string'
-    }
+  if (kind === 'a') {
+    payload.toFixed(); // 'payload' narrowed to 'number'
+  }
+  if (kind === 'b') {
+    payload.toUpperCase(); // 'payload' narrowed to 'string'
+  }
 };
 
-f1("a", 42);
-f1("b", "hello");
+f1('a', 42);
+f1('b', 'hello');
 ```
 
 更多详情请阅读 [PR](https://github.com/microsoft/TypeScript/pull/47190)。
@@ -265,8 +263,8 @@ export const el = <div>foo</div>;
 TypeScript 会生成如下的 JavaScript 代码：
 
 ```ts
-import { jsx as _jsx } from "react/jsx-runtime";
-export const el = _jsx("div", { children: "foo" }, void 0);
+import { jsx as _jsx } from 'react/jsx-runtime';
+export const el = _jsx('div', { children: 'foo' }, void 0);
 ```
 
 末尾的 `void 0` 参数是没用的，删掉它会减小打包的体积。
@@ -283,7 +281,7 @@ export const el = _jsx("div", { children: "foo" }, void 0);
  * @param y The second operand
  */
 function add(x, y) {
-    return x + y;
+  return x + y;
 }
 ```
 
@@ -295,7 +293,7 @@ function add(x, y) {
  * @param y {number} The second operand
  */
 function add(a, b) {
-    return a + b;
+  return a + b;
 }
 ```
 
@@ -334,11 +332,10 @@ const foo = 5678;
 
 ```js
 function container() {
-    export function foo() {
-//  ~~~~~~
-// error: Modifiers cannot appear here.
-
-    }
+  export function foo() {
+    //  ~~~~~~
+    // error: Modifiers cannot appear here.
+  }
 }
 ```
 

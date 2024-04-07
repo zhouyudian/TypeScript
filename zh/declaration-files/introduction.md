@@ -25,13 +25,13 @@
 在[模版](./templates.md)一节里，你能找到一些声明文件，它们对于编写新的声明文件来讲会有所帮助。
 如果你已经了解了库的结构，那么可以阅读相应的模版文件：
 
--   [global-modifying-module.d.ts](templates/global-modifying-module.d.ts.md)
--   [global-plugin.d.ts](templates/global-plugin.d.ts.md)
--   [global.d.ts](templates/global.d.ts.md)
--   [module-class.d.ts](templates/module-class.d.ts.md)
--   [module-function.d.ts](templates/module-function.d.ts.md)
--   [module-plugin.d.ts](templates/module-plugin.d.ts.md)
--   [module.d.ts](templates/module.d.ts.md)
+- [global-modifying-module.d.ts](templates/global-modifying-module.d.ts.md)
+- [global-plugin.d.ts](templates/global-plugin.d.ts.md)
+- [global.d.ts](templates/global.d.ts.md)
+- [module-class.d.ts](templates/module-class.d.ts.md)
+- [module-function.d.ts](templates/module-function.d.ts.md)
+- [module-plugin.d.ts](templates/module-plugin.d.ts.md)
+- [module.d.ts](templates/module.d.ts.md)
 
 ## [规范](./do-s-and-don-ts.md)
 

@@ -19,9 +19,7 @@ let x = foo?.bar.baz();
 更明确地说，上面的代码和下面的代码等价。
 
 ```ts
-let x = (foo === null || foo === undefined) ?
-    undefined :
-    foo.bar.baz();
+let x = foo === null || foo === undefined ? undefined : foo.bar.baz();
 ```
 
 注意，当 `bar` 是 `null` 或 `undefined`，我们的代码访问 `baz` 依然会报错。
@@ -33,12 +31,12 @@ let x = (foo === null || foo === undefined) ?
 ```ts
 // 以前
 if (foo && foo.bar && foo.bar.baz) {
-    // ...
+  // ...
 }
 
 // 以后
 if (foo?.bar?.baz) {
-    // ...
+  // ...
 }
 ```
 
@@ -54,11 +52,11 @@ if (foo?.bar?.baz) {
  * 否则返回 undefined
  */
 function tryGetFirstElement<T>(arr?: T[]) {
-    return arr?.[0];
-    // 等价于：
-    //   return (arr === null || arr === undefined) ?
-    //       undefined :
-    //       arr[0];
+  return arr?.[0];
+  // 等价于：
+  //   return (arr === null || arr === undefined) ?
+  //       undefined :
+  //       arr[0];
 }
 ```
 
@@ -66,17 +64,17 @@ function tryGetFirstElement<T>(arr?: T[]) {
 
 ```ts
 async function makeRequest(url: string, log?: (msg: string) => void) {
-    log?.(`Request started at ${new Date().toISOString()}`);
-    // 基本等价于：
-    //   if (log != null) {
-    //       log(`Request started at ${new Date().toISOString()}`);
-    //   }
+  log?.(`Request started at ${new Date().toISOString()}`);
+  // 基本等价于：
+  //   if (log != null) {
+  //       log(`Request started at ${new Date().toISOString()}`);
+  //   }
 
-    const result = (await fetch(url)).json();
+  const result = (await fetch(url)).json();
 
-    log?.(`Request finished at at ${new Date().toISOString()}`);
+  log?.(`Request finished at at ${new Date().toISOString()}`);
 
-    return result;
+  return result;
 }
 ```
 
@@ -84,16 +82,14 @@ async function makeRequest(url: string, log?: (msg: string) => void) {
 也就是说，
 
 ```ts
-let result = foo?.bar / someComputation()
+let result = foo?.bar / someComputation();
 ```
 
 可选链不会阻止除法运算或 `someComputation()` 的进行。
 上面这段代码实际上等价于：
 
 ```ts
-let temp = (foo === null || foo === undefined) ?
-    undefined :
-    foo.bar;
+let temp = foo === null || foo === undefined ? undefined : foo.bar;
 
 let result = temp / someComputation();
 ```
@@ -102,9 +98,9 @@ let result = temp / someComputation();
 
 ```ts
 function barPercentage(foo?: { bar: number }) {
-    return foo?.bar / 100;
-    //     ~~~~~~~~
-    // Error: Object is possibly undefined.
+  return foo?.bar / 100;
+  //     ~~~~~~~~
+  // Error: Object is possibly undefined.
 }
 ```
 
@@ -129,9 +125,7 @@ let x = foo ?? bar();
 同样的，上面的代码可以写出等价代码。
 
 ```ts
-let x = (foo !== null && foo !== undefined) ?
-    foo :
-    bar();
+let x = foo !== null && foo !== undefined ? foo : bar();
 ```
 
 当尝试使用默认值时，`??` 运算符可以代替 `||` 的作用。
@@ -140,9 +134,9 @@ let x = (foo !== null && foo !== undefined) ?
 
 ```ts
 function initializeAudio() {
-    let volume = localStorage.volume || 0.5
+  let volume = localStorage.volume || 0.5;
 
-    // ...
+  // ...
 }
 ```
 
@@ -171,10 +165,10 @@ assert(someValue === 42);
 
 ```js
 function multiply(x, y) {
-    assert(typeof x === "number");
-    assert(typeof y === "number");
+  assert(typeof x === 'number');
+  assert(typeof y === 'number');
 
-    return x * y;
+  return x * y;
 }
 ```
 
@@ -183,11 +177,11 @@ function multiply(x, y) {
 
 ```ts
 function yell(str) {
-    assert(typeof str === "string");
+  assert(typeof str === 'string');
 
-    return str.toUppercase();
-    // 糟了！我们拼错了 'toUpperCase'。
-    // 如果 TypeScript 依然能检查出来就太棒了！
+  return str.toUppercase();
+  // 糟了！我们拼错了 'toUpperCase'。
+  // 如果 TypeScript 依然能检查出来就太棒了！
 }
 ```
 
@@ -195,11 +189,11 @@ function yell(str) {
 
 ```ts
 function yell(str) {
-    if (typeof str !== "string") {
-        throw new TypeError("str should have been a string.")
-    }
-    // 发现错误！
-    return str.toUppercase();
+  if (typeof str !== 'string') {
+    throw new TypeError('str should have been a string.');
+  }
+  // 发现错误！
+  return str.toUppercase();
 }
 ```
 
@@ -211,9 +205,9 @@ function yell(str) {
 
 ```ts
 function assert(condition: any, msg?: string): asserts condition {
-    if (!condition) {
-        throw new AssertionError(msg)
-    }
+  if (!condition) {
+    throw new AssertionError(msg);
+  }
 }
 ```
 
@@ -223,18 +217,18 @@ function assert(condition: any, msg?: string): asserts condition {
 
 ```ts
 function yell(str) {
-    assert(typeof str === "string");
+  assert(typeof str === 'string');
 
-    return str.toUppercase();
-    //         ~~~~~~~~~~~
-    // error: Property 'toUppercase' does not exist on type 'string'.
-    //        Did you mean 'toUpperCase'?
+  return str.toUppercase();
+  //         ~~~~~~~~~~~
+  // error: Property 'toUppercase' does not exist on type 'string'.
+  //        Did you mean 'toUpperCase'?
 }
 
 function assert(condition: any, msg?: string): asserts condition {
-    if (!condition) {
-        throw new AssertionError(msg)
-    }
+  if (!condition) {
+    throw new AssertionError(msg);
+  }
 }
 ```
 
@@ -242,9 +236,9 @@ function assert(condition: any, msg?: string): asserts condition {
 
 ```ts
 function assertIsString(val: any): asserts val is string {
-    if (typeof val !== "string") {
-        throw new AssertionError("Not a string!");
-    }
+  if (typeof val !== 'string') {
+    throw new AssertionError('Not a string!');
+  }
 }
 ```
 
@@ -252,14 +246,14 @@ function assertIsString(val: any): asserts val is string {
 
 ```ts
 function yell(str: any) {
-    assertIsString(str);
+  assertIsString(str);
 
-    // 现在 TypeScript 知道 'str' 是一个 'string'。
+  // 现在 TypeScript 知道 'str' 是一个 'string'。
 
-    return str.toUppercase();
-    //         ~~~~~~~~~~~
-    // error: Property 'toUppercase' does not exist on type 'string'.
-    //        Did you mean 'toUpperCase'?
+  return str.toUppercase();
+  //         ~~~~~~~~~~~
+  // error: Property 'toUppercase' does not exist on type 'string'.
+  //        Did you mean 'toUpperCase'?
 }
 ```
 
@@ -267,14 +261,14 @@ function yell(str: any) {
 
 ```ts
 function isString(val: any): val is string {
-    return typeof val === "string";
+  return typeof val === 'string';
 }
 
 function yell(str: any) {
-    if (isString(str)) {
-        return str.toUppercase();
-    }
-    throw "Oops!";
+  if (isString(str)) {
+    return str.toUppercase();
+  }
+  throw 'Oops!';
 }
 ```
 
@@ -283,11 +277,11 @@ function yell(str: any) {
 
 ```ts
 function assertIsDefined<T>(val: T): asserts val is NonNullable<T> {
-    if (val === undefined || val === null) {
-        throw new AssertionError(
-            `Expected 'val' to be defined, but received ${val}`
-        );
-    }
+  if (val === undefined || val === null) {
+    throw new AssertionError(
+      `Expected 'val' to be defined, but received ${val}`
+    );
+  }
 }
 ```
 
@@ -307,13 +301,12 @@ function assertIsDefined<T>(val: T): asserts val is NonNullable<T> {
 
 ```ts
 function dispatch(x: string | number): SomeType {
-    if (typeof x === "string") {
-        return doThingWithString(x);
-    }
-    else if (typeof x === "number") {
-        return doThingWithNumber(x);
-    }
-    return process.exit(1);
+  if (typeof x === 'string') {
+    return doThingWithString(x);
+  } else if (typeof x === 'number') {
+    return doThingWithNumber(x);
+  }
+  return process.exit(1);
 }
 ```
 
@@ -321,13 +314,12 @@ function dispatch(x: string | number): SomeType {
 
 ```ts
 function dispatch(x: string | number): SomeType {
-    if (typeof x === "string") {
-        return doThingWithString(x);
-    }
-    else if (typeof x === "number") {
-        return doThingWithNumber(x);
-    }
-    process.exit(1);
+  if (typeof x === 'string') {
+    return doThingWithString(x);
+  } else if (typeof x === 'number') {
+    return doThingWithNumber(x);
+  }
+  process.exit(1);
 }
 ```
 
@@ -377,16 +369,10 @@ interface ArrayOfValueOrArray<T> extends Array<ValueOrArray<T>> {}
 这意味着，用于表示 JSON 的以下代码……
 
 ```ts
-type Json =
-    | string
-    | number
-    | boolean
-    | null
-    | JsonObject
-    | JsonArray;
+type Json = string | number | boolean | null | JsonObject | JsonArray;
 
 interface JsonObject {
-    [property: string]: Json;
+  [property: string]: Json;
 }
 
 interface JsonArray extends Array<Json> {}
@@ -396,27 +382,26 @@ interface JsonArray extends Array<Json> {}
 
 ```ts
 type Json =
-    | string
-    | number
-    | boolean
-    | null
-    | { [property: string]: Json }
-    | Json[];
+  | string
+  | number
+  | boolean
+  | null
+  | { [property: string]: Json }
+  | Json[];
 ```
 
 这个新的机制让我们在元组中，同样也可以递归地使用类型别名。
 下面的 TypeScript 代码在以前会报错，但现在是合法的：
 
 ```ts
-type VirtualNode =
-    | string
-    | [string, { [key: string]: any }, ...VirtualNode[]];
+type VirtualNode = string | [string, { [key: string]: any }, ...VirtualNode[]];
 
-const myNode: VirtualNode =
-    ["div", { id: "parent" },
-        ["div", { id: "first-child" }, "I'm the first child"],
-        ["div", { id: "second-child" }, "I'm the second child"]
-    ];
+const myNode: VirtualNode = [
+  'div',
+  { id: 'parent' },
+  ['div', { id: 'first-child' }, "I'm the first child"],
+  ['div', { id: 'second-child' }, "I'm the second child"],
+];
 ```
 
 想了解更多细节，你可以 [查看原始的 PR](https://github.com/microsoft/TypeScript/pull/33050)。
@@ -442,25 +427,25 @@ TypeScript 3.7 对此进行了改进，允许这两个选项一起使用！
 比如下面这个代码片段
 
 ```js
-const assert = require("assert")
+const assert = require('assert');
 
 module.exports.blurImage = blurImage;
 
 /**
  * Produces a blurred image from an input buffer.
- * 
+ *
  * @param input {Uint8Array}
  * @param width {number}
  * @param height {number}
  */
 function blurImage(input, width, height) {
-    const numPixels = width * height * 4;
-    assert(input.length === numPixels);
-    const result = new Uint8Array(numPixels);
+  const numPixels = width * height * 4;
+  assert(input.length === numPixels);
+  const result = new Uint8Array(numPixels);
 
-    // TODO
+  // TODO
 
-    return result;
+  return result;
 }
 ```
 
@@ -474,7 +459,11 @@ function blurImage(input, width, height) {
  * @param width {number}
  * @param height {number}
  */
-export function blurImage(input: Uint8Array, width: number, height: number): Uint8Array;
+export function blurImage(
+  input: Uint8Array,
+  width: number,
+  height: number
+): Uint8Array;
 ```
 
 除了基本的带有 `@param` 标记的函数，也支持其他情形, 请看下面这个例子：
@@ -487,34 +476,34 @@ export function blurImage(input: Uint8Array, width: number, height: number): Uin
 
 /** Queues work */
 export class Worker {
-    constructor(maxDepth = 10) {
-        this.started = false;
-        this.depthLimit = maxDepth;
-        /**
-         * NOTE: queued jobs may add more items to queue
-         * @type {Job[]}
-         */
-        this.queue = [];
-    }
+  constructor(maxDepth = 10) {
+    this.started = false;
+    this.depthLimit = maxDepth;
     /**
-     * Adds a work item to the queue
-     * @param {Job} work 
+     * NOTE: queued jobs may add more items to queue
+     * @type {Job[]}
      */
-    push(work) {
-        if (this.queue.length + 1 > this.depthLimit) throw new Error("Queue full!");
-        this.queue.push(work);
+    this.queue = [];
+  }
+  /**
+   * Adds a work item to the queue
+   * @param {Job} work
+   */
+  push(work) {
+    if (this.queue.length + 1 > this.depthLimit) throw new Error('Queue full!');
+    this.queue.push(work);
+  }
+  /**
+   * Starts the queue if it has not yet started
+   */
+  start() {
+    if (this.started) return false;
+    this.started = true;
+    while (this.queue.length) {
+      /** @type {Job} */ (this.queue.shift())();
     }
-    /**
-     * Starts the queue if it has not yet started
-     */
-    start() {
-        if (this.started) return false;
-        this.started = true;
-        while (this.queue.length) {
-            /** @type {Job} */(this.queue.shift())();
-        }
-        return true;
-    }
+    return true;
+  }
 }
 ```
 
@@ -527,23 +516,23 @@ export class Worker {
  */
 /** Queues work */
 export class Worker {
-    constructor(maxDepth?: number);
-    started: boolean;
-    depthLimit: number;
-    /**
-     * NOTE: queued jobs may add more items to queue
-     * @type {Job[]}
-     */
-    queue: Job[];
-    /**
-     * Adds a work item to the queue
-     * @param {Job} work
-     */
-    push(work: Job): void;
-    /**
-     * Starts the queue if it has not yet started
-     */
-    start(): boolean;
+  constructor(maxDepth?: number);
+  started: boolean;
+  depthLimit: number;
+  /**
+   * NOTE: queued jobs may add more items to queue
+   * @type {Job[]}
+   */
+  queue: Job[];
+  /**
+   * Adds a work item to the queue
+   * @param {Job} work
+   */
+  push(work: Job): void;
+  /**
+   * Starts the queue if it has not yet started
+   */
+  start(): boolean;
 }
 export type Job = () => void;
 ```
@@ -559,8 +548,8 @@ export type Job = () => void;
 
 ```ts
 class C {
-    foo = 100;
-    bar: string;
+  foo = 100;
+  bar: string;
 }
 ```
 
@@ -568,9 +557,9 @@ class C {
 
 ```ts
 class C {
-    constructor() {
-        this.foo = 100;
-    }
+  constructor() {
+    this.foo = 100;
+  }
 }
 ```
 
@@ -579,20 +568,20 @@ class C {
 
 ```ts
 class C {
-    constructor() {
-        Object.defineProperty(this, "foo", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: 100
-        });
-        Object.defineProperty(this, "bar", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: void 0
-        });
-    }
+  constructor() {
+    Object.defineProperty(this, 'foo', {
+      enumerable: true,
+      configurable: true,
+      writable: true,
+      value: 100,
+    });
+    Object.defineProperty(this, 'bar', {
+      enumerable: true,
+      configurable: true,
+      writable: true,
+      value: void 0,
+    });
+  }
 }
 ```
 
@@ -608,40 +597,44 @@ class C {
 
 ```ts
 class Base {
-    set data(value: string) {
-        console.log("data changed to " + value);
-    }
+  set data(value: string) {
+    console.log('data changed to ' + value);
+  }
 }
 
 class Derived extends Base {
-    // 当启用 'useDefineForClassFields' 时
-    // 不再触发 'console.log'
-    data = 10;
+  // 当启用 'useDefineForClassFields' 时
+  // 不再触发 'console.log'
+  data = 10;
 }
 ```
 
 其次，基类中的属性设定也将不起作用。
 
 ```ts
-interface Animal { animalStuff: any }
-interface Dog extends Animal { dogStuff: any }
+interface Animal {
+  animalStuff: any;
+}
+interface Dog extends Animal {
+  dogStuff: any;
+}
 
 class AnimalHouse {
-    resident: Animal;
-    constructor(animal: Animal) {
-        this.resident = animal;
-    }
+  resident: Animal;
+  constructor(animal: Animal) {
+    this.resident = animal;
+  }
 }
 
 class DogHouse extends AnimalHouse {
-    // 当启用 'useDefineForClassFields' 时
-    // 调用 'super()' 后
-    // 'resident' 只会被初始化成 'undefined'！
-    resident: Dog;
+  // 当启用 'useDefineForClassFields' 时
+  // 调用 'super()' 后
+  // 'resident' 只会被初始化成 'undefined'！
+  resident: Dog;
 
-    constructor(dog: Dog) {
-        super(dog);
-    }
+  constructor(dog: Dog) {
+    super(dog);
+  }
 }
 ```
 
@@ -653,40 +646,44 @@ class DogHouse extends AnimalHouse {
 
 ```ts
 class Base {
-    set data(value: string) {
-        console.log("data changed to " + value);
-    }
+  set data(value: string) {
+    console.log('data changed to ' + value);
+  }
 }
 
 class Derived extends Base {
-    constructor() {
-        data = 10;
-    }
+  constructor() {
+    data = 10;
+  }
 }
 ```
 
 而解决第二个问题，你可以显式地提供一个初始值，或添加一个`declare` 修饰符来表示这个属性不要被编译。
 
 ```ts
-interface Animal { animalStuff: any }
-interface Dog extends Animal { dogStuff: any }
+interface Animal {
+  animalStuff: any;
+}
+interface Dog extends Animal {
+  dogStuff: any;
+}
 
 class AnimalHouse {
-    resident: Animal;
-    constructor(animal: Animal) {
-        this.resident = animal;
-    }
+  resident: Animal;
+  constructor(animal: Animal) {
+    this.resident = animal;
+  }
 }
 
 class DogHouse extends AnimalHouse {
-    declare resident: Dog;
-//  ^^^^^^^
-// 'resident' now has a 'declare' modifier,
-// and won't produce any output code.
+  declare resident: Dog;
+  //  ^^^^^^^
+  // 'resident' now has a 'declare' modifier,
+  // and won't produce any output code.
 
-    constructor(dog: Dog) {
-        super(dog);
-    }
+  constructor(dog: Dog) {
+    super(dog);
+  }
 }
 ```
 
@@ -715,23 +712,22 @@ TypeScript 的项目引用功能，为我们提供了一种简单的方法来分
 
 ```ts
 interface User {
-    isAdministrator(): boolean;
-    notify(): void;
-    doNotDisturb?(): boolean;
+  isAdministrator(): boolean;
+  notify(): void;
+  doNotDisturb?(): boolean;
 }
 
 // 之后…
 
 // 有问题的代码，别用！
 function doAdminThing(user: User) {
-    // 糟了！
-    if (user.isAdministrator) {
-        sudo();
-        editTheConfiguration();
-    }
-    else {
-        throw new AccessDeniedError("User is not an admin");
-    }
+  // 糟了！
+  if (user.isAdministrator) {
+    sudo();
+    editTheConfiguration();
+  } else {
+    throw new AccessDeniedError('User is not an admin');
+  }
 }
 ```
 
@@ -752,19 +748,19 @@ function doAdminThing(user: User) {
 
 ```ts
 interface User {
-    isAdministrator(): boolean;
-    notify(): void;
-    doNotDisturb?(): boolean;
+  isAdministrator(): boolean;
+  notify(): void;
+  doNotDisturb?(): boolean;
 }
 
 function issueNotification(user: User) {
-    if (user.doNotDisturb) {
-        // OK，属性是可选的
-    }
-    if (user.notify) {
-        // OK，调用了该函数
-        user.notify();
-    }
+  if (user.doNotDisturb) {
+    // OK，属性是可选的
+  }
+  if (user.notify) {
+    // OK，调用了该函数
+    user.notify();
+  }
 }
 ```
 
@@ -820,17 +816,17 @@ TypeScript 之前有一个 bug，导致允许以下代码结构：
 ```ts
 // ./someOtherModule.ts
 interface SomeType {
-    y: string;
+  y: string;
 }
 
 // ./myModule.ts
-import { SomeType } from "./someOtherModule";
+import { SomeType } from './someOtherModule';
 export interface SomeType {
-    x: number;
+  x: number;
 }
 
 function fn(arg: SomeType) {
-    console.log(arg.x); // Error! 'x' doesn't exist on 'SomeType'
+  console.log(arg.x); // Error! 'x' doesn't exist on 'SomeType'
 }
 ```
 

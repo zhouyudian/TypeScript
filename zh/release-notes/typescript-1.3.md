@@ -2,11 +2,13 @@
 
 ## 受保护的
 
-类里面新的`protected`修饰符作用与其它语言如C++，C\#和Java中的一样。一个类的`protected`成员只在这个类的子类中可见：
+类里面新的`protected`修饰符作用与其它语言如 C++，C\#和 Java 中的一样。一个类的`protected`成员只在这个类的子类中可见：
 
 ```typescript
 class Thing {
-  protected doSomething() { /* ... */ }
+  protected doSomething() {
+    /* ... */
+  }
 }
 
 class MyThing extends Thing {
@@ -39,11 +41,10 @@ console.log(x[0].substr(1)); // OK
 console.log(x[1].substr(1)); // Error, 'number'没有'substr'方法
 ```
 
-注意在TypeScript1.4里，当访问超出已知索引的元素时，会返回联合类型：
+注意在 TypeScript1.4 里，当访问超出已知索引的元素时，会返回联合类型：
 
 ```typescript
 x[3] = 'world'; // OK
 console.log(x[5].toString()); // OK, 'string'和'number'都有toString
 x[6] = true; // Error, boolean不是number或string
 ```
-

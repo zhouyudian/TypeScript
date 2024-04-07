@@ -109,4 +109,3 @@ type ValidationResult =
   | ValidationSuccess
   | ValidationFailure;
 ```
-

@@ -182,4 +182,3 @@ B     C
 ### `outFile`的结构
 
 使用了`outFile`的编译输出结构十分灵活，因为相对路径是无关紧要的。 要注意的是，你通常不需要使用`prepend` - 因为这会改善构建时间并结省I/O。 TypeScript项目本身是一个好的参照 - 我们有一些“library”的工程和一些“endpoint”工程，“endpoint”工程会确保足够小并仅仅导入它们需要的“library”。
-

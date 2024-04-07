@@ -785,4 +785,3 @@ var normal;
 ```
 
 不同于JSDoc类型系统，TypeScript只允许将类型标记为包不包含`null`。 没有明确的`Non-nullable` -- 如果启用了`strictNullChecks`，那么`number`是非`null`的。 如果没有启用，那么`number`是可以为`null`的。
-

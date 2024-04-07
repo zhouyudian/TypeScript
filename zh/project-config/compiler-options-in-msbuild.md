@@ -114,4 +114,3 @@
 ## TypeScriptCompileBlocked
 
 如果你使用其它的构建工具（比如，gulp， grunt等等）并且使用VS做为开发和调试工具，那么在工程里设置`<TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>`。 这样VS只会提供给你编辑的功能，而不会在你按F5的时候去构建。
-

@@ -128,4 +128,3 @@ class D extends B {
     }
 }
 ```
-

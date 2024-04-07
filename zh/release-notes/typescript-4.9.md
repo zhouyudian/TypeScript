@@ -9,10 +9,10 @@ TypeScript 开发者有时会感到进退两难：既想要确保表达式能够
 ```ts
 // 每个属性可能是 string 或 RGB 元组。
 const palette = {
-    red: [255, 0, 0],
-    green: "#00ff00",
-    bleu: [0, 0, 255]
-//  ^^^^ 拼写错误
+  red: [255, 0, 0],
+  green: '#00ff00',
+  bleu: [0, 0, 255],
+  //  ^^^^ 拼写错误
 };
 
 // 我们想要在 'red' 上调用数组的方法
@@ -27,15 +27,15 @@ const greenNormalized = palette.green.toUpperCase();
 但同时我们也失去了属性各自的信息。
 
 ```ts
-type Colors = "red" | "green" | "blue";
+type Colors = 'red' | 'green' | 'blue';
 
 type RGB = [red: number, green: number, blue: number];
 
 const palette: Record<Colors, string | RGB> = {
-    red: [255, 0, 0],
-    green: "#00ff00",
-    bleu: [0, 0, 255]
-//  ~~~~ 能够检测到拼写错误
+  red: [255, 0, 0],
+  green: '#00ff00',
+  bleu: [0, 0, 255],
+  //  ~~~~ 能够检测到拼写错误
 };
 
 // 意想不到的错误 - 'palette.red' 可能为 string
@@ -46,15 +46,15 @@ const redComponent = palette.red.at(0);
 例如，可以使用 `satisfies` 来检验 `palette` 的所有属性与 `string | number[]` 是否兼容：
 
 ```ts
-type Colors = "red" | "green" | "blue";
+type Colors = 'red' | 'green' | 'blue';
 
 type RGB = [red: number, green: number, blue: number];
 
 const palette = {
-    red: [255, 0, 0],
-    green: "#00ff00",
-    bleu: [0, 0, 255]
-//  ~~~~ 捕获拼写错误
+  red: [255, 0, 0],
+  green: '#00ff00',
+  bleu: [0, 0, 255],
+  //  ~~~~ 捕获拼写错误
 } satisfies Record<Colors, string | RGB>;
 
 // 依然可以访问这些方法
@@ -66,15 +66,15 @@ const greenNormalized = palette.green.toUpperCase();
 例如，检查一个对象是否包含了某个类型要求的所有的键，并且没有多余的：
 
 ```ts
-type Colors = "red" | "green" | "blue";
+type Colors = 'red' | 'green' | 'blue';
 
 // 确保仅包含 'Colors' 中定义的键
 const favoriteColors = {
-    "red": "yes",
-    "green": false,
-    "blue": "kinda",
-    "platypus": false
-//  ~~~~~~~~~~ 错误 - "platypus" 不在 'Colors' 中
+  red: 'yes',
+  green: false,
+  blue: 'kinda',
+  platypus: false,
+  //  ~~~~~~~~~~ 错误 - "platypus" 不在 'Colors' 中
 } satisfies Record<Colors, unknown>;
 
 // 'red', 'green', and 'blue' 的类型信息保留下来
@@ -88,10 +88,10 @@ const g: boolean = favoriteColors.green;
 type RGB = [red: number, green: number, blue: number];
 
 const palette = {
-    red: [255, 0, 0],
-    green: "#00ff00",
-    blue: [0, 0]
-    //    ~~~~~~ 错误！
+  red: [255, 0, 0],
+  green: '#00ff00',
+  blue: [0, 0],
+  //    ~~~~~~ 错误！
 } satisfies Record<string, string | RGB>;
 
 // 类型信息保留下来
@@ -112,22 +112,22 @@ JavaScript 的 `in` 运算符能够检查对象上是否存在某个属性。
 
 ```ts
 interface RGB {
-    red: number;
-    green: number;
-    blue: number;
+  red: number;
+  green: number;
+  blue: number;
 }
 
 interface HSV {
-    hue: number;
-    saturation: number;
-    value: number;
+  hue: number;
+  saturation: number;
+  value: number;
 }
 
 function setColor(color: RGB | HSV) {
-    if ("hue" in color) {
-        // 'color' 类型为 HSV
-    }
-    // ...
+  if ('hue' in color) {
+    // 'color' 类型为 HSV
+  }
+  // ...
 }
 ```
 
@@ -139,16 +139,16 @@ function setColor(color: RGB | HSV) {
 
 ```ts
 function tryGetPackageName(context) {
-    const packageJSON = context.packageJSON;
-    // Check to see if we have an object.
-    if (packageJSON && typeof packageJSON === "object") {
-        // Check to see if it has a string name property.
-        if ("name" in packageJSON && typeof packageJSON.name === "string") {
-            return packageJSON.name;
-        }
+  const packageJSON = context.packageJSON;
+  // Check to see if we have an object.
+  if (packageJSON && typeof packageJSON === 'object') {
+    // Check to see if it has a string name property.
+    if ('name' in packageJSON && typeof packageJSON.name === 'string') {
+      return packageJSON.name;
     }
+  }
 
-    return undefined;
+  return undefined;
 }
 ```
 
@@ -157,24 +157,24 @@ function tryGetPackageName(context) {
 
 ```ts
 interface Context {
-    packageJSON: unknown;
+  packageJSON: unknown;
 }
 
 function tryGetPackageName(context: Context) {
-    const packageJSON = context.packageJSON;
-    // Check to see if we have an object.
-    if (packageJSON && typeof packageJSON === "object") {
-        // Check to see if it has a string name property.
-        if ("name" in packageJSON && typeof packageJSON.name === "string") {
-        //                                              ~~~~
-        // error! Property 'name' does not exist on type 'object.
-            return packageJSON.name;
-        //                     ~~~~
-        // error! Property 'name' does not exist on type 'object.
-        }
+  const packageJSON = context.packageJSON;
+  // Check to see if we have an object.
+  if (packageJSON && typeof packageJSON === 'object') {
+    // Check to see if it has a string name property.
+    if ('name' in packageJSON && typeof packageJSON.name === 'string') {
+      //                                              ~~~~
+      // error! Property 'name' does not exist on type 'object.
+      return packageJSON.name;
+      //                     ~~~~
+      // error! Property 'name' does not exist on type 'object.
     }
+  }
 
-    return undefined;
+  return undefined;
 }
 ```
 
@@ -190,21 +190,21 @@ TypeScript 4.9 增强了 `in` 运算符的类型细化功能，它能够更好�
 
 ```ts
 interface Context {
-    packageJSON: unknown;
+  packageJSON: unknown;
 }
 
 function tryGetPackageName(context: Context): string | undefined {
-    const packageJSON = context.packageJSON;
-    // Check to see if we have an object.
-    if (packageJSON && typeof packageJSON === "object") {
-        // Check to see if it has a string name property.
-        if ("name" in packageJSON && typeof packageJSON.name === "string") {
-            // Just works!
-            return packageJSON.name;
-        }
+  const packageJSON = context.packageJSON;
+  // Check to see if we have an object.
+  if (packageJSON && typeof packageJSON === 'object') {
+    // Check to see if it has a string name property.
+    if ('name' in packageJSON && typeof packageJSON.name === 'string') {
+      // Just works!
+      return packageJSON.name;
     }
+  }
 
-    return undefined;
+  return undefined;
 }
 ```
 
@@ -220,11 +220,11 @@ TypeScript 4.9 支持了 ECMAScript 即将引入的“自动存取器”功能�
 
 ```ts
 class Person {
-    accessor name: string;
+  accessor name: string;
 
-    constructor(name: string) {
-        this.name = name;
-    }
+  constructor(name: string) {
+    this.name = name;
+  }
 }
 ```
 
@@ -232,18 +232,18 @@ class Person {
 
 ```ts
 class Person {
-    #__name: string;
+  #__name: string;
 
-    get name() {
-        return this.#__name;
-    }
-    set name(value: string) {
-        this.#__name = name;
-    }
+  get name() {
+    return this.#__name;
+  }
+  set name(value: string) {
+    this.#__name = name;
+  }
 
-    constructor(name: string) {
-        this.name = name;
-    }
+  constructor(name: string) {
+    this.name = name;
+  }
 }
 ```
 
@@ -257,36 +257,36 @@ class Person {
 没有值等于 `NaN`，包括 `NaN` 自己！
 
 ```ts
-console.log(NaN == 0)  // false
-console.log(NaN === 0) // false
+console.log(NaN == 0); // false
+console.log(NaN === 0); // false
 
-console.log(NaN == NaN)  // false
-console.log(NaN === NaN) // false
+console.log(NaN == NaN); // false
+console.log(NaN === NaN); // false
 ```
 
 换句话说，任何值都不等于 `NaN`。
 
 ```ts
-console.log(NaN != 0)  // true
-console.log(NaN !== 0) // true
+console.log(NaN != 0); // true
+console.log(NaN !== 0); // true
 
-console.log(NaN != NaN)  // true
-console.log(NaN !== NaN) // true
+console.log(NaN != NaN); // true
+console.log(NaN !== NaN); // true
 ```
 
 从技术上讲，这不是 JavaScript 独有的问题，任何使用 IEEE-754 浮点数的语言都有一样的问题；
 但是 JavaScript 中主要的数值类型为浮点数，并且解析数值时经常会得到 `NaN`。
-因此，检查 `NaN` 是很常见的操作，正确的方法是使用 `Number.isNaN` 函数 - 
+因此，检查 `NaN` 是很常见的操作，正确的方法是使用 `Number.isNaN` 函数 -
 但像上文提到的，很多人可能不小心地使用了 `someValue === NaN` 来进行检查。
 
 现在，如果 TypeScript 发现直接比较 `NaN` 会报错，并提示使用 `Number.isNaN`。
 
 ```ts
 function validate(someValue: number) {
-    return someValue !== NaN;
-    //     ~~~~~~~~~~~~~~~~~
-    // error: This condition will always return 'true'.
-    //        Did you mean '!Number.isNaN(someValue)'?
+  return someValue !== NaN;
+  //     ~~~~~~~~~~~~~~~~~
+  // error: This condition will always return 'true'.
+  //        Did you mean '!Number.isNaN(someValue)'?
 }
 ```
 
@@ -333,8 +333,8 @@ VS Code 支持了很多[远程开发](https://marketplace.visualstudio.com/searc
 拿下面的代码举例：
 
 ```ts
-import { Zebra, Moose, HoneyBadger } from "./zoo";
-import { foo, bar } from "./helper";
+import { Zebra, Moose, HoneyBadger } from './zoo';
+import { foo, bar } from './helper';
 
 let x: Moose | HoneyBadger = foo();
 ```
@@ -343,8 +343,8 @@ let x: Moose | HoneyBadger = foo();
 因此会将上面的代码重写为：
 
 ```ts
-import { foo } from "./helper";
-import { HoneyBadger, Moose } from "./zoo";
+import { foo } from './helper';
+import { HoneyBadger, Moose } from './zoo';
 
 let x: Moose | HoneyBadger = foo();
 ```
@@ -352,8 +352,8 @@ let x: Moose | HoneyBadger = foo();
 在 TypeScript 4.3 中，引入了“排序导入语句”命令，它仅排序导入语句但不进行删除，因此会将上例代码重写为：
 
 ```ts
-import { bar, foo } from "./helper";
-import { HoneyBadger, Moose, Zebra } from "./zoo";
+import { bar, foo } from './helper';
+import { HoneyBadger, Moose, Zebra } from './zoo';
 
 let x: Moose | HoneyBadger = foo();
 ```
@@ -364,8 +364,8 @@ TypeScript 4.9 添加了另一半功能，提供了“移除未使用的导入�
 TypeScript 会移除未使用的导入命名和语句，但是不能改变当前的排序。
 
 ```ts
-import { Moose, HoneyBadger } from "./zoo";
-import { foo } from "./helper";
+import { Moose, HoneyBadger } from './zoo';
+import { foo } from './helper';
 
 let x: Moose | HoneyBadger = foo();
 ```
@@ -403,7 +403,7 @@ TypeScript 进行了一些较小的但是能觉察到的性能优化。
 
 ```ts
 interface Zoo<T extends Animal> {
-    // ...
+  // ...
 }
 
 type MakeZoo<A> = A extends Animal ? Zoo<A> : never;

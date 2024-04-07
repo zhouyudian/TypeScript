@@ -45,9 +45,11 @@
 
 ```typescript
 function sayHello() {
-    const compiler = (document.getElementById("compiler") as HTMLInputElement).value;
-    const framework = (document.getElementById("framework") as HTMLInputElement).value;
-    return `Hello from ${compiler} and ${framework}!`;
+  const compiler = (document.getElementById('compiler') as HTMLInputElement)
+    .value;
+  const framework = (document.getElementById('framework') as HTMLInputElement)
+    .value;
+  return `Hello from ${compiler} and ${framework}!`;
 }
 ```
 
@@ -82,7 +84,7 @@ function sayHello() {
 3. 显式列出了 `"files"` 而不是依据 `"excludes"`选项。
 4. 设置 `"compileOnSave": true`。
 
-当你写新代码时，设置 `"noImplicitAny"` 选项是个好主意 — 这可以确保你不会错写任何新的类型。 设置 `"compileOnSave"` 选项可以确保你在运行web程序前自动编译保存变更后的代码。 更多信息请参见 [the tsconfig.json documentation](../project-config/tsconfig.json.md)。
+当你写新代码时，设置 `"noImplicitAny"` 选项是个好主意 — 这可以确保你不会错写任何新的类型。 设置 `"compileOnSave"` 选项可以确保你在运行 web 程序前自动编译保存变更后的代码。 更多信息请参见 [the tsconfig.json documentation](../project-config/tsconfig.json.md)。
 
 ### 在视图中调用脚本
 
@@ -116,11 +118,11 @@ function sayHello() {
 1. 在 Edge 浏览器中, 按 F12 键并选择 **Debugger** 标签页。
 2. 展开 localhost 列表, 选择 src/app.ts
 3. 在 `return` 那一行上打一个断点。
-4. 在输入框中键入一些内容，确认TypeScript代码命中断点，观察它是否能正确地工作。
+4. 在输入框中键入一些内容，确认 TypeScript 代码命中断点，观察它是否能正确地工作。
 
 ![Demo paused on breakpoint](../assets/images/tutorials/aspnet/paused-demo.png)
 
-这就是你需要知道的在ASP.NET中使用TypeScript的基本知识了。接下来，我们引入Angular，写一个简单的Angular程序示例。
+这就是你需要知道的在 ASP.NET 中使用 TypeScript 的基本知识了。接下来，我们引入 Angular，写一个简单的 Angular 程序示例。
 
 ## 添加 Angular 2
 
@@ -129,7 +131,7 @@ function sayHello() {
 1. 安装 [PackageInstaller](https://github.com/madskristensen/PackageInstaller)。
 2. 用 PackageInstaller 来安装 Angular 2， systemjs 和 Typings。
 
-   在project上右击, 选择 **Quick Install Package**。
+   在 project 上右击, 选择 **Quick Install Package**。
 
    ![Use PackageInstaller to install angular2](../assets/images/tutorials/aspnet/packageinstaller-angular2.png) ![Use PackageInstaller to install systemjs](../assets/images/tutorials/aspnet/packageinstaller-systemjs.png) ![Use PackageInstaller to install Typings](../assets/images/tutorials/aspnet/packageinstaller-typings.png)
 
@@ -186,18 +188,18 @@ function sayHello() {
 首先，将 `app.ts` 改成：
 
 ```typescript
-import {Component} from "angular2/core"
-import {MyModel} from "./model"
+import { Component } from 'angular2/core';
+import { MyModel } from './model';
 
 @Component({
-    selector: `my-app`,
-    template: `<div>Hello from {{getCompiler()}}</div>`
+  selector: `my-app`,
+  template: `<div>Hello from {{ getCompiler() }}</div>`,
 })
 class MyApp {
-    model = new MyModel();
-    getCompiler() {
-        return this.model.compiler;
-    }
+  model = new MyModel();
+  getCompiler() {
+    return this.model.compiler;
+  }
 }
 ```
 
@@ -205,15 +207,15 @@ class MyApp {
 
 ```typescript
 export class MyModel {
-    compiler = "TypeScript";
+  compiler = 'TypeScript';
 }
 ```
 
 再在 `src` 中添加 `main.ts`：
 
 ```typescript
-import {bootstrap} from "angular2/platform/browser";
-import {MyApp} from "./app";
+import { bootstrap } from 'angular2/platform/browser';
+import { MyApp } from './app';
 bootstrap(MyApp);
 ```
 
@@ -242,4 +244,3 @@ bootstrap(MyApp);
 ```
 
 这里加载了此应用。 运行 ASP.NET 应用，你应该能看到一个 div 显示 "Loading..." 紧接着更新成显示 "Hello from TypeScript"。
-

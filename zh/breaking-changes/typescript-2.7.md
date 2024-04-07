@@ -12,7 +12,7 @@ var triple: [number, number, number] = [1, 2, 3];
 pair = triple;
 ```
 
-但是，这_是_一个错误：
+但是，这*是*一个错误：
 
 ```typescript
 triple = pair;
@@ -29,7 +29,7 @@ for (const n of numbers) {
 }
 ```
 
-对此最好的解决方法是创建扩展Array的自己的类型：
+对此最好的解决方法是创建扩展 Array 的自己的类型：
 
 ```typescript
 interface Struct extends Array<string | number> {
@@ -42,9 +42,9 @@ for (const n of numbers) {
 }
 ```
 
-## 在`allowSyntheticDefaultImports`下，对于TS和JS文件来说默认导入的类型合成不常见
+## 在`allowSyntheticDefaultImports`下，对于 TS 和 JS 文件来说默认导入的类型合成不常见
 
-在过去，我们在类型系统中合成一个默认导入，用于TS或JS文件，如下所示：
+在过去，我们在类型系统中合成一个默认导入，用于 TS 或 JS 文件，如下所示：
 
 ```typescript
 export const foo = 12;
@@ -54,31 +54,30 @@ export const foo = 12;
 
 ## 更严格地检查索引访问泛型类型约束
 
-以前，仅当类型具有索引签名时才计算索引访问类型的约束，否则它是`any`。这样就可以取消选中无效赋值。在TS 2.7.1中，编译器在这里有点聪明，并且会将约束计算为此处所有可能属性的并集。
+以前，仅当类型具有索引签名时才计算索引访问类型的约束，否则它是`any`。这样就可以取消选中无效赋值。在 TS 2.7.1 中，编译器在这里有点聪明，并且会将约束计算为此处所有可能属性的并集。
 
 ```typescript
 interface O {
-    foo?: string;
+  foo?: string;
 }
 
 function fails<K extends keyof O>(o: O, k: K) {
-    var s: string = o[k]; // Previously allowed, now an error
-                          // string | undefined is not assignable to a string
+  var s: string = o[k]; // Previously allowed, now an error
+  // string | undefined is not assignable to a string
 }
 ```
 
 ## `in`表达式被视为类型保护
 
-对于`n in x`表达式，其中`n`是字符串文字或字符串文字类型而`x`是联合类型，"true"分支缩小为具有可选或必需属性`n`的类型，并且 "false"分支缩小为具有可选或缺少属性`n`的类型。 如果声明类型始终具有属性`n`，则可能导致在false分支中将变量的类型缩小为`never`的情况。
+对于`n in x`表达式，其中`n`是字符串文字或字符串文字类型而`x`是联合类型，"true"分支缩小为具有可选或必需属性`n`的类型，并且 "false"分支缩小为具有可选或缺少属性`n`的类型。 如果声明类型始终具有属性`n`，则可能导致在 false 分支中将变量的类型缩小为`never`的情况。
 
 ```typescript
 var x: { foo: number };
 
-if ("foo" in x) {
-    x; // { foo: number }
-}
-else {
-    x; // never
+if ('foo' in x) {
+  x; // { foo: number }
+} else {
+  x; // never
 }
 ```
 
@@ -87,12 +86,10 @@ else {
 以前在结构上相同的类在条件或`||`运算符中被简化为最佳公共类型。现在这些类以联合类型维护，以便更准确地检查`instanceof`运算符。
 
 ```typescript
-class Animal {
-
-}
+class Animal {}
 
 class Dog {
-    park() { }
+  park() {}
 }
 
 var a = Math.random() ? new Animal() : new Dog();
@@ -104,14 +101,11 @@ var a = Math.random() ? new Animal() : new Dog();
 `CustomEvent`现在有一个`details`属性类型的类型参数。如果要从中扩展，则需要指定其他类型参数。
 
 ```typescript
-class MyCustomEvent extends CustomEvent {
-}
+class MyCustomEvent extends CustomEvent {}
 ```
 
 应该成为
 
 ```typescript
-class MyCustomEvent extends CustomEvent<any> {
-}
+class MyCustomEvent extends CustomEvent<any> {}
 ```
-

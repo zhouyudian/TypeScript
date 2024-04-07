@@ -6,7 +6,7 @@
 
 ```ts
 $(() => {
-    console.log('hello!');
+  console.log('hello!');
 });
 ```
 
@@ -27,7 +27,7 @@ UMD 代码库与全局代码库很难通过文档来识别。
 
 ```js
 function createGreeting(s) {
-    return 'Hello, ' + s;
+  return 'Hello, ' + s;
 }
 ```
 
@@ -35,22 +35,22 @@ function createGreeting(s) {
 
 ```js
 window.createGreeting = function (s) {
-    return 'Hello, ' + s;
+  return 'Hello, ' + s;
 };
 ```
 
 在阅读全局代码库的代码时，你会看到：
 
--   顶层的`var`语句或`function`声明
--   一个或多个`window.someName`赋值语句
--   假设 DOM 相关的原始值`document`或`window`存在
+- 顶层的`var`语句或`function`声明
+- 一个或多个`window.someName`赋值语句
+- 假设 DOM 相关的原始值`document`或`window`存在
 
 你不会看到：
 
--   检查或使用了模块加载器，如`require`或`define`
--   CommonJS/Node.js 风格的导入语句，如`var fs = require("fs");`
--   `define(...)`调用
--   描述`require`或导入代码库的文档
+- 检查或使用了模块加载器，如`require`或`define`
+- CommonJS/Node.js 风格的导入语句，如`var fs = require("fs");`
+- `define(...)`调用
+- 描述`require`或导入代码库的文档
 
 ## 全局代码库的示例
 
@@ -81,9 +81,9 @@ declare function myLib(a: number): number;
  *~ delete this declaration and add types inside the namespace below.
  */
 interface myLib {
-    name: string;
-    length: number;
-    extras?: string[];
+  name: string;
+  length: number;
+  extras?: string[];
 }
 
 /*~ If your library has properties exposed on a global variable,
@@ -91,37 +91,37 @@ interface myLib {
  *~ You should also place types (interfaces and type alias) here.
  */
 declare namespace myLib {
-    //~ We can write 'myLib.timeout = 50;'
-    let timeout: number;
+  //~ We can write 'myLib.timeout = 50;'
+  let timeout: number;
 
-    //~ We can access 'myLib.version', but not change it
-    const version: string;
+  //~ We can access 'myLib.version', but not change it
+  const version: string;
 
-    //~ There's some class we can create via 'let c = new myLib.Cat(42)'
-    //~ Or reference e.g. 'function f(c: myLib.Cat) { ... }
-    class Cat {
-        constructor(n: number);
+  //~ There's some class we can create via 'let c = new myLib.Cat(42)'
+  //~ Or reference e.g. 'function f(c: myLib.Cat) { ... }
+  class Cat {
+    constructor(n: number);
 
-        //~ We can read 'c.age' from a 'Cat' instance
-        readonly age: number;
+    //~ We can read 'c.age' from a 'Cat' instance
+    readonly age: number;
 
-        //~ We can invoke 'c.purr()' from a 'Cat' instance
-        purr(): void;
-    }
+    //~ We can invoke 'c.purr()' from a 'Cat' instance
+    purr(): void;
+  }
 
-    //~ We can declare a variable as
-    //~   'var s: myLib.CatSettings = { weight: 5, name: "Maru" };'
-    interface CatSettings {
-        weight: number;
-        name: string;
-        tailLength?: number;
-    }
+  //~ We can declare a variable as
+  //~   'var s: myLib.CatSettings = { weight: 5, name: "Maru" };'
+  interface CatSettings {
+    weight: number;
+    name: string;
+    tailLength?: number;
+  }
 
-    //~ We can write 'const v: myLib.VetID = 42;'
-    //~  or 'const v: myLib.VetID = "bob";'
-    type VetID = string | number;
+  //~ We can write 'const v: myLib.VetID = 42;'
+  //~  or 'const v: myLib.VetID = "bob";'
+  type VetID = string | number;
 
-    //~ We can invoke 'myLib.checkCat(c)' or 'myLib.checkCat(c, v);'
-    function checkCat(c: Cat, s?: VetID);
+  //~ We can invoke 'myLib.checkCat(c)' or 'myLib.checkCat(c, v);'
+  function checkCat(c: Cat, s?: VetID);
 }
 ```

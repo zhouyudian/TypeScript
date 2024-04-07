@@ -35,7 +35,7 @@ let obj: any = { x: 0 };
 obj.foo();
 obj();
 obj.bar = 100;
-obj = "hello";
+obj = 'hello';
 const n: number = obj;
 ```
 
@@ -52,7 +52,7 @@ const n: number = obj;
 使用 `const`、`var` 或 `let` 声明变量时，你可以选择性地添加类型注解来显式指定变量的类型：
 
 ```ts twoslash
-let myName: string = "Alice";
+let myName: string = 'Alice';
 //        ^^^^^^^^ 类型注解
 ```
 
@@ -63,7 +63,7 @@ let myName: string = "Alice";
 
 ```ts twoslash
 // 不需要类型注解——“myName”推断为 “string” 类型
-let myName = "Alice";
+let myName = 'Alice';
 ```
 
 在大多数情况下，你不需要学习推断规则。如果你刚开始使用，尝试少使用一些类型注解——实际上仅需要了解少量的类型注解，就能让 TypeScript 完全理解代码的含义。
@@ -80,7 +80,7 @@ let myName = "Alice";
 // 参数类型注解
 function greet(name: string) {
   //                 ^^^^^^^^
-  console.log("你好，" + name.toUpperCase() + "！！");
+  console.log('你好，' + name.toUpperCase() + '！！');
 }
 ```
 
@@ -118,7 +118,7 @@ function getFavoriteNumber(): number {
 ```ts twoslash
 // @errors: 2551
 // 这里没有类型注解，但 TypeScript 可以发现错误
-const names = ["Alice", "Bob", "Eve"];
+const names = ['Alice', 'Bob', 'Eve'];
 
 // 函数的上下文类型推断
 names.forEach(function (s) {
@@ -126,7 +126,7 @@ names.forEach(function (s) {
 });
 
 // 箭头函数也适用上下文类型推断
-names.forEach((s) => {
+names.forEach(s => {
   console.log(s.toUppercase());
 });
 ```
@@ -145,8 +145,8 @@ names.forEach((s) => {
 // 参数的类型注解是对象类型
 function printCoord(pt: { x: number; y: number }) {
   //                      ^^^^^^^^^^^^^^^^^^^^^^^^
-  console.log("坐标的 x 值是 " + pt.x);
-  console.log("坐标的 y 值是 " + pt.y);
+  console.log('坐标的 x 值是 ' + pt.x);
+  console.log('坐标的 y 值是 ' + pt.y);
 }
 printCoord({ x: 3, y: 7 });
 ```
@@ -164,8 +164,8 @@ function printName(obj: { first: string; last?: string }) {
   // ...
 }
 // 都是有效的
-printName({ first: "Bob" });
-printName({ first: "Alice", last: "Alisson" });
+printName({ first: 'Bob' });
+printName({ first: 'Alice', last: 'Alisson' });
 ```
 
 在 JavaScript 中，如果访问一个不存在的属性，你会得到 `undefined` 而不是运行时错误。因此，如果你*读取*的是一个可选属性的话，那么在使用它之前，你需要检查其是否为 `undefined`。
@@ -191,19 +191,19 @@ TypeScript 的类型系统允许你使用各种运算符从现有类型构建新
 
 ### 定义联合类型
 
-*联合*（Union）类型是组合类型的一种方式。联合类型是由两个或更多其他类型形成的类型，表示值可以是这些类型中的*任意一个*。我们将每个类型都称为联合的*成员*。
+_联合_（Union）类型是组合类型的一种方式。联合类型是由两个或更多其他类型形成的类型，表示值可以是这些类型中的*任意一个*。我们将每个类型都称为联合的*成员*。
 
 以下是可以操作字符串或数字的函数：
 
 ```ts twoslash
 // @errors: 2345
 function printId(id: number | string) {
-  console.log("你的 ID 是：" + id);
+  console.log('你的 ID 是：' + id);
 }
 // 正常运行
 printId(101);
 // 正常运行
-printId("202");
+printId('202');
 // 错误
 printId({ myID: 22342 });
 ```
@@ -227,7 +227,7 @@ function printId(id: number | string) {
 
 ```ts twoslash
 function printId(id: number | string) {
-  if (typeof id === "string") {
+  if (typeof id === 'string') {
     // 在这个分支中，id 的类型是 'string'
     console.log(id.toUpperCase());
   } else {
@@ -243,10 +243,10 @@ function printId(id: number | string) {
 function welcomePeople(x: string[] | string) {
   if (Array.isArray(x)) {
     // 在这里：'x' 的类型是 'string[]'
-    console.log("你好，" + x.join(" 和 "));
+    console.log('你好，' + x.join(' 和 '));
   } else {
     // 在这里：'x' 的类型是 'string'
-    console.log("欢迎，孤独旅行者 " + x);
+    console.log('欢迎，孤独旅行者 ' + x);
   }
 }
 ```
@@ -282,8 +282,8 @@ type Point = {
 
 // 与前面的示例完全相同
 function printCoord(pt: Point) {
-  console.log("x 的坐标值是 " + pt.x);
-  console.log("y 的坐标值是 " + pt.y);
+  console.log('x 的坐标值是 ' + pt.x);
+  console.log('y 的坐标值是 ' + pt.y);
 }
 
 printCoord({ x: 100, y: 100 });
@@ -311,7 +311,7 @@ function sanitizeInput(str: string): UserInputSanitizedString {
 let userInput = sanitizeInput(getInput());
 
 // 仍然可以使用字符串重新赋值
-userInput = "新的输入";
+userInput = '新的输入';
 ```
 
 ## 接口
@@ -325,8 +325,8 @@ interface Point {
 }
 
 function printCoord(pt: Point) {
-  console.log("x 的坐标值是 " + pt.x);
-  console.log("y 的坐标值是 " + pt.y);
+  console.log('x 的坐标值是 ' + pt.x);
+  console.log('y 的坐标值是 ' + pt.y);
 }
 
 printCoord({ x: 100, y: 100 });
@@ -354,7 +354,7 @@ interface Animal {
 interface Bear extends Animal {
   honey: boolean
 }<br/>
-const bear = getBear() 
+const bear = getBear()
 bear.name
 bear.honey
         </pre></code>
@@ -365,8 +365,8 @@ bear.honey
 type Animal = {
   name: string
 }<br/>
-type Bear = Animal & { 
-  honey: Boolean 
+type Bear = Animal & {
+  honey: Boolean
 }<br/>
 const bear = getBear();
 bear.name;
@@ -406,7 +406,7 @@ type Window = {
 
 在后面的章节中你会学到更多关于这些概念的知识，所以如果你没有立即理解这些知识，请不要担心。
 
-- 在 TypeScript 4.2 之前，类型别名命名[*可能* 会出现在错误消息中](/play?#code/PTAEGEHsFsAcEsA2BTATqNrLusgzngIYDm+oA7koqIYuYQJ56gCueyoAUCKAC4AWHAHaFcoSADMaQ0PCG80EwgGNkALk6c5C1EtWgAsqOi1QAb06groEbjWg8vVHOKcAvpokshy3vEgyyMr8kEbQJogAFND2YREAlOaW1soBeJAoAHSIkMTRmbbI8e6aPMiZxJmgACqCGKhY6ABGyDnkFFQ0dIzMbBwCwqIccabcYLyQoKjIEmh8kwN8DLAc5PzwwbLMyAAeK77IACYaQSEjUWZWhfYAjABMAMwALA+gbsVjoADqgjKESytQPxCHghAByXigYgBfr8LAsYj8aQMUASbDQcRSExCeCwFiIQh+AKfAYyBiQFgOPyIaikSGLQo0Zj-aazaY+dSaXjLDgAGXgAC9CKhDqAALxJaw2Ib2RzOISuDycLw+ImBYKQflCkWRRD2LXCw6JCxS1JCdJZHJ5RAFIbFJU8ADKC3WzEcnVZaGYE1ABpFnFOmsFhsil2uoHuzwArO9SmAAEIsSFrZB-GgAjjA5gtVN8VCEc1o1C4Q4AGlR2AwO1EsBQoAAbvB-gJ4HhPgB5aDwem-Ph1TCV3AEEirTp4ELtRbTPD4vwKjOfAuioSQHuDXBcnmgACC+eCONFEs73YAPGGZVT5cRyyhiHh7AAON7lsG3vBggB8XGV3l8-nVISOgghxoLq9i7io-AHsayRWGaFrlFauq2rg9qaIGQHwCBqChtKdgRo8TxRjeyB3o+7xAA)，有时代替等效的匿名类型（可能需要也可能不需要）。接口在错误消息中将始终被命名。
+- 在 TypeScript 4.2 之前，类型别名命名[_可能_ 会出现在错误消息中](/play?#code/PTAEGEHsFsAcEsA2BTATqNrLusgzngIYDm+oA7koqIYuYQJ56gCueyoAUCKAC4AWHAHaFcoSADMaQ0PCG80EwgGNkALk6c5C1EtWgAsqOi1QAb06groEbjWg8vVHOKcAvpokshy3vEgyyMr8kEbQJogAFND2YREAlOaW1soBeJAoAHSIkMTRmbbI8e6aPMiZxJmgACqCGKhY6ABGyDnkFFQ0dIzMbBwCwqIccabcYLyQoKjIEmh8kwN8DLAc5PzwwbLMyAAeK77IACYaQSEjUWZWhfYAjABMAMwALA+gbsVjoADqgjKESytQPxCHghAByXigYgBfr8LAsYj8aQMUASbDQcRSExCeCwFiIQh+AKfAYyBiQFgOPyIaikSGLQo0Zj-aazaY+dSaXjLDgAGXgAC9CKhDqAALxJaw2Ib2RzOISuDycLw+ImBYKQflCkWRRD2LXCw6JCxS1JCdJZHJ5RAFIbFJU8ADKC3WzEcnVZaGYE1ABpFnFOmsFhsil2uoHuzwArO9SmAAEIsSFrZB-GgAjjA5gtVN8VCEc1o1C4Q4AGlR2AwO1EsBQoAAbvB-gJ4HhPgB5aDwem-Ph1TCV3AEEirTp4ELtRbTPD4vwKjOfAuioSQHuDXBcnmgACC+eCONFEs73YAPGGZVT5cRyyhiHh7AAON7lsG3vBggB8XGV3l8-nVISOgghxoLq9i7io-AHsayRWGaFrlFauq2rg9qaIGQHwCBqChtKdgRo8TxRjeyB3o+7xAA)，有时代替等效的匿名类型（可能需要也可能不需要）。接口在错误消息中将始终被命名。
 - 类型别名不能参与[声明合并，但接口可以](/play?#code/PTAEEEDtQS0gXApgJwGYEMDGjSfdAIx2UQFoB7AB0UkQBMAoEUfO0Wgd1ADd0AbAK6IAzizp16ALgYM4SNFhwBZdAFtV-UAG8GoPaADmNAcMmhh8ZHAMMAvjLkoM2UCvWad+0ARL0A-GYWVpA29gyY5JAWLJAwGnxmbvGgALzauvpGkCZmAEQAjABMAMwALLkANBl6zABi6DB8okR4Jjg+iPSgABboovDk3jjo5pbW1d6+dGb5djLwAJ7UoABKiJTwjThpnpnGpqPBoTLMAJrkArj4kOTwYmycPOhW6AR8IrDQ8N04wmo4HHQCwYi2Waw2W1S6S8HX8gTGITsQA)。
 - 接口只能用于[声明对象的形状，不能重命名基本类型](/play?#code/PTAEAkFMCdIcgM6gC4HcD2pIA8CGBbABwBtIl0AzUAKBFAFcEBLAOwHMUBPQs0XFgCahWyGBVwBjMrTDJMAshOhMARpD4tQ6FQCtIE5DWoixk9QEEWAeV37kARlABvaqDegAbrmL1IALlAEZGV2agBfampkbgtrWwMAJlAAXmdXdy8ff0Dg1jZwyLoAVWZ2Lh5QVHUJflAlSFxROsY5fFAWAmk6CnRoLGwmILzQQmV8JmQmDzI-SOiKgGV+CaYAL0gBBdyy1KCQ-Pn1AFFplgA5enw1PtSWS+vCsAAVAAtB4QQWOEMKBuYVUiVCYvYQsUTQcRSBDGMGmKSgAAa-VEgiQe2GLgKQA)。
 - 接口名称将[*始终*以其原始形式出现](/play?#code/PTAEGEHsFsAcEsA2BTATqNrLusgzngIYDm+oA7koqIYuYQJ56gCueyoAUCKAC4AWHAHaFcoSADMaQ0PCG80EwgGNkALk6c5C1EtWgAsqOi1QAb06groEbjWg8vVHOKcAvpokshy3vEgyyMr8kEbQJogAFND2YREAlOaW1soBeJAoAHSIkMTRmbbI8e6aPMiZxJmgACqCGKhY6ABGyDnkFFQ0dIzMbBwCwqIccabcYLyQoKjIEmh8kwN8DLAc5PzwwbLMyAAeK77IACYaQSEjUWY2Q-YAjABMAMwALA+gbsVjNXW8yxySoAADaAA0CCaZbPh1XYqXgOIY0ZgmcK0AA0nyaLFhhGY8F4AHJmEJILCWsgZId4NNfIgGFdcIcUTVfgBlZTOWC8T7kAJ42G4eT+GS42QyRaYbCgXAEEguTzeXyCjDBSAAQSE8Ai0Xsl0K9kcziExDeiQs1lAqSE6SyOTy0AKQ2KHk4p1V6s1OuuoHuzwArMagA)在错误消息中，但*只有*在按名称使用时才会出现。
@@ -422,7 +422,7 @@ type Window = {
 在这种情况下，你可以使用*类型断言*来指定更具体的类型：
 
 ```ts twoslash
-const myCanvas = document.getElementById("main_canvas") as HTMLCanvasElement;
+const myCanvas = document.getElementById('main_canvas') as HTMLCanvasElement;
 ```
 
 与类型注解类似，类型断言会在编译时移除，不会影响代码的运行行为。
@@ -430,7 +430,7 @@ const myCanvas = document.getElementById("main_canvas") as HTMLCanvasElement;
 你也可以使用尖括号语法（除非代码在 `.tsx` 文件中），效果是一样的：
 
 ```ts twoslash
-const myCanvas = <HTMLCanvasElement>document.getElementById("main_canvas");
+const myCanvas = <HTMLCanvasElement>document.getElementById('main_canvas');
 ```
 
 > 提醒：由于类型断言在编译时被移除，因此没有与类型断言相关的运行时检查。
@@ -440,7 +440,7 @@ TypeScript 只允许将类型断言为*更具体*或*更不具体*的类型。�
 
 ```ts twoslash
 // @errors: 2352
-const x = "hello" as number;
+const x = 'hello' as number;
 ```
 
 有时这个规则可能过于保守，会禁止一些更复杂的强制转换，尽管这些转换可能是有效的。如果遇到这种情况，你可以使用两个断言，先断言为 `any`（或者后面我们会介绍的 `unknown`），然后再断言为目标类型：
@@ -459,13 +459,13 @@ const a = expr as any as T;
 可以这样想，JavaScript 提供了不同的声明变量的方式。`var` 和 `let` 都允许改变变量中保存的值，而 `const` 则不允许。这体现在 TypeScript 创建字面类型的方式上。
 
 ```ts twoslash
-let changingString = "Hello World";
-changingString = "Olá Mundo";
+let changingString = 'Hello World';
+changingString = 'Olá Mundo';
 // `changingString` 可以表示任意可能的字符串，所以 TypeScript 在类型系统中这样描述它
 changingString;
 // ^?
 
-const constantString = "Hello World";
+const constantString = 'Hello World';
 // `constantString` 只能表示一个可能的字符串，它有字面类型的表示形式
 constantString;
 // ^?
@@ -475,11 +475,11 @@ constantString;
 
 ```ts twoslash
 // @errors: 2322
-let x: "hello" = "hello";
+let x: 'hello' = 'hello';
 // OK
-x = "hello";
+x = 'hello';
 // ...
-x = "howdy";
+x = 'howdy';
 ```
 
 只能是固定一个值的变量并没有多大用处！
@@ -488,11 +488,11 @@ x = "howdy";
 
 ```ts twoslash
 // @errors: 2345
-function printText(s: string, alignment: "left" | "right" | "center") {
+function printText(s: string, alignment: 'left' | 'right' | 'center') {
   // ...
 }
-printText("Hello, world", "left");
-printText("G'day, mate", "centre");
+printText('Hello, world', 'left');
+printText("G'day, mate", 'centre');
 ```
 
 数字字面类型的工作方式相同：
@@ -510,12 +510,12 @@ function compare(a: string, b: string): -1 | 0 | 1 {
 interface Options {
   width: number;
 }
-function configure(x: Options | "auto") {
+function configure(x: Options | 'auto') {
   // ...
 }
 configure({ width: 100 });
-configure("auto");
-configure("automatic");
+configure('auto');
+configure('automatic');
 ```
 
 还有一种字面类型：布尔字面类型。只有两种布尔字面类型，`true` 和 `false`。`boolean` 类型本身实际上只是 `true | false` 的联合类型的别名。
@@ -539,9 +539,9 @@ TypeScript 不会认为将 `1` 赋值给之前为 `0` 的字段是一个错误�
 
 ```ts twoslash
 // @errors: 2345
-declare function handleRequest(url: string, method: "GET" | "POST"): void;
+declare function handleRequest(url: string, method: 'GET' | 'POST'): void;
 // ---cut---
-const req = { url: "https://example.com", method: "GET" };
+const req = { url: 'https://example.com', method: 'GET' };
 handleRequest(req.url, req.method);
 ```
 
@@ -552,12 +552,12 @@ handleRequest(req.url, req.method);
 1. 可以通过在任一位置添加类型断言来改变推断结果：
 
    ```ts twoslash
-   declare function handleRequest(url: string, method: "GET" | "POST"): void;
+   declare function handleRequest(url: string, method: 'GET' | 'POST'): void;
    // ---cut---
    // 改变 1：
-   const req = { url: "https://example.com", method: "GET" as "GET" };
+   const req = { url: 'https://example.com', method: 'GET' as 'GET' };
    // 改变 2：
-   handleRequest(req.url, req.method as "GET");
+   handleRequest(req.url, req.method as 'GET');
    ```
 
    改变 1 的意思是 "我打算让 `req.method` 始终具有字面量类型 `"GET"`"，阻止在之后将 `"GUESS"` 赋值给该字段。
@@ -566,9 +566,9 @@ handleRequest(req.url, req.method);
 2. 可以使用 `as const` 将整个对象转换为字面量类型：
 
    ```ts twoslash
-   declare function handleRequest(url: string, method: "GET" | "POST"): void;
+   declare function handleRequest(url: string, method: 'GET' | 'POST'): void;
    // ---cut---
-   const req = { url: "https://example.com", method: "GET" } as const;
+   const req = { url: 'https://example.com', method: 'GET' } as const;
    handleRequest(req.url, req.method);
    ```
 
@@ -582,18 +582,18 @@ TypeScript 也有两个相应的*类型*，名称相同。这些类型的特性�
 
 ### `strictNullChecks` 关闭
 
-如果 `strictNullChecks` *关闭*，可能为 `null` 或 `undefined` 的值仍然可以正常访问，并且可以将 `null` 和 `undefined` 赋值给任何类型的属性。这类似于没有空值检查的语言（例如 C#、Java）的行为。不检查这些值的缺失往往是错误的主要来源；建议尽可能打开 `strictNullChecks`。
+如果 `strictNullChecks` _关闭_，可能为 `null` 或 `undefined` 的值仍然可以正常访问，并且可以将 `null` 和 `undefined` 赋值给任何类型的属性。这类似于没有空值检查的语言（例如 C#、Java）的行为。不检查这些值的缺失往往是错误的主要来源；建议尽可能打开 `strictNullChecks`。
 
 ### `strictNullChecks` 打开
 
-如果 `strictNullChecks` *打开*，当一个值为 `null` 或 `undefined` 时，你需要在使用该值的方法或属性之前进行检查。就像在使用可选属性之前检查 `undefined` 一样，我们可以使用*缩小类型*来检查可能为 `null` 的值：
+如果 `strictNullChecks` _打开_，当一个值为 `null` 或 `undefined` 时，你需要在使用该值的方法或属性之前进行检查。就像在使用可选属性之前检查 `undefined` 一样，我们可以使用*缩小类型*来检查可能为 `null` 的值：
 
 ```ts twoslash
 function doSomething(x: string | null) {
   if (x === null) {
     // 什么都不做
   } else {
-    console.log("Hello, " + x.toUpperCase());
+    console.log('Hello, ' + x.toUpperCase());
   }
 }
 ```
@@ -641,8 +641,8 @@ JavaScript 中有一个用于通过 `Symbol()` 函数创建全局唯一引用的
 
 ```ts twoslash
 // @errors: 2367
-const firstName = Symbol("name");
-const secondName = Symbol("name");
+const firstName = Symbol('name');
+const secondName = Symbol('name');
 
 if (firstName === secondName) {
   // 永远不会发生

@@ -94,4 +94,3 @@
 
 * 在[`tsconfig.json`](tsconfig.json.md)文件里设置编译器选项。
 * 在[MSBuild工程](compiler-options-in-msbuild.md)里设置编译器选项。
-

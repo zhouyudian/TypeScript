@@ -274,4 +274,3 @@ module.exports = {
 * 安装完成后，Rebuild。
 
 更多详细信息请参考[Package Manager Dialog](http://docs.nuget.org/Consume/Package-Manager-Dialog)和[using nightly builds with NuGet](https://github.com/Microsoft/TypeScript/wiki/Nightly-drops#using-nuget-with-msbuild)
-

@@ -8,22 +8,22 @@
 
 ```js
 class Thing {
-    #size = 0;
+  #size = 0;
 
-    get size() {
-        return this.#size;
+  get size() {
+    return this.#size;
+  }
+  set size(value) {
+    let num = Number(value);
+
+    // Don't allow NaN and stuff.
+    if (!Number.isFinite(num)) {
+      this.#size = 0;
+      return;
     }
-    set size(value) {
-        let num = Number(value);
 
-        // Don't allow NaN and stuff.
-        if (!Number.isFinite(num)) {
-            this.#size = 0;
-            return;
-        }
-
-        this.#size = num;
-    }
+    this.#size = num;
+  }
 }
 ```
 
@@ -35,10 +35,10 @@ class Thing {
 
 ```ts
 class Thing {
-    // ...
-    get size(): unknown {
-        return this.#size;
-    }
+  // ...
+  get size(): unknown {
+    return this.#size;
+  }
 }
 ```
 
@@ -49,23 +49,23 @@ class Thing {
 
 ```ts
 class Thing {
-    #size = 0;
+  #size = 0;
 
-    get size(): number {
-        return this.#size;
+  get size(): number {
+    return this.#size;
+  }
+
+  set size(value: string | number | boolean) {
+    let num = Number(value);
+
+    // Don't allow NaN and stuff.
+    if (!Number.isFinite(num)) {
+      this.#size = 0;
+      return;
     }
 
-    set size(value: string | number | boolean) {
-        let num = Number(value);
-
-        // Don't allow NaN and stuff.
-        if (!Number.isFinite(num)) {
-            this.#size = 0;
-            return;
-        }
-
-        this.#size = num;
-    }
+    this.#size = num;
+  }
 }
 ```
 
@@ -74,23 +74,23 @@ class Thing {
 
 ```ts
 class Thing {
-    #size = 0;
+  #size = 0;
 
-    get size(): number {
-        return this.#size;
+  get size(): number {
+    return this.#size;
+  }
+
+  set size(value: string | number | boolean) {
+    let num = Number(value);
+
+    // Don't allow NaN and stuff.
+    if (!Number.isFinite(num)) {
+      this.#size = 0;
+      return;
     }
 
-    set size(value: string | number | boolean) {
-        let num = Number(value);
-
-        // Don't allow NaN and stuff.
-        if (!Number.isFinite(num)) {
-            this.#size = 0;
-            return;
-        }
-
-        this.#size = num;
-    }
+    this.#size = num;
+  }
 }
 // ---cut---
 let thing = new Thing();
@@ -112,23 +112,23 @@ let mySize: number = thing.size;
 
 ```ts
 function makeThing(): Thing {
-    let size = 0;
-    return {
-        get size(): number {
-            return size;
-        },
-        set size(value: string | number | boolean) {
-            let num = Number(value);
+  let size = 0;
+  return {
+    get size(): number {
+      return size;
+    },
+    set size(value: string | number | boolean) {
+      let num = Number(value);
 
-            // Don't allow NaN and stuff.
-            if (!Number.isFinite(num)) {
-                size = 0;
-                return;
-            }
+      // Don't allow NaN and stuff.
+      if (!Number.isFinite(num)) {
+        size = 0;
+        return;
+      }
 
-            size = num;
-        },
-    };
+      size = num;
+    },
+  };
 }
 ```
 
@@ -137,8 +137,8 @@ function makeThing(): Thing {
 ```ts
 // Now valid!
 interface Thing {
-    get size(): number;
-    set size(value: number | string | boolean);
+  get size(): number;
+  set size(value: number | string | boolean);
 }
 ```
 
@@ -157,21 +157,21 @@ interface Thing {
 
 ```ts
 class SomeComponent {
-    show() {
-        // ...
-    }
-    hide() {
-        // ...
-    }
+  show() {
+    // ...
+  }
+  hide() {
+    // ...
+  }
 }
 
 class SpecializedComponent extends SomeComponent {
-    show() {
-        // ...
-    }
-    hide() {
-        // ...
-    }
+  show() {
+    // ...
+  }
+  hide() {
+    // ...
+  }
 }
 ```
 
@@ -209,12 +209,12 @@ _哦，不！_
 
 ```ts
 class SpecializedComponent extends SomeComponent {
-    override show() {
-        // ...
-    }
-    override hide() {
-        // ...
-    }
+  override show() {
+    // ...
+  }
+  override hide() {
+    // ...
+  }
 }
 ```
 
@@ -222,15 +222,15 @@ class SpecializedComponent extends SomeComponent {
 
 ```ts
 class SomeComponent {
-    setVisible(value: boolean) {
-        // ...
-    }
+  setVisible(value: boolean) {
+    // ...
+  }
 }
 class SpecializedComponent extends SomeComponent {
-    override show() {
-        //   ~~~~
-        //   错误
-    }
+  override show() {
+    //   ~~~~
+    //   错误
+  }
 }
 ```
 
@@ -240,17 +240,17 @@ class SpecializedComponent extends SomeComponent {
 
 ```ts
 class Base {
-    someHelperMethod() {
-        // ...
-    }
+  someHelperMethod() {
+    // ...
+  }
 }
 
 class Derived extends Base {
-    // 不是真正想覆写基类中的方法，
-    // 只是想编写一个本地的帮助方法
-    someHelperMethod() {
-        // ...
-    }
+  // 不是真正想覆写基类中的方法，
+  // 只是想编写一个本地的帮助方法
+  someHelperMethod() {
+    // ...
+  }
 }
 ```
 
@@ -291,8 +291,8 @@ s1 = s2;
 
 ```ts
 function bar(s: string): `hello ${string}` {
-    // 之前会产生错误，但现在没有问题
-    return `hello ${s}`;
+  // 之前会产生错误，但现在没有问题
+  return `hello ${s}`;
 }
 ```
 
@@ -350,13 +350,13 @@ s1 = s6;
 declare function foo<V extends string>(arg: `*${V}*`): V;
 
 function test<T extends string>(s: string, n: number, b: boolean, t: T) {
-    let x1 = foo('*hello*'); // "hello"
-    let x2 = foo('**hello**'); // "*hello*"
-    let x3 = foo(`*${s}*` as const); // string
-    let x4 = foo(`*${n}*` as const); // `${number}`
-    let x5 = foo(`*${b}*` as const); // "true" | "false"
-    let x6 = foo(`*${t}*` as const); // `${T}`
-    let x7 = foo(`**${s}**` as const); // `*${string}*`
+  let x1 = foo('*hello*'); // "hello"
+  let x2 = foo('**hello**'); // "*hello*"
+  let x3 = foo(`*${s}*` as const); // string
+  let x4 = foo(`*${n}*` as const); // `${number}`
+  let x5 = foo(`*${b}*` as const); // "true" | "false"
+  let x6 = foo(`*${t}*` as const); // `${T}`
+  let x7 = foo(`**${s}**` as const); // `*${string}*`
 }
 ```
 
@@ -369,20 +369,20 @@ TypeScript 4.3 扩大了在类中可被声明为 `#private` `#names` 的成员�
 
 ```ts
 class Foo {
-    #someMethod() {
-        //...
-    }
+  #someMethod() {
+    //...
+  }
 
-    get #someValue() {
-        return 100;
-    }
+  get #someValue() {
+    return 100;
+  }
 
-    publicMethod() {
-        // 可以使用
-        // 可以在类内部访问私有命名成员。
-        this.#someMethod();
-        return this.#someValue;
-    }
+  publicMethod() {
+    // 可以使用
+    // 可以在类内部访问私有命名成员。
+    this.#someMethod();
+    return this.#someValue;
+  }
 }
 
 new Foo().#someMethod();
@@ -400,9 +400,9 @@ new Foo().#someValue;
 
 ```ts
 class Foo {
-    static #someMethod() {
-        // ...
-    }
+  static #someMethod() {
+    // ...
+  }
 }
 
 Foo.#someMethod();
@@ -420,9 +420,9 @@ Foo.#someMethod();
 
 ```ts
 abstract class C {
-    constructor(a: string, b: number) {
-        // ...
-    }
+  constructor(a: string, b: number) {
+    // ...
+  }
 }
 
 // 类型为 '[a: string, b: number]'
@@ -433,7 +433,7 @@ type CParams = ConstructorParameters<typeof C>;
 
 ```ts
 type MyConstructorOf<T> = {
-    new (...args: any[]): T;
+  new (...args: any[]): T;
 };
 
 // 或使用简写形式：
@@ -636,6 +636,7 @@ Foo['whatever'] = 42;
 // 类型为 'string | number | undefined'
 let x = Foo['something'];
 ```
+
 类静态类型上的索引签名检查规则与类实例类型上的索引签名的检查规则是相同的，即每个静态属性必须与静态索引签名类型兼容。
 
 ```ts

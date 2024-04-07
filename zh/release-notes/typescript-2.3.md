@@ -6,7 +6,7 @@ _首先是一些 ES2016 的术语：_
 
 ### 迭代器
 
-[ES2015引入了`Iterator`（迭代器）](http://www.ecma-international.org/ecma-262/6.0/#sec-iteration)，它表示提供了 next，return，以及 throw 三个方法的对象，具体满足以下接口：
+[ES2015 引入了`Iterator`（迭代器）](http://www.ecma-international.org/ecma-262/6.0/#sec-iteration)，它表示提供了 next，return，以及 throw 三个方法的对象，具体满足以下接口：
 
 ```typescript
 interface Iterator<T> {
@@ -16,13 +16,13 @@ interface Iterator<T> {
 }
 ```
 
-这种迭代器对于迭代可用的值时很有用，比如数组的元素或者Map的键。如果一个对象有一个返回`Iterator`对象的`Symbol.iterator`方法，那么我们说这个对象是“可迭代的”。
+这种迭代器对于迭代可用的值时很有用，比如数组的元素或者 Map 的键。如果一个对象有一个返回`Iterator`对象的`Symbol.iterator`方法，那么我们说这个对象是“可迭代的”。
 
-迭代器协议还定义了一些ES2015中的特性像`for..of`和展开运算符以及解构赋值中的数组的剩余运算的操作对象。
+迭代器协议还定义了一些 ES2015 中的特性像`for..of`和展开运算符以及解构赋值中的数组的剩余运算的操作对象。
 
 ### 生成器
 
-[ES2015也引入了"生成器"](http://www.ecma-international.org/ecma-262/6.0/#sec-generatorfunction-objects)，生成器是可以通过`Iterator`接口和`yield`关键字被用来生成部分运算结果的函数。生成器也可以在内部通过`yield*`代理对与其他可迭代对象的调用。举例来说：
+[ES2015 也引入了"生成器"](http://www.ecma-international.org/ecma-262/6.0/#sec-generatorfunction-objects)，生成器是可以通过`Iterator`接口和`yield`关键字被用来生成部分运算结果的函数。生成器也可以在内部通过`yield*`代理对与其他可迭代对象的调用。举例来说：
 
 ```typescript
 function* f() {
@@ -33,7 +33,7 @@ function* f() {
 
 ### 新的`--downlevelIteration`编译选项
 
-之前迭代器只在编译目标为 ES6/ES2015 或者更新版本时可用。此外，设计迭代器协议的结构，比如`for..of`，如果编译目标低于ES6/ES2015，则只能在操作数组时被支持。
+之前迭代器只在编译目标为 ES6/ES2015 或者更新版本时可用。此外，设计迭代器协议的结构，比如`for..of`，如果编译目标低于 ES6/ES2015，则只能在操作数组时被支持。
 
 TypeScript 2.3 在 ES3 和 ES5 为编译目标时由`--downlevelIteration`编译选项增加了完整的对生成器和迭代器协议的支持。
 
@@ -70,23 +70,23 @@ async function* g() {
   yield 1;
   await sleep(100);
   yield* [2, 3];
-  yield* (async function *() {
+  yield* (async function* () {
     await sleep(100);
     yield 4;
   })();
 }
 ```
 
-和生成器一样，异步生成器只能是函数声明，函数表达式，或者类或对象字面量的方法。箭头函数不能作为异步生成器。异步生成器除了一个可用的`Symbol.asyncIterator`引用外 \(原生或三方实现\)，还需要一个可用的全局`Promise`实现（既可以是原生的，也可以是ES2015兼容的实现）。
+和生成器一样，异步生成器只能是函数声明，函数表达式，或者类或对象字面量的方法。箭头函数不能作为异步生成器。异步生成器除了一个可用的`Symbol.asyncIterator`引用外 \(原生或三方实现\)，还需要一个可用的全局`Promise`实现（既可以是原生的，也可以是 ES2015 兼容的实现）。
 
 ### `for-await-of`语句
 
-最后，ES2015引入了`for..of`语句来迭代可迭代对象。相似的，异步迭代提案引入了`for..await..of`语句来迭代可异步迭代的对象。
+最后，ES2015 引入了`for..of`语句来迭代可迭代对象。相似的，异步迭代提案引入了`for..await..of`语句来迭代可异步迭代的对象。
 
 ```typescript
 async function f() {
   for await (const x of g()) {
-     console.log(x);
+    console.log(x);
   }
 }
 ```
@@ -95,9 +95,9 @@ async function f() {
 
 ### 注意事项
 
-* 始终记住我们对于异步迭代器的支持是建立在运行时有`Symbol.asyncIterator`支持的基础上的。你可能需要`Symbol.asyncIterator`的三方实现，虽然对于简单的目的可以仅仅是：`(Symbol as any).asyncIterator = Symbol.asyncIterator || Symbol.for("Symbol.asyncIterator");`
-* 如果你没有声明`AsyncIterator`，还需要在`--lib`选项中加入`esnext`来获取`AsyncIterator`声明。
-* 最后, 如果你的编译目标是ES5或ES3，你还需要设置`--downlevelIterators`编译选项。
+- 始终记住我们对于异步迭代器的支持是建立在运行时有`Symbol.asyncIterator`支持的基础上的。你可能需要`Symbol.asyncIterator`的三方实现，虽然对于简单的目的可以仅仅是：`(Symbol as any).asyncIterator = Symbol.asyncIterator || Symbol.for("Symbol.asyncIterator");`
+- 如果你没有声明`AsyncIterator`，还需要在`--lib`选项中加入`esnext`来获取`AsyncIterator`声明。
+- 最后, 如果你的编译目标是 ES5 或 ES3，你还需要设置`--downlevelIterators`编译选项。
 
 ## 泛型参数默认类型
 
@@ -110,35 +110,41 @@ TypeScript 2.3 增加了对声明泛型参数默认类型的支持。
 ```typescript
 declare function create(): Container<HTMLDivElement, HTMLDivElement[]>;
 declare function create<T extends HTMLElement>(element: T): Container<T, T[]>;
-declare function create<T extends HTMLElement, U extends HTMLElement>(element: T, children: U[]): Container<T, U[]>;
+declare function create<T extends HTMLElement, U extends HTMLElement>(
+  element: T,
+  children: U[]
+): Container<T, U[]>;
 ```
 
 有了泛型参数默认类型，我们可以将定义化简为：
 
 ```typescript
-declare function create<T extends HTMLElement = HTMLDivElement, U = T[]>(element?: T, children?: U): Container<T, U>;
+declare function create<T extends HTMLElement = HTMLDivElement, U = T[]>(
+  element?: T,
+  children?: U
+): Container<T, U>;
 ```
 
 泛型参数的默认类型遵循以下规则：
 
-* 有默认类型的类型参数被认为是可选的。
-* 必选的类型参数不能在可选的类型参数后。
-* 如果类型参数有约束，类型参数的默认类型必须满足这个约束。
-* 当指定类型实参时，你只需要指定必选类型参数的类型实参。 未指定的类型参数会被解析为它们的默认类型。
-* 如果指定了默认类型，且类型推断无法选择一个候选类型，那么将使用默认类型作为推断结果。
-* 一个被现有类或接口合并的类或者接口的声明可以为现有类型参数引入默认类型。
-* 一个被现有类或接口合并的类或者接口的声明可以引入新的类型参数，只要它指定了默认类型。
+- 有默认类型的类型参数被认为是可选的。
+- 必选的类型参数不能在可选的类型参数后。
+- 如果类型参数有约束，类型参数的默认类型必须满足这个约束。
+- 当指定类型实参时，你只需要指定必选类型参数的类型实参。 未指定的类型参数会被解析为它们的默认类型。
+- 如果指定了默认类型，且类型推断无法选择一个候选类型，那么将使用默认类型作为推断结果。
+- 一个被现有类或接口合并的类或者接口的声明可以为现有类型参数引入默认类型。
+- 一个被现有类或接口合并的类或者接口的声明可以引入新的类型参数，只要它指定了默认类型。
 
 ## 新的`--strict`主要编译选项
 
-TypeScript加入的新检查项为了避免不兼容现有项目通常都是默认关闭的。虽然避免不兼容是好事，但这个策略的一个弊端则是使配置最高类型安全越来越复杂，这么做每次TypeScript版本发布时都需要显示地加入新选项。有了`--strict`编译选项，就可以选择最高级别的类型安全（了解随着更新版本的编译器增加了增强的类型检查特性可能会报新的错误）。
+TypeScript 加入的新检查项为了避免不兼容现有项目通常都是默认关闭的。虽然避免不兼容是好事，但这个策略的一个弊端则是使配置最高类型安全越来越复杂，这么做每次 TypeScript 版本发布时都需要显示地加入新选项。有了`--strict`编译选项，就可以选择最高级别的类型安全（了解随着更新版本的编译器增加了增强的类型检查特性可能会报新的错误）。
 
 新的`--strict`编译器选项包含了一些建议配置的类型检查选项。具体来说，指定`--strict`相当于是指定了以下所有选项（未来还可能包括更多选项）：
 
-* `--strictNullChecks`
-* `--noImplicitAny`
-* `--noImplicitThis`
-* `--alwaysStrict`
+- `--strictNullChecks`
+- `--noImplicitAny`
+- `--noImplicitThis`
+- `--alwaysStrict`
 
 确切地说，`--strict`编译选项会为以上列出的编译器选项设置默认值。这意味着还可以单独控制这些选项。比如：
 
@@ -148,7 +154,7 @@ TypeScript加入的新检查项为了避免不兼容现有项目通常都是默�
 
 这将是开启除`--noImplicitThis`编译选项以外的所有严格检查选项。使用这个方式可以表述除某些明确列出的项以外的所有严格检查项。换句话说，现在可以在默认最高级别的类型安全下排除部分检查。
 
-从TypeScript 2.3开始，`tsc --init`生成的默认`tsconfig.json`在`"compilerOptions"`中包含了`"strict: true"`设置。这样一来，用`tsc --init`创建的新项目默认会开启最高级别的类型安全。
+从 TypeScript 2.3 开始，`tsc --init`生成的默认`tsconfig.json`在`"compilerOptions"`中包含了`"strict: true"`设置。这样一来，用`tsc --init`创建的新项目默认会开启最高级别的类型安全。
 
 ## 改进的`--init`输出
 
@@ -156,11 +162,10 @@ TypeScript加入的新检查项为了避免不兼容现有项目通常都是默�
 
 ## `--checkJS`选项下 .js 文件中的错误
 
-即便使用了`--allowJs`，TypeScript编译器默认不会报 .js 文件中的任何错误。TypeScript 2.3 中使用`--checkJs`选项，`.js`文件中的类型检查错误也可以被报出.
+即便使用了`--allowJs`，TypeScript 编译器默认不会报 .js 文件中的任何错误。TypeScript 2.3 中使用`--checkJs`选项，`.js`文件中的类型检查错误也可以被报出.
 
 你可以通过为它们添加`// @ts-nocheck`注释来跳过对某些文件的检查，反过来你也可以选择通过添加`// @ts-check`注释只检查一些`.js`文件而不需要设置`--checkJs`编译选项。你也可以通过添加`// @ts-ignore`到特定行的一行前来忽略这一行的错误.
 
-`.js`文件仍然会被检查确保只有标准的 ECMAScript 特性，类型标注仅在`.ts`文件中被允许，在`.js`中会被标记为错误。JSDoc注释可以用来为你的JavaScript代码添加某些类型信息，更多关于支持的JSDoc结构的详情，请浏览[JSDoc支持文档](https://github.com/Microsoft/TypeScript/wiki/JSDoc-support-in-JavaScript)。
+`.js`文件仍然会被检查确保只有标准的 ECMAScript 特性，类型标注仅在`.ts`文件中被允许，在`.js`中会被标记为错误。JSDoc 注释可以用来为你的 JavaScript 代码添加某些类型信息，更多关于支持的 JSDoc 结构的详情，请浏览[JSDoc 支持文档](https://github.com/Microsoft/TypeScript/wiki/JSDoc-support-in-JavaScript)。
 
-有关详细信息，请浏览[类型检查JavaScript文件文档](https://github.com/Microsoft/TypeScript/wiki/Type-Checking-JavaScript-Files)。
-
+有关详细信息，请浏览[类型检查 JavaScript 文件文档](https://github.com/Microsoft/TypeScript/wiki/Type-Checking-JavaScript-Files)。
