@@ -6,9 +6,9 @@ TypeScript 的控制流分析在跟踪变量类型在代码中的变化时表现
 
 ```ts
 interface Bird {
-    commonName: string;
-    scientificName: string;
-    sing(): void;
+  commonName: string;
+  scientificName: string;
+  sing(): void;
 }
 
 // Maps country names -> national bird.
@@ -16,9 +16,9 @@ interface Bird {
 declare const nationalBirds: Map<string, Bird>;
 
 function makeNationalBirdCall(country: string) {
-  const bird = nationalBirds.get(country);  // bird has a declared type of Bird | undefined
+  const bird = nationalBirds.get(country); // bird has a declared type of Bird | undefined
   if (bird) {
-    bird.sing();  // bird has type Bird inside the if statement
+    bird.sing(); // bird has type Bird inside the if statement
   } else {
     // bird has type undefined here.
   }
@@ -37,7 +37,7 @@ function makeBirdCalls(countries: string[]) {
     .filter(bird => bird !== undefined);
 
   for (const bird of birds) {
-    bird.sing();  // error: 'bird' is possibly 'undefined'.
+    bird.sing(); // error: 'bird' is possibly 'undefined'.
   }
 }
 ```
@@ -55,7 +55,7 @@ function makeBirdCalls(countries: string[]) {
     .filter(bird => bird !== undefined);
 
   for (const bird of birds) {
-    bird.sing();  // ok!
+    bird.sing(); // ok!
   }
 }
 ```
@@ -90,7 +90,7 @@ function isBirdReal(bird: Bird | undefined) {
 const isNumber = (x: unknown) => typeof x === 'number';
 
 // const isNonNullish: <T>(x: T) => x is NonNullable<T>
-const isNonNullish = <T,>(x: T) => x != null;
+const isNonNullish = <T>(x: T) => x != null;
 ```
 
 从前，TypeScript 仅会推断出这类函数返回 `boolean`。
@@ -106,7 +106,10 @@ const isNonNullish = <T,>(x: T) => x != null;
 这通常出现在“真值”检查中：
 
 ```ts
-function getClassroomAverage(students: string[], allScores: Map<string, number>) {
+function getClassroomAverage(
+  students: string[],
+  allScores: Map<string, number>
+) {
   const studentScores = students
     .map(student => allScores.get(student))
     .filter(score => !!score);
@@ -122,12 +125,15 @@ TypeScript 没有为 `score => !!score` 推断出类型谓词，这是有道理�
 与第一个例子一样，最好明确地过滤掉 `undefined` 值：
 
 ```ts
-function getClassroomAverage(students: string[], allScores: Map<string, number>) {
+function getClassroomAverage(
+  students: string[],
+  allScores: Map<string, number>
+) {
   const studentScores = students
     .map(student => allScores.get(student))
     .filter(score => score !== undefined);
 
-  return studentScores.reduce((a, b) => a + b) / studentScores.length;  // ok!
+  return studentScores.reduce((a, b) => a + b) / studentScores.length; // ok!
 }
 ```
 
@@ -144,14 +150,30 @@ function getClassroomAverage(students: string[], allScores: Map<string, number>)
 // Now, nums: number[]
 const nums = [1, 2, 3, null, 5].filter(x => x !== null);
 
-nums.push(null);  // ok in TS 5.4, error in TS 5.5
+nums.push(null); // ok in TS 5.4, error in TS 5.5
 ```
 
 解决方法是使用显式类型注解告诉 TypeScript 你想要的类型：
 
 ```ts
 const nums: (number | null)[] = [1, 2, 3, null, 5].filter(x => x !== null);
-nums.push(null);  // ok in all versions
+nums.push(null); // ok in all versions
 ```
 
-更多详情请参考[PR](https://github.com/microsoft/TypeScript/pull/57465)和 [Dan 的博客](https://effectivetypescript.com/2024/04/16/inferring-a-type-predicate/)。
+更多详情请参考[PR](https://github.com/microsoft/TypeScript/pull/57465) 和 [Dan 的博客](https://effectivetypescript.com/2024/04/16/inferring-a-type-predicate/)。
+
+## 常量索引访问的控制流细化
+
+当 `obj` 和 `key` 是常量时，TypeScript 现在能够细化 obj[key] 形式的表达式。
+
+```ts
+function f1(obj: Record<string, unknown>, key: string) {
+  if (typeof obj[key] === 'string') {
+    // Now okay, previously was error
+    obj[key].toUpperCase();
+  }
+}
+```
+
+如上，`obj` 和 `key` 都没有修改过，因此 TypeScript 能够在 `typeof` 检查后将 `obj[key]` 细化为 `string`。
+更多详情请参考[PR](https://github.com/microsoft/TypeScript/pull/57847)。
