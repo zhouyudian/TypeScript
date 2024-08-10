@@ -186,17 +186,17 @@ JavaScript 开发者不能简单地导入一个名为 `SomeType` 的类型，如
 ```ts
 // ./some-module.d.ts
 export interface SomeType {
-    // ...
+  // ...
 }
 
 // ./index.js
-import { SomeType } from "./some-module"; //  runtime error!
+import { SomeType } from './some-module'; //  runtime error!
 
 /**
  * @param {SomeType} myValue
  */
 function doSomething(myValue) {
-    // ...
+  // ...
 }
 ```
 
@@ -204,13 +204,13 @@ function doSomething(myValue) {
 开发者可以使用命名空间导入来替代。
 
 ```ts
-import * as someModule from "./some-module";
+import * as someModule from './some-module';
 
 /**
  * @param {someModule.SomeType} myValue
  */
 function doSomething(myValue) {
-    // ...
+  // ...
 }
 ```
 
@@ -223,7 +223,7 @@ function doSomething(myValue) {
  * @param {import("./some-module").SomeType} myValue
  */
 function doSomething(myValue) {
-    // ...
+  // ...
 }
 ```
 
@@ -238,7 +238,7 @@ function doSomething(myValue) {
  * @param {SomeType} myValue
  */
 function doSomething(myValue) {
-    // ...
+  // ...
 }
 ```
 
@@ -253,7 +253,7 @@ function doSomething(myValue) {
  * @param {SomeType} myValue
  */
 function doSomething(myValue) {
-    // ...
+  // ...
 }
 ```
 
@@ -267,7 +267,7 @@ function doSomething(myValue) {
  * @param {someModule.SomeType} myValue
  */
 function doSomething(myValue) {
-    // ...
+  // ...
 }
 ```
 
@@ -275,3 +275,59 @@ function doSomething(myValue) {
 
 更多详情请参考[PR](https://github.com/microsoft/TypeScript/pull/57207)。
 感谢 [Oleksandr Tarasiuk](https://github.com/a-tarasyuk) 的贡献。
+
+## 正则表达式语法检查
+
+直到现在，TypeScript 通常会跳过代码中的大多数正则表达式。
+这是因为正则表达式在技术上具有可扩展的语法，TypeScript 从未努力将正则表达式编译成早期版本的 JavaScript。
+尽管如此，这意味着许多常见问题可能会在正则表达式中被忽略，并且它们要么会在运行时转变为错误，要么会悄悄地失败。
+
+但是现在，TypeScript 对正则表达式进行基本的语法检查了！
+
+```ts
+let myRegex = /@robot(\s+(please|immediately)))? do some task/;
+//                                            ~
+// error!
+// Unexpected ')'. Did you mean to escape it with backslash?
+```
+
+这是一个简单的例子，但这种检查可以捕捉到许多常见的错误。
+事实上，TypeScript 的检查略微超出了语法检查。
+例如，TypeScript 现在可以捕捉到不存在的后向引用周围的问题。
+
+```ts
+let myRegex = /@typedef \{import\((.+)\)\.([a-zA-Z_]+)\} \3/u;
+//                                                        ~
+// error!
+// This backreference refers to a group that does not exist.
+// There are only 2 capturing groups in this regular expression.
+```
+
+这同样适用于捕获命名的分组。
+
+```ts
+let myRegex =
+  /@typedef \{import\((?<importPath>.+)\)\.(?<importedEntity>[a-zA-Z_]+)\} \k<namedImport>/;
+//                                                                                        ~~~~~~~~~~~
+// error!
+// There is no capturing group named 'namedImport' in this regular expression.
+```
+
+TypeScript 现在还会检测到当使用某些 RegExp 功能时，这些功能是否比您的 ECMAScript 目标版本更新。
+例如，如果我们在 ES5 目标中使用类似上文中的命名捕获组，将会导致错误。
+
+```ts
+let myRegex =
+  /@typedef \{import\((?<importPath>.+)\)\.(?<importedEntity>[a-zA-Z_]+)\} \k<importedEntity>/;
+//                                  ~~~~~~~~~~~~         ~~~~~~~~~~~~~~~~
+// error!
+// Named capturing groups are only available when targeting 'ES2018' or later.
+```
+
+同样适用于某些正则表达式标志。
+
+请注意，TypeScript 的正则表达式支持仅限于正则表达式字面量。
+如果您尝试使用字符串字面量调用 `new RegExp`，TypeScript 将不会检查提供的字符串。
+
+更多详情请参考[PR](https://github.com/microsoft/TypeScript/pull/55600)。
+感谢 [graphemecluster](https://github.com/graphemecluster/) 的贡献。
