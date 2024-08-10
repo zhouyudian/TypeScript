@@ -177,3 +177,101 @@ function f1(obj: Record<string, unknown>, key: string) {
 
 如上，`obj` 和 `key` 都没有修改过，因此 TypeScript 能够在 `typeof` 检查后将 `obj[key]` 细化为 `string`。
 更多详情请参考[PR](https://github.com/microsoft/TypeScript/pull/57847)。
+
+## JSDoc `@import` 标签
+
+如今，在 JavaScript 文件中，如果你只想为类型检查导入某些内容，这显得很繁琐。
+JavaScript 开发者不能简单地导入一个名为 `SomeType` 的类型，如果在运行时该类型不存在的话。
+
+```ts
+// ./some-module.d.ts
+export interface SomeType {
+    // ...
+}
+
+// ./index.js
+import { SomeType } from "./some-module"; //  runtime error!
+
+/**
+ * @param {SomeType} myValue
+ */
+function doSomething(myValue) {
+    // ...
+}
+```
+
+`SomeType` 类型在运行时不存在，因此导入会失败。
+开发者可以使用命名空间导入来替代。
+
+```ts
+import * as someModule from "./some-module";
+
+/**
+ * @param {someModule.SomeType} myValue
+ */
+function doSomething(myValue) {
+    // ...
+}
+```
+
+但 `./some-module` 仍是在运行时导入 - 可能不是期望的行为。
+
+为避免此问题，开发者通常需要在 JSDoc 里使用 `import(...)`。
+
+```ts
+/**
+ * @param {import("./some-module").SomeType} myValue
+ */
+function doSomething(myValue) {
+    // ...
+}
+```
+
+如果你想在多处重用该类型，你可以使用 `typedef` 来减少重覆。
+
+```ts
+/**
+ * @typedef {import("./some-module").SomeType} SomeType
+ */
+
+/**
+ * @param {SomeType} myValue
+ */
+function doSomething(myValue) {
+    // ...
+}
+```
+
+对于本地使用 `SomeType` 的情况是没问题的，但是出现了很多重覆的导入并显得啰嗦。
+
+因此，TypeScript 现在支持了新的 `@import` 注释标签，它与 ECMAScript 导入语句有相同的语法。
+
+```ts
+/** @import { SomeType } from "some-module" */
+
+/**
+ * @param {SomeType} myValue
+ */
+function doSomething(myValue) {
+    // ...
+}
+```
+
+此处，我们使用了命名导入。
+我们也可将其写为命名空间导入。
+
+```ts
+/** @import * as someModule from "some-module" */
+
+/**
+ * @param {someModule.SomeType} myValue
+ */
+function doSomething(myValue) {
+    // ...
+}
+```
+
+因为它们是 JSDoc 注释，它们完全不影响运行时行为。
+
+更多详情请参考[PR](https://github.com/microsoft/TypeScript/pull/57207)。
+感谢 [Oleksandr Tarasiuk](https://github.com/a-tarasyuk) 的贡献。
