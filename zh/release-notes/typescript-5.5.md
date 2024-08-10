@@ -331,3 +331,118 @@ let myRegex =
 
 更多详情请参考[PR](https://github.com/microsoft/TypeScript/pull/55600)。
 感谢 [graphemecluster](https://github.com/graphemecluster/) 的贡献。
+
+## 支持新的 ECMAScript `Set` 方法
+
+TypeScript 5.5 声明了新提议的 [ECMAScript Set](https://github.com/tc39/proposal-set-methods) 类型。
+
+其中一些方法，比如 `union`、`intersection`、`difference` 和 `symmetricDifference`，接受另一个 `Set` 并返回一个新的 `Set` 作为结果。另一些方法，比如 `isSubsetOf`、`isSupersetOf` 和 `isDisjointFrom`，接受另一个 `Set` 并返回一个布尔值。这些方法都不会改变原始的 `Sets`。
+
+示例：
+
+```ts
+let fruits = new Set(['apples', 'bananas', 'pears', 'oranges']);
+let applesAndBananas = new Set(['apples', 'bananas']);
+let applesAndOranges = new Set(['apples', 'oranges']);
+let oranges = new Set(['oranges']);
+let emptySet = new Set();
+
+////
+// union
+////
+
+// Set(4) {'apples', 'bananas', 'pears', 'oranges'}
+console.log(fruits.union(oranges));
+
+// Set(3) {'apples', 'bananas', 'oranges'}
+console.log(applesAndBananas.union(oranges));
+
+////
+// intersection
+////
+
+// Set(2) {'apples', 'bananas'}
+console.log(fruits.intersection(applesAndBananas));
+
+// Set(0) {}
+console.log(applesAndBananas.intersection(oranges));
+
+// Set(1) {'apples'}
+console.log(applesAndBananas.intersection(applesAndOranges));
+
+////
+// difference
+////
+
+// Set(3) {'apples', 'bananas', 'pears'}
+console.log(fruits.difference(oranges));
+
+// Set(2) {'pears', 'oranges'}
+console.log(fruits.difference(applesAndBananas));
+
+// Set(1) {'bananas'}
+console.log(applesAndBananas.difference(applesAndOranges));
+
+////
+// symmetricDifference
+////
+
+// Set(2) {'bananas', 'oranges'}
+console.log(applesAndBananas.symmetricDifference(applesAndOranges)); // no apples
+
+////
+// isDisjointFrom
+////
+
+// true
+console.log(applesAndBananas.isDisjointFrom(oranges));
+
+// false
+console.log(applesAndBananas.isDisjointFrom(applesAndOranges));
+
+// true
+console.log(fruits.isDisjointFrom(emptySet));
+
+// true
+console.log(emptySet.isDisjointFrom(emptySet));
+
+////
+// isSubsetOf
+////
+
+// true
+console.log(applesAndBananas.isSubsetOf(fruits));
+
+// false
+console.log(fruits.isSubsetOf(applesAndBananas));
+
+// false
+console.log(applesAndBananas.isSubsetOf(oranges));
+
+// true
+console.log(fruits.isSubsetOf(fruits));
+
+// true
+console.log(emptySet.isSubsetOf(fruits));
+
+////
+// isSupersetOf
+////
+
+// true
+console.log(fruits.isSupersetOf(applesAndBananas));
+
+// false
+console.log(applesAndBananas.isSupersetOf(fruits));
+
+// false
+console.log(applesAndBananas.isSupersetOf(oranges));
+
+// true
+console.log(fruits.isSupersetOf(fruits));
+
+// false
+console.log(emptySet.isSupersetOf(fruits));
+```
+
+感谢 [Kevin Gibbons](https://github.com/bakkot) 的贡献。
