@@ -722,3 +722,18 @@ TypeScript 5.5 现在采用了更加细致的方法，保留已删除项目的�
 这应该使像 `npm ci` 这样的操作与 TypeScript 协同工作更加顺畅。
 
 更多详情请参考 [PR](https://github.com/microsoft/TypeScript/pull/57492)。
+
+## 符号链接在解析失败时会被跟踪
+
+当 TypeScript 无法解析一个模块时，它仍然需要监视所有失败的查找路径，以防该模块在之后被添加。
+之前，这种情况不会发生在符号链接的目录中，这在 monorepo 场景中可能导致可靠性问题，例如当一个项目中发生构建但另一个项目中未检测到时。
+这一问题应在 TypeScript 5.5 中得到修复，这意味着你不需要那么频繁地重启编辑器。
+
+更多详情请参考 [PR](https://github.com/microsoft/TypeScript/pull/58139)。
+
+## 项目引用有助于自动导入
+
+在项目引用设置中，自动导入不再需要至少一个对依赖项目的显式导入。
+相反，自动导入补全应适用于你在 `tsconfig.json` 的 `references` 字段中列出的任何内容。
+
+更多详情请参考 [PR](https://github.com/microsoft/TypeScript/pull/55955)。
