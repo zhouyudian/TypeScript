@@ -446,3 +446,173 @@ console.log(emptySet.isSupersetOf(fruits));
 ```
 
 感谢 [Kevin Gibbons](https://github.com/bakkot) 的贡献。
+
+## 孤立的声明
+
+声明文件（即 `.d.ts` 文件）用于向 TypeScript 描述现有库和模块的结构。
+这种轻量级描述包括库的类型签名，但不包含实现细节，例如函数体。
+它们被发布出来，以便 TypeScript 在检查你对库的使用时无需分析库本身。
+虽然可以手写声明文件，但如果你正在编写带类型的代码，使用 `--declaration` 让 TypeScript 从源文件自动生成它们会更安全、更简单。
+
+TypeScript 编译器及其 API 一直以来都负责生成声明文件；
+然而，有些情况下你可能希望使用其他工具，或者传统的构建流程无法满足需求。
+
+### 用例：更快的声明生成工具
+
+想象一下，如果你想创建一个更快的工具来生成声明文件，也许作为发布服务或一个新的打包工具的一部分。
+虽然有许多快速工具生态系统可以将 TypeScript 转换为 JavaScript，但将 TypeScript 转换为声明文件的工具并不那么丰富。
+原因在于 TypeScript 的推断能力允许我们编写代码而不需要显式声明类型，这意味着声明生成可能会变得复杂。
+
+让我们考虑一个简单的例子，一个将两个导入变量相加的函数。
+
+```ts
+// util.ts
+export let one = '1';
+export let two = '2';
+
+// add.ts
+import { one, two } from './util';
+export function add() {
+  return one + two;
+}
+```
+
+即使我们只想生成 `add.d.ts` 这个声明文件，TypeScript 也需要深入到另一个导入的文件（`util.ts`），推断出 `one` 和 `two` 的类型为字符串，然后计算出两个字符串上的 `+` 运算符将导致一个字符串返回类型。
+
+```ts
+// add.d.ts
+export declare function add(): string;
+```
+
+虽然这种推断对开发人员体验很重要，但这意味着想要生成声明文件的工具需要复制类型检查器的部分内容，包括推断和解析模块规范器以跟踪导入。
+
+### 用例：并行的声明生成和类型检查
+
+想象一下，如果你拥有一个包含许多项目的单体库（monorepo）和一个渴望帮助你更快检查代码的多核 CPU。如果我们能够通过在每个核心上运行不同项目来同时检查所有这些项目，那不是太棒了吗？
+
+不幸的是，我们不能自由地将所有工作并行处理。
+原因是我们必须按照依赖顺序构建这些项目，因为每个项目都在对其依赖项的声明文件进行检查。
+因此，我们必须首先构建依赖项以生成声明文件。
+TypeScript 的项目引用功能也是以"拓扑"依赖顺序构建项目集合。
+
+举个例子，如果我们有两个名为 `backend` 和 `frontend` 的项目，它们都依赖一个名为 `core` 的项目，TypeScript 在构建 `core` 并生成其声明文件之前，无法开始对 `frontend` 或 `backend` 进行类型检查。
+
+![](https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2024/04/5-5-beta-isolated-declarations-deps.png)
+
+在上面的图中，您可以看到我们有一个瓶颈。虽然我们可以并行构建 `frontend` 和 `backend`，但我们需要等待 `core` 完成构建，然后才能开始任何一个项目的构建。
+
+我们该如何改进呢？
+如果一个快速工具可以并行生成所有这些 `core` 的声明文件，那么 TypeScript 就可以立即跟进，通过并行检查 `core`、`frontend` 和 `backend`。
+
+### 解决文案：显式的类型
+
+在这两种用例中的共同要求是，我们需要一个跨文件类型检查器来生成声明文件。
+这对于工具开发社区来说是一个很大的要求。
+
+作为一个更复杂的例子，如果我们想要以下代码的声明文件…
+
+```ts
+import { add } from './add';
+
+const x = add();
+
+export function foo() {
+  return x;
+}
+```
+
+我们需要为 `foo` 生成一个签名。
+这需要查看 `foo` 的实现。
+`foo` 只是返回 `x`，所以获取 `x` 的类型需要查看 `add` 的实现。
+但这可能需要查看 `add` 的依赖项的实现，依此类推。
+我们在这里看到的是，生成声明文件需要大量逻辑来确定可能甚至不在当前文件中的不同位置的类型。
+
+不过，对于寻求快速迭代时间和完全并行构建的开发人员来说，还有另一种思考这个问题的方式。
+声明文件仅需要模块的公共 API 类型，换句话说，导出内容的类型。
+如果开发人员愿意显式编写导出内容的类型，工具就可以生成声明文件，而无需查看模块的实现 - 也无需重新实现完整的类型检查器。
+
+这就是新的 `--isolatedDeclarations` 选项发挥作用的地方。
+`--isolatedDeclarations` 在模块无法在没有类型检查器的情况下被可靠转换时报告错误。
+简而言之，如果您有一个没有足够注释其导出的文件，TypeScript 将报告错误。
+
+这意味着在上面的例子中，我们将看到类似以下的错误：
+
+```ts
+export function foo() {
+  //              ~~~
+  // error! Function must have an explicit
+  // return type annotation with --isolatedDeclarations.
+  return x;
+}
+```
+
+### 为什么错误是期望的？
+
+因为这意味着 TypeScript 能够
+
+1. 提前告知其它工具在生成声明文件时是否会有问题
+1. 提供快速修复功能帮助添加缺失的类型注解
+
+然而，这种模式并不要求在所有地方都进行注解。
+对于局部变量，可以忽略这些注解，因为它们不会影响公共 API。
+例如，以下代码不会产生错误：
+
+```ts
+import { add } from './add';
+
+const x = add('1', '2'); // no error on 'x', it's not exported.
+
+export function foo(): string {
+  return x;
+}
+```
+
+在某些表达式中，计算类型是“微不足道的”。
+
+```ts
+// No error on 'x'.
+// It's trivial to calculate the type is 'number'
+export let x = 10;
+
+// No error on 'y'.
+// We can get the type from the return expression.
+export function y() {
+  return 20;
+}
+
+// No error on 'z'.
+// The type assertion makes it clear what the type is.
+export function z() {
+  return Math.max(x, y()) as number;
+}
+```
+
+### 使用 `isolatedDeclarations`
+
+`isolatedDeclarations` 要求设置 `declaration` 或 `composite` 标志之一。
+
+请注意，`isolatedDeclarations` 不会改变 TypeScript 的输出方式，只会改变它报告错误的方式。
+重要的是，与 `isolatedModules` 类似，启用 TypeScript 中的该功能不会立即带来本文讨论的潜在好处。
+因此，请耐心等待，并期待这一领域的未来发展。
+考虑到工具作者的需求，我们还应该认识到，如今，并非所有 TypeScript 的声明输出都能轻松地由其他希望使用它作为指南的工具复制。
+这是我们正在积极致力于改进的事项。
+
+此外，独立声明仍然是一个新功能，我们正在积极努力改进体验。
+一些情景，比如在类和对象字面量中使用计算属性声明，尚不受 `isolatedDeclarations` 支持。
+请留意这方面的进展，并随时提供反馈。
+
+我们还认为值得指出的是，应该基于具体情况逐案采用 `isolatedDeclarations`。
+在使用 `isolatedDeclarations` 时可能会失去一些开发人员友好性，因此，如果您的设置没有利用前面提到的两种情景，这可能不是正确的选择。
+对于其他人来说，`isolatedDeclarations` 的工作已经揭示了许多优化和机会，可以解锁不同的并行构建策略。
+同时，如果您愿意做出权衡，我们相信随着外部工具变得更广泛可用，`isolatedDeclarations` 可以成为加快构建流程的强大工具。
+
+更多详情请参考[讨论](https://github.com/microsoft/TypeScript/issues/58944)。
+
+### 信用
+
+独立声明的工作是 TypeScript 团队与 Bloomberg 和 Google 内基础设施和工具团队之间长期的合作努力。
+像 Google 的 Hana Joo 这样实现了独立声明错误快速修复的个人（更多相关信息即将发布），以及 Ashley Claymore、Jan Kühle、Lisa Velden、Rob Palmer 和 Thomas Chetwin 等人数个月以来一直参与讨论、规范和实施。
+但我们特别要提到 Bloomberg 的 Titian Cernicova-Dragomir 提供的大量工作。
+Titian 在推动独立声明实现方面发挥了关键作用，并在之前的多年里一直是 TypeScript 项目的贡献者。
+
+更多详情请参考 [PR](https://github.com/microsoft/TypeScript/pull/58201)。
