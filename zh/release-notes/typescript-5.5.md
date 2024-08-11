@@ -680,3 +680,21 @@ Titian 在推动独立声明实现方面发挥了关键作用，并在之前的�
 如果您打算使一个 `tsconfig.json` 文件可继承，请考虑是否应该用 `${configDir}` 替代 `./`。
 
 更多详情请参考 [设计](https://github.com/microsoft/TypeScript/issues/57485) 和 [PR](https://github.com/microsoft/TypeScript/pull/58042)。
+
+## 参考 package.json 中的依赖项来生成声明文件
+
+之前，TypeScript 可能经常抛出如下错误：
+
+```txt
+The inferred type of "X" cannot be named without a reference to "Y". This is likely not portable. A type annotation is necessary.
+```
+
+这通常是由于 TypeScript 的声明文件生成在从未在程序中显式导入的文件内容中发现自身。
+如果路径最终变成相对路径，生成对这样的文件的导入可能存在风险。
+然而，在 `package.json` 的依赖项（或 `peerDependencies` 和 `optionalDependencies`）中具有明确依赖关系的代码库中，在某些解析模式下生成这样的导入应该是安全的。
+因此，在 TypeScript 5.5 中，当出现这种情况时，我们更加宽松，许多此类错误应该消失。
+
+
+更多详情请参考 [PR](https://github.com/microsoft/TypeScript/issues/42873)。
+
+
