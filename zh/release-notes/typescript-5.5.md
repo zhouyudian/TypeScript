@@ -694,7 +694,31 @@ The inferred type of "X" cannot be named without a reference to "Y". This is lik
 然而，在 `package.json` 的依赖项（或 `peerDependencies` 和 `optionalDependencies`）中具有明确依赖关系的代码库中，在某些解析模式下生成这样的导入应该是安全的。
 因此，在 TypeScript 5.5 中，当出现这种情况时，我们更加宽松，许多此类错误应该消失。
 
-
 更多详情请参考 [PR](https://github.com/microsoft/TypeScript/issues/42873)。
 
+## 编辑器和监视模式可靠性改进
 
+TypeScript 已经添加了一些新功能或修复了现有逻辑，使得 `--watch` 模式和 TypeScript 的编辑器集成感觉更加可靠。
+这希望能够转化为更少的 TSServer 或编辑器重新启动。
+
+## 正确刷新配置文件中的编辑器错误
+
+TypeScript 可以为 `tsconfig.json` 文件生成错误；
+然而，这些错误实际上是在加载项目时生成的，编辑器通常不会直接请求针对 `tsconfig.json` 文件的这些错误。
+虽然这听起来像一个技术细节，但这意味着当在 `tsconfig.json` 中修复了所有错误时，TypeScript 不会发出新的空错误集，用户将继续看到过时的错误，除非他们重新加载编辑器。
+
+TypeScript 5.5 现在有意发出一个事件来清除这些错误。
+更多详情请参考 [PR](https://github.com/microsoft/TypeScript/pull/58120)。
+
+## 更好地处理删除操作后紧接着的写操作
+
+一些工具选择删除文件而不是覆盖它们，然后从头开始创建新文件。
+例如，在运行 `npm ci` 时就是这种情况。
+
+尽管这对于那些工具可能是高效的，但对于 TypeScript 的编辑器场景可能会有问题，在这种情况下，删除一个被监视的文件可能会使其及其所有传递依赖项被丢弃。
+快速连续删除和创建文件可能导致 TypeScript 拆除整个项目，然后从头开始重新构建。
+
+TypeScript 5.5 现在采用了更加细致的方法，保留已删除项目的部分内容，直到它捕捉到新的创建事件。
+这应该使像 `npm ci` 这样的操作与 TypeScript 协同工作更加顺畅。
+
+更多详情请参考 [PR](https://github.com/microsoft/TypeScript/pull/57492)。
