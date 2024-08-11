@@ -616,3 +616,67 @@ export function z() {
 Titian 在推动独立声明实现方面发挥了关键作用，并在之前的多年里一直是 TypeScript 项目的贡献者。
 
 更多详情请参考 [PR](https://github.com/microsoft/TypeScript/pull/58201)。
+
+## 配置文件中的 `${configDir}` 模版变量
+
+在许多代码库中都会重用某个 `tsconfig.json` 作为其它配置文件的“基础”。
+这是通过在 `tsconfig.json` 文件中使用 `extends` 字段实现的。
+
+```ts
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "outDir": "./dist"
+    }
+}
+```
+
+其中一个问题是，`tsconfig.json` 文件中的所有路径都是相对于文件本身的位置。
+这意味着如果您有一个被多个项目使用的共享 `tsconfig.base.json` 文件，那么派生项目中的相对路径通常不会有用。
+例如，请想象以下 `tsconfig.base.json`：
+
+```ts
+{
+    "compilerOptions": {
+        "typeRoots": [
+            "./node_modules/@types"
+            "./custom-types"
+        ],
+        "outDir": "dist"
+    }
+}
+```
+
+如果作者的意图是每个继承此文件的 `tsconfig.json` 都应：
+
+1. 输出到相对于派生 `tsconfig.json` 的 `dist` 目录，并且
+2. 有一个相对于派生 `tsconfig.json` 的 `custom-types` 目录，
+
+那么这样做是行不通的。
+`typeRoots` 路径将是相对于共享 `tsconfig.base.json` 文件的位置，而不是继承它的项目。
+每个继承此共享文件的项目都需要声明自己的 `outDir` 和 `typeRoots`，并且内容相同。
+这可能会让人沮丧，并且在项目之间保持同步可能会很困难。
+虽然上面的示例使用了 `typeRoots`，但这对于路径和其他选项来说是一个常见问题。
+
+为了解决这个问题，TypeScript 5.5 引入了一个新的模板变量 `${configDir}`。
+当在 `tsconfig.json` 或 `jsconfig.json` 文件的某些路径字段中写入 `${configDir}` 时，此变量将在给定编译中替换为配置文件的所在目录。
+这意味着上述 `tsconfig.base.json` 可以重写为：
+
+```ts
+{
+    "compilerOptions": {
+        "typeRoots": [
+            "${configDir}/node_modules/@types"
+            "${configDir}/custom-types"
+        ],
+        "outDir": "${configDir}/dist"
+    }
+}
+```
+
+现在，当一个项目继承此文件时，路径将相对于派生的 `tsconfig.json`，而不是共享的 `tsconfig.base.json` 文件。
+这使得在项目之间共享配置文件变得更加容易，并确保配置文件更具可移植性。
+
+如果您打算使一个 `tsconfig.json` 文件可继承，请考虑是否应该用 `${configDir}` 替代 `./`。
+
+更多详情请参考 [设计](https://github.com/microsoft/TypeScript/issues/57485) 和 [PR](https://github.com/microsoft/TypeScript/pull/58042)。
